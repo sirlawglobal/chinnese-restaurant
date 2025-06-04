@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/styles/main.css" />
+    <link rel="stylesheet" href="../assets/styles/forms.css" />
+    <link rel="stylesheet" href="../assets/styles/signin.css" />
+    <title>Admin Sign In</title>
+  </head>
+  <body>
+    <main class="flex align-center justify-center wrap">
+      <section class="content">
+        <div class="logo">
+          <img src="../assets/images/admin-logo.png" alt="Golden Dish" />
+        </div>
+        <div class="head">
+          <h3>Sign Up</h3>
+          <p>Get started to start feeding like a king.</p>
+        </div>
+     <!-- <form id="registrationForm" method="POST" action="register.php"> -->
+     <form id="registrationForm" method="POST" >
+  <fieldset>
+    <legend>Fullname</legend>
+    <input type="text" name="name" id="name" required />
+  </fieldset>
+  <fieldset>
+    <legend>Phone</legend>
+    <input type="tel" name="phone" id="phone" required />
+  </fieldset>
+  <fieldset>
+    <legend>Email</legend>
+    <input type="email" name="email" id="email" required />
+  </fieldset>
+  <fieldset>
+    <legend>Password</legend>
+    <input type="password" name="password" id="password" required />
+  </fieldset>
+  <div class="flex justify-between align-center">
+    <div class="remember flex align-center">
+      <input type="checkbox" name="remember" id="remember" />
+      <label for="remember">Remember Me?</label>
+    </div>
+  </div>
+  <div class="flex align-center justify-center">
+    <button type="submit">Sign Up</button>
+  </div>
+</form>
+
+      </section>
+      <section class="image">
+        <img src="../assets/images/admin-img.png" alt="Golden Dish" />
+      </section>
+    </main>
+    <script>
+  document.querySelector('form').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    // Convert FormData to plain object (optional, but easier for JSON)
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key.toLowerCase()] = value; // lowercase keys to match PHP expected keys
+    });
+// fetch("/chinese-food/BackEnd/controller/inventory/get_menu.php")
+    try {
+      const response = await fetch('/chinese-food/BackEnd/auth/register.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(result.message);
+        form.reset(); // clear form on success
+      } else {
+        alert('Error: ' + result.message);
+      }
+    } catch (error) {
+      alert('An unexpected error occurred.');
+      console.error(error);
+    }
+  });
+</script>
+
+  </body>
+</html>

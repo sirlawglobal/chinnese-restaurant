@@ -1,0 +1,97 @@
+body {
+  background: fixed linear-gradient(#00000040, #00000040),
+    url("../images/hero.webp");
+  background-size: 150%;
+  background-position: center 25%;
+  background-repeat: no-repeat;
+  color: white;
+  overflow: hidden;
+}
+
+header {
+  padding: 2rem 2vw;
+}
+
+.logo{
+  width: 20%;
+}
+.logo a{
+  width: 100%;
+}
+.logo a img{
+  width: 100%;
+  max-width: 180px;
+}
+
+nav a {
+  color: white;
+  padding: 1rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+  &:hover {
+    border-bottom: 2px solid white;
+  }
+}
+nav {
+  gap: 3rem;
+}
+nav ul {
+  gap: 2rem;
+}
+section#hero {
+  position: fixed;
+  top: calc(50% + 3rem);
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+}
+
+section h1 {
+  font-family: "ZCOOL XiaoWei", sans-serif;
+  font-size: 5rem;
+  font-weight: 400;
+  margin-block: 1rem;
+}
+
+section#hero .text {
+  width: 70%;
+  z-index: 3;
+  padding: 2rem 2vw;
+}
+
+section#hero .text p {
+  margin-block: 1rem;
+}
+
+section#hero .images {
+  position: relative;
+  left: -15%;
+  right: -0rem;
+  gap: 3rem;
+  width: 40%;
+  /* scale: .9; */
+}
+
+section#hero .images img:first-child {
+  width: 70%;
+}
+
+section#hero .images img:nth-child(2) {
+  width: 50%;
+}
+
+section#hero .images img:last-child {
+  width: 20%;
+}
+
+@media screen and (max-width: 1020px) {
+  body {
+    background-position: center 10%;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  body{
+    background-position: center 5%;
+  }
+}

@@ -1,0 +1,37 @@
+# Ignore composer dependencies
+/vendor/
+
+# Ignore Laravel environment file
+.env
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore cache
+/storage/*.key
+/storage/*.log
+/storage/framework/*
+/bootstrap/cache/
+
+# Ignore node dependencies if you're using frontend tooling
+/node_modules/
+
+# Ignore IDE and OS-specific files
+*.sublime*
+.idea/
+.vscode/
+*.swp
+
+# Ignore backup files
+*.bak
+*.tmp
+*.old
+
+# Ignore database files (optional)
+*.sqlite
+*.db
+*.sql

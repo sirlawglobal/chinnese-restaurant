@@ -1,0 +1,20 @@
+
+.content form .remember {
+  gap: 6px;
+}
+.content form .remember input {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #959895;
+}
+.content form .remember label {
+  font-size: 0.8rem;
+  color: #959895;
+}
+.content form div a {
+  color: #b30505;
+  font-size: 0.8rem;
+}
+.content form div a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+body {
+  background: url("../img/bg.png") no-repeat;
+  background-size: cover;
+  background-position: center 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  padding-bottom: 0;
+}
+main {
+  /* padding: 4vw; */
+  margin: auto;
+  width: 70%;
+}
+.content {
+  flex: 1;
+  min-width: 300px;
+  padding: 1rem;
+}
+.image {
+  flex: 2;
+  min-width: 300px;
+}
+.content .logo img {
+  width: 10rem;
+}
+.content .head {
+  text-align: center;
+}
+.content .head h3 {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 2.6rem;
+  color: #07143b;
+  margin-bottom: 1rem;
+}
+.content .head p {
+  color: #959895;
+  font-size: 1rem;
+}
+.content form {
+  margin-block: 1rem;
+}
+.content form fieldset {
+  border: none;
+  margin-block: 1rem;
+}
+.content form fieldset legend {
+  font-size: 1rem;
+  color: #959895;
+  margin-bottom: 0.5rem;
+}
+.content form fieldset input {
+  background-color: #ffffff;
+  border: 1px solid #b30505;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  font-size: 0.8rem;
+}
+.content form .remember {
+  gap: 6px;
+}
+.content form .remember input {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #959895;
+}
+.content form .remember label {
+  font-size: 0.8rem;
+  color: #959895;
+}
+.content form div a {
+  color: #b30505;
+  font-size: 0.8rem;
+}
+.content form div a:hover {
+  text-decoration: underline;
+}
+.content form button[type="submit"] {
+  border: 1px solid #b30505;
+  border-radius: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  background: #b30505;
+  color: white;
+  min-width: 10rem;
+  margin-block: 1rem;
+  transition: all 0.3s;
+}
+.content form button[type="submit"]:hover {
+  background-color: #8b0c0c;
+  cursor: pointer;
+}

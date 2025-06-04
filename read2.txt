@@ -1,0 +1,43 @@
+
+category_id
+: 
+1
+description
+: 
+null
+has_options
+: 
+1
+id
+: 
+583
+image_url
+: 
+null
+name
+: 
+"Crispy Aromatic Duck"
+options
+: 
+Array(3)
+0
+: 
+{portion: '1/4 (6 pancakes)', price: '13.50'}
+1
+: 
+{portion: '1/2 (12 pancakes)', price: '21.50'}
+2
+: 
+{portion: 'Whole (24 pancakes)', price: '37.00'}
+length
+: 
+3
+[[Prototype]]
+: 
+Array(0)
+price
+: 
+0
+[[Prototype]]
+: 
+Object

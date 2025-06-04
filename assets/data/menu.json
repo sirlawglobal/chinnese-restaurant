@@ -1,0 +1,1141 @@
+{
+  "categories": [
+    {
+      "name": "STARTERS",
+      "items": [
+        {
+          "id": 1,
+          "name": "Mixed Platter (min for 2)",
+          "description": "Seaweed, Sesame Prawn On Toast, Chicken Satay, Barbecued Spare Ribs, Vegetarian Spring Rolls",
+          "price": 14.8
+        },
+        {
+          "id": 2,
+          "name": "Crispy Seaweed",
+          "price": 5.5
+        },
+        {
+          "id": 3,
+          "name": "Sesame Prawns on Toast",
+          "price": 7.0
+        },
+        {
+          "id": 4,
+          "name": "Crispy Won Ton",
+          "description": "With Sweet & Sour Sauce",
+          "price": 6.0
+        },
+        {
+          "id": 5,
+          "name": "Deep Fried King Prawns in Breadcrumbs (8)",
+          "price": 8.5
+        },
+        {
+          "id": 6,
+          "name": "Grilled Peking Dumplings (6)",
+          "price": 6.8
+        },
+        {
+          "id": 7,
+          "name": "Grilled Vegetarian Dumplings (6)",
+          "price": 6.5
+        },
+        {
+          "id": 8,
+          "name": "Satay Chicken on Skewers (4)",
+          "price": 7.3
+        },
+        {
+          "id": 9,
+          "name": "Satay Beef on Skewers (4)",
+          "price": 7.5
+        },
+        {
+          "id": 10,
+          "name": "Satay King Prawn on Skewers (4)",
+          "price": 8.5
+        },
+        {
+          "id": 11,
+          "name": "Salt & Pepper King Prawns",
+          "price": 8.5
+        },
+        {
+          "id": 12,
+          "name": "Salt & Pepper Chicken Wings (8)",
+          "price": 6.9
+        },
+        {
+          "id": 13,
+          "name": "Barbecued Chicken Wings (8)",
+          "price": 6.9
+        },
+        {
+          "id": 14,
+          "name": "Barbecued Spare Ribs (dry)",
+          "price": 7.5
+        },
+        {
+          "id": 15,
+          "name": "Barbecued Spare Ribs in Sauce",
+          "description": "BBQ, Curry Or Sweet & Sour",
+          "price": 7.8
+        },
+        {
+          "id": 16,
+          "name": "Barbecued Spare Ribs in Mandarin Sauce",
+          "price": 7.8
+        },
+        {
+          "id": 17,
+          "name": "Salt & Pepper Spare Ribs",
+          "price": 7.8
+        },
+        {
+          "id": 18,
+          "name": "Spicy Chilli Chips",
+          "price": 4.3
+        },
+        {
+          "id": 19,
+          "name": "Dim Sum - Siu Mai (6)",
+          "price": 7.5
+        },
+        {
+          "id": 20,
+          "name": "Spring Roll",
+          "price": 3.5
+        },
+        {
+          "id": 21,
+          "name": "Vegetarian Spring Rolls (2)",
+          "price": 4.2
+        },
+        {
+          "id": 22,
+          "name": "Prawn Crackers",
+          "price": 2.8
+        },
+        {
+          "id": 23,
+          "name": "Crispy Aromatic Duck",
+          "description": "With Pancakes, Spring Onions, Cucumber & Plum Sauce",
+          "options": [
+            {
+              "portion": "1/4 (6 pancakes)",
+              "price": 13.5
+            },
+            {
+              "portion": "1/2 (12 pancakes)",
+              "price": 21.8
+            },
+            {
+              "portion": "Whole (24 pancakes)",
+              "price": 36.8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SOUP",
+      "items": [
+        {
+          "id": 24,
+          "name": "Crab Meat & Sweetcorn Soup",
+          "price": 5.0
+        },
+        {
+          "id": 25,
+          "name": "Chicken & Sweetcorn Soup",
+          "price": 4.5
+        },
+        {
+          "id": 26,
+          "name": "Chicken & Mushroom Soup",
+          "price": 4.5
+        },
+        {
+          "id": 27,
+          "name": "Chicken & Noodles Soup",
+          "price": 4.5
+        },
+        {
+          "id": 28,
+          "name": "Hot & Sour Soup",
+          "price": 4.8
+        },
+        {
+          "id": 29,
+          "name": "Won Ton Soup",
+          "price": 5.5
+        },
+        {
+          "id": 30,
+          "name": "Vegetable Soup",
+          "price": 4.5
+        }
+      ]
+    },
+    {
+      "name": "CHICKEN",
+      "items": [
+        {
+          "id": 31,
+          "name": "Crispy Shredded Chilli Chicken",
+          "price": 7.5
+        },
+        {
+          "id": 32,
+          "name": "Chicken with Green Pepper in Black Bean Sauce",
+          "price": 7.3
+        },
+        {
+          "id": 33,
+          "name": "Chicken in Szechuan Style",
+          "price": 7.3
+        },
+        {
+          "id": 34,
+          "name": "Chicken with Cashewnuts in Yellow Bean Sauce",
+          "price": 7.5
+        },
+        {
+          "id": 35,
+          "name": "Chicken with Cashewnuts",
+          "price": 7.5
+        },
+        {
+          "id": 36,
+          "name": "Chicken with Mixed Vegetables",
+          "price": 7.3
+        },
+        {
+          "id": 37,
+          "name": "Chicken with Pineapple",
+          "price": 7.3
+        },
+        {
+          "id": 38,
+          "name": "Chicken with Mushrooms",
+          "price": 7.3
+        },
+        {
+          "id": 39,
+          "name": "Kung Po Chicken (Sweet & Chili Sauce)",
+          "price": 7.5
+        },
+        {
+          "id": 40,
+          "name": "Lemon Chicken",
+          "price": 7.5
+        },
+        {
+          "id": 41,
+          "name": "Chicken with Ginger & Spring Onion in Oyster Sauce",
+          "price": 7.5
+        },
+        {
+          "id": 42,
+          "name": "Chicken in Satay Sauce",
+          "price": 7.5
+        },
+        {
+          "id": 43,
+          "name": "Chicken Chinese Style",
+          "price": 7.5
+        }
+      ]
+    },
+    {
+      "name": "BEEF",
+      "items": [
+        {
+          "id": 44,
+          "name": "Crispy Shredded Chilli Beef",
+          "price": 7.5
+        },
+        {
+          "id": 45,
+          "name": "Beef with Cashewnuts",
+          "price": 7.5
+        },
+        {
+          "id": 46,
+          "name": "Beef with Green Pepper in Black Bean Sauce",
+          "price": 7.3
+        },
+        {
+          "id": 47,
+          "name": "Beef with Mushrooms",
+          "price": 7.3
+        },
+        {
+          "id": 48,
+          "name": "Beef with Ginger & Spring Onion in Oyster Sauce",
+          "price": 7.5
+        },
+        {
+          "id": 49,
+          "name": "Beef with Mixed Vegetables",
+          "price": 7.3
+        },
+        {
+          "id": 50,
+          "name": "Beef with Onion",
+          "price": 7.3
+        },
+        {
+          "id": 51,
+          "name": "Fillet Steak in Mandarin Sauce",
+          "price": 13.8
+        },
+        {
+          "id": 52,
+          "name": "Fillet Steak in Black Bean Sauce",
+          "price": 13.8
+        },
+        {
+          "id": 53,
+          "name": "Fillet Steak with Ginger & Spring Onions",
+          "price": 13.8
+        }
+      ]
+    },
+    {
+      "name": "LAMB",
+      "items": [
+        {
+          "id": 54,
+          "name": "Lamb with Ginger & Spring Onions",
+          "price": 9.8
+        },
+        {
+          "id": 55,
+          "name": "Lamb with Cashewnuts in Yellow Bean Sauce",
+          "price": 9.8
+        },
+        {
+          "id": 56,
+          "name": "Lamb with Green Pepper in Black Bean Sauce",
+          "price": 9.5
+        },
+        {
+          "id": 57,
+          "name": "Crispy Aromatic Lamb",
+          "description": "With Pancakes, Spring Onions, Cucumber & Plum Sauce",
+          "price": 13.8
+        }
+      ]
+    },
+    {
+      "name": "PORK & ROAST PORK",
+      "items": [
+        {
+          "id": 58,
+          "name": "Pork with Green Pepper in Black Bean Sauce",
+          "price": 7.3
+        },
+        {
+          "id": 59,
+          "name": "Pork with Mixed Vegetables",
+          "price": 7.3
+        },
+        {
+          "id": 60,
+          "name": "Pork with Mushrooms",
+          "price": 7.3
+        },
+        {
+          "id": 61,
+          "name": "Pork with Ginger & Spring Onions in Oyster Sauce",
+          "price": 7.3
+        },
+        {
+          "id": 62,
+          "name": "Pork with Cashewnuts",
+          "price": 7.5
+        },
+        {
+          "id": 63,
+          "name": "Pork with Cashewnuts in Yellow Bean Sauce",
+          "price": 7.5
+        },
+        {
+          "id": 64,
+          "name": "Pork Chop in Mandarin Sauce",
+          "price": 8.5
+        },
+        {
+          "id": 65,
+          "name": "Pork Chop in Honey Sauce",
+          "price": 8.5
+        },
+        {
+          "id": 66,
+          "name": "Roast Pork with Onions",
+          "price": 7.8
+        },
+        {
+          "id": 67,
+          "name": "Roast Pork (Char Siu) in Tasty Soya Sauce",
+          "price": 8.8
+        },
+        {
+          "id": 68,
+          "name": "Crispy Roast Pork (Belly Pork)",
+          "price": 9.8
+        }
+      ]
+    },
+    {
+      "name": "DUCK",
+      "items": [
+        {
+          "id": 69,
+          "name": "Roast Duck in Tasty Soya Sauce",
+          "price": 11.0
+        },
+        {
+          "id": 70,
+          "name": "Duck with Green Pepper in Black Sauce",
+          "price": 9.5
+        },
+        {
+          "id": 71,
+          "name": "Duck with Ginger & Spring Onions in Oyster Sauce",
+          "price": 9.5
+        },
+        {
+          "id": 72,
+          "name": "Duck with Cashewnuts",
+          "price": 9.5
+        },
+        {
+          "id": 73,
+          "name": "Duck with Pineapple",
+          "price": 9.5
+        },
+        {
+          "id": 74,
+          "name": "Duck with Mixed Vegetables",
+          "price": 9.5
+        },
+        {
+          "id": 75,
+          "name": "Roast Duck Chinese Style",
+          "price": 9.8
+        },
+        {
+          "id": 76,
+          "name": "Roast Duck in Lemon Sauce",
+          "price": 9.8
+        }
+      ]
+    },
+    {
+      "name": "SEAFOOD",
+      "items": [
+        {
+          "id": 77,
+          "name": "Lobster with Ginger & Spring Onions",
+          "price": 29.8
+        },
+        {
+          "id": 78,
+          "name": "Lobster with Chilli in Black Bean Sauce",
+          "price": 29.8
+        },
+        {
+          "id": 79,
+          "name": "Lobster with Salt & Pepper",
+          "price": 29.8
+        },
+        {
+          "id": 80,
+          "name": "Crab with Ginger & Spring Onions",
+          "price": 18.5
+        },
+        {
+          "id": 81,
+          "name": "Crab with Chilli in Black Bean Sauce",
+          "price": 18.5
+        },
+        {
+          "id": 82,
+          "name": "Green Shell Mussels with Chilli in Black Bean Sauce",
+          "price": 10.5
+        },
+        {
+          "id": 83,
+          "name": "Squid with Salt & Pepper",
+          "price": 9.5
+        },
+        {
+          "id": 84,
+          "name": "Squid with Chilli in Black Bean Sauce",
+          "price": 9.5
+        },
+        {
+          "id": 85,
+          "name": "Scallops with Ginger & Spring Onions",
+          "price": 12.8
+        },
+        {
+          "id": 86,
+          "name": "Scallops with Chilli in Black Bean Sauce",
+          "price": 12.8
+        },
+        {
+          "id": 87,
+          "name": "Fish in Sweet Sour Sauce",
+          "price": 12.5
+        },
+        {
+          "id": 88,
+          "name": "Fish in Black Bean Sauce",
+          "price": 12.5
+        }
+      ]
+    },
+    {
+      "name": "KING PRAWNS",
+      "items": [
+        {
+          "id": 89,
+          "name": "King Prawns with Cashewnuts",
+          "price": 8.8
+        },
+        {
+          "id": 90,
+          "name": "King Prawns with Mixed Vegetables",
+          "price": 8.8
+        },
+        {
+          "id": 91,
+          "name": "King Prawns with Chinese Mushrooms in Oyster Sauce",
+          "price": 8.8
+        },
+        {
+          "id": 92,
+          "name": "King Prawns with Green Pepper in Black Bean Sauce",
+          "price": 8.8
+        },
+        {
+          "id": 93,
+          "name": "King Prawns with Ginger & Spring Onions in Oyster Sauce",
+          "price": 8.8
+        },
+        {
+          "id": 94,
+          "name": "King Prawns in Szechuan Style",
+          "price": 8.8
+        },
+        {
+          "id": 95,
+          "name": "King Prawns with Mushrooms",
+          "price": 8.8
+        },
+        {
+          "id": 96,
+          "name": "Kung Po King Prawns (Sweet & Chilli Hot)",
+          "price": 8.8
+        },
+        {
+          "id": 97,
+          "name": "King Prawns with French Beans in Spicy Garlic Sauce",
+          "price": 8.8
+        }
+      ]
+    },
+    {
+      "name": "VEGETABLES",
+      "items": [
+        {
+          "id": 98,
+          "name": "Stir Fried Mixed Vegetables",
+          "price": 6.5
+        },
+        {
+          "id": 99,
+          "name": "Mixed Vegetables in Black Bean Sauce",
+          "price": 6.3
+        },
+        {
+          "id": 100,
+          "name": "Beancurd in Black Bean Sauce",
+          "price": 6.3
+        },
+        {
+          "id": 101,
+          "name": "Beancurd with Chinese Mushrooms & Bamboo Shoots",
+          "price": 6.5
+        },
+        {
+          "id": 102,
+          "name": "Stir Fried French Beans in Garlic Sauce",
+          "price": 6.5
+        },
+        {
+          "id": 103,
+          "name": "Beancurd in Oyster Sauce",
+          "price": 6.5
+        },
+        {
+          "id": 104,
+          "name": "Pak Choi in Garlic Sauce",
+          "price": 7.5
+        },
+        {
+          "id": 105,
+          "name": "Stir Fried Mushrooms",
+          "price": 6.5
+        },
+        {
+          "id": 106,
+          "name": "Monks Vegetables",
+          "price": 7.2
+        }
+      ]
+    },
+    {
+      "name": "CHOP SUEY (BEANSPROUTS)",
+      "items": [
+        {
+          "id": 107,
+          "name": "Special Chop Suey",
+          "price": 6.8
+        },
+        {
+          "id": 108,
+          "name": "King Prawn Chop Suey",
+          "price": 8.5
+        },
+        {
+          "id": 109,
+          "name": "Chicken Chop Suey",
+          "price": 6.9
+        },
+        {
+          "id": 110,
+          "name": "Beef Chop Suey",
+          "price": 6.9
+        },
+        {
+          "id": 111,
+          "name": "Pork Chop Suey",
+          "price": 6.9
+        },
+        {
+          "id": 112,
+          "name": "Mushrooms Chop Suey",
+          "price": 6.5
+        }
+      ]
+    },
+    {
+      "name": "SWEET & SOUR",
+      "items": [
+        {
+          "id": 113,
+          "name": "Sweet & Sour King Prawns (Hong Kong Style)",
+          "price": 8.8
+        },
+        {
+          "id": 114,
+          "name": "Sweet & Sour King Prawn Balls (10)",
+          "price": 8.8
+        },
+        {
+          "id": 115,
+          "name": "Sweet & Sour Chicken (Hong Kong Style)",
+          "price": 7.5
+        },
+        {
+          "id": 116,
+          "name": "Sweet & Sour Chicken Balls (10)",
+          "price": 8.0
+        },
+        {
+          "id": 117,
+          "name": "Sweet & Sour Pork (Hong Kong Style)",
+          "price": 7.5
+        },
+        {
+          "id": 118,
+          "name": "Sweet & Sour Fried Squid",
+          "price": 9.5
+        },
+        {
+          "id": 119,
+          "name": "Sweet & Sour Spare Ribs",
+          "price": 7.9
+        },
+        {
+          "id": 120,
+          "name": "Sweet & Sour Mixed Vegetables",
+          "price": 6.9
+        },
+        {
+          "id": 121,
+          "name": "Sweet & Sour Sauce",
+          "price": 2.8
+        }
+      ]
+    },
+    {
+      "name": "CURRY",
+      "items": [
+        {
+          "id": 122,
+          "name": "Beef Curry",
+          "price": 7.3
+        },
+        {
+          "id": 123,
+          "name": "Chicken Curry",
+          "price": 7.3
+        },
+        {
+          "id": 124,
+          "name": "Pork Curry",
+          "price": 7.3
+        },
+        {
+          "id": 125,
+          "name": "Lamb Curry",
+          "price": 8.5
+        },
+        {
+          "id": 126,
+          "name": "Mixed Meat Curry",
+          "price": 7.5
+        },
+        {
+          "id": 127,
+          "name": "King Prawn Curry",
+          "price": 8.5
+        },
+        {
+          "id": 128,
+          "name": "Shrimp Curry",
+          "price": 7.5
+        },
+        {
+          "id": 129,
+          "name": "Mushroom Curry",
+          "price": 6.8
+        },
+        {
+          "id": 130,
+          "name": "Mixed Vegetable Curry",
+          "price": 6.8
+        },
+        {
+          "id": 131,
+          "name": "Curry Sauce",
+          "price": 2.5
+        }
+      ]
+    },
+    {
+      "name": "RICE",
+      "note": "LARGE EXTRA £1",
+      "items": [
+        {
+          "id": 132,
+          "name": "Golden Dish House Special Rice",
+          "price": 7.8
+        },
+        {
+          "id": 133,
+          "name": "Special Fried Rice",
+          "description": "Chicken, Shrimp Pork and Pea",
+          "price": 6.8
+        },
+        {
+          "id": 134,
+          "name": "Shrimp Fried rice",
+          "price": 7.5
+        },
+        {
+          "id": 135,
+          "name": "King Prawn Fried Rice",
+          "price": 8.3
+        },
+        {
+          "id": 136,
+          "name": "Chicken Fried Rice",
+          "price": 6.8
+        },
+        {
+          "id": 137,
+          "name": "Beef Fried Rice",
+          "price": 6.8
+        },
+        {
+          "id": 138,
+          "name": "Pork Fried Rice",
+          "price": 6.8
+        },
+        {
+          "id": 139,
+          "name": "Shredded Roast Pork Fried Rice",
+          "price": 6.8
+        },
+        {
+          "id": 140,
+          "name": "Mixed Vegetables Fried Rice",
+          "price": 6.5
+        },
+        {
+          "id": 141,
+          "name": "Egg Fried Rice",
+          "price": 4.9
+        },
+        {
+          "id": 142,
+          "name": "Boiled Rice",
+          "price": 3.9
+        }
+      ]
+    },
+    {
+      "name": "NOODLES",
+      "note": "LARGE EXTRA £1",
+      "items": [
+        {
+          "id": 143,
+          "name": "Golden Dish House Special Chow Mein",
+          "price": 7.8
+        },
+        {
+          "id": 144,
+          "name": "Special Chow Mein",
+          "description": "Chicken, Shrimp Pork and Pea",
+          "price": 6.8
+        },
+        {
+          "id": 145,
+          "name": "Shrimp Chow Mein",
+          "price": 7.2
+        },
+        {
+          "id": 146,
+          "name": "King Prawn Chow Mein",
+          "price": 8.3
+        },
+        {
+          "id": 147,
+          "name": "Chicken Chow Mein",
+          "price": 6.8
+        },
+        {
+          "id": 148,
+          "name": "Beef Chow Mein",
+          "price": 6.8
+        },
+        {
+          "id": 149,
+          "name": "Pork Chow Mein",
+          "price": 6.8
+        },
+        {
+          "id": 150,
+          "name": "Shredded Roast Pork Chow Mein",
+          "price": 6.8
+        },
+        {
+          "id": 151,
+          "name": "Mixed Vegetables Chow Mein",
+          "price": 6.5
+        },
+        {
+          "id": 152,
+          "name": "Plain Chow Mein",
+          "price": 5.3
+        }
+      ]
+    },
+    {
+      "name": "NOODLE SOUP",
+      "items": [
+        {
+          "id": 153,
+          "name": "Roast Duck with Noodle Soup",
+          "price": 9.5
+        },
+        {
+          "id": 154,
+          "name": "Roast Pork with Noodle Soup",
+          "price": 9.0
+        },
+        {
+          "id": 155,
+          "name": "Roast Chicken with Noodle Soup",
+          "price": 8.8
+        },
+        {
+          "id": 156,
+          "name": "Won Ton Noodle Soup",
+          "price": 8.8
+        }
+      ]
+    },
+    {
+      "name": "OMELETTE",
+      "items": [
+        {
+          "id": 157,
+          "name": "Special Omelette",
+          "price": 6.9
+        },
+        {
+          "id": 158,
+          "name": "King Prawn Omelette",
+          "price": 8.3
+        },
+        {
+          "id": 159,
+          "name": "Chicken Omelette",
+          "price": 6.8
+        },
+        {
+          "id": 160,
+          "name": "Roast Pork Omelette",
+          "price": 7.0
+        },
+        {
+          "id": 161,
+          "name": "Mushroom Omelette",
+          "price": 6.8
+        },
+        {
+          "id": 162,
+          "name": "Plain Omelette",
+          "price": 5.5
+        }
+      ]
+    },
+    {
+      "name": "EXTRAS & DESSERTS",
+      "items": [
+        {
+          "id": 163,
+          "name": "Chips",
+          "price": 3.5
+        },
+        {
+          "id": 164,
+          "name": "Chilli Oil",
+          "price": 2.9
+        },
+        {
+          "id": 165,
+          "name": "Sweet Chilli Sauce",
+          "price": 2.9
+        },
+        {
+          "id": 166,
+          "name": "Barbecued Sauce",
+          "price": 2.9
+        },
+        {
+          "id": 167,
+          "name": "Plum Sauce",
+          "price": 3.3
+        },
+        {
+          "id": 168,
+          "name": "Banana Fritter in Syrup",
+          "price": 5.0
+        },
+        {
+          "id": 169,
+          "name": "Apple Fritter in Syrup",
+          "price": 5.0
+        },
+        {
+          "id": 170,
+          "name": "Pineapple Fritter in Syrup",
+          "price": 5.0
+        }
+      ]
+    },
+    {
+      "name": "SPECIAL HOUSE MEALS",
+      "note": "All Served in One Container with Boiled Rice (Noodle or Egg Fried Rice 50p Extra)",
+      "items": [
+        {
+          "id": "SP1",
+          "name": "Chicken / Beef or Pork with Green Pepper in Black Bean Sauce",
+          "price": 7.8
+        },
+        {
+          "id": "SP2",
+          "name": "Chicken / Beef or Pork with Mixed Vegetables",
+          "price": 7.8
+        },
+        {
+          "id": "SP3",
+          "name": "Chicken / Beef or Pork in Satay Sauce",
+          "price": 7.8
+        },
+        {
+          "id": "SP4",
+          "name": "Spare Ribs with Green Pepper in Black Bean Sauce",
+          "price": 7.8
+        },
+        {
+          "id": "SP5",
+          "name": "Roast Chicken",
+          "price": 7.8
+        },
+        {
+          "id": "SP6",
+          "name": "Roast Pork",
+          "price": 8.5
+        },
+        {
+          "id": "SP7",
+          "name": "Roast Duck",
+          "price": 9.0
+        },
+        {
+          "id": "SP8",
+          "name": "Singapore Fried Rice",
+          "price": 7.8
+        },
+        {
+          "id": "SP9",
+          "name": "Singapore Fried Noodles",
+          "price": 7.8
+        },
+        {
+          "id": "SP10",
+          "name": "Singapore Vermicelli Rice Noodles",
+          "price": 7.8
+        },
+        {
+          "id": "SP11",
+          "name": "Vegetarian Singapore Noodles",
+          "price": 7.5
+        },
+        {
+          "id": "SP12",
+          "name": "Mixed Vegetables",
+          "price": 7.5
+        },
+        {
+          "id": "SP13",
+          "name": "Sweet & Sour Chicken",
+          "price": 7.5
+        },
+        {
+          "id": "SP14",
+          "name": "Sweet & Sour Pork",
+          "price": 7.5
+        },
+        {
+          "id": "SP15",
+          "name": "Chicken with Cashewnuts",
+          "price": 7.8
+        },
+        {
+          "id": "SP16",
+          "name": "Crispy Chilii Beef",
+          "price": 7.8
+        },
+        {
+          "id": "SP17",
+          "name": "Beancurd with Mixed Vegetables",
+          "price": 7.5
+        },
+        {
+          "id": "SP18",
+          "name": "Mixed Seafood (King Prawns, Squid, Scallops)",
+          "price": 9.8
+        },
+        {
+          "id": "SP19",
+          "name": "Squid in Black Bean Sauce",
+          "price": 9.8
+        },
+        {
+          "id": "SP20",
+          "name": "King Prawns with Mixed Vegetables",
+          "price": 8.8
+        }
+      ]
+    },
+    {
+      "name": "SET MENU",
+      "items": [
+        {
+          "id": "MENU_A",
+          "name": "Menu A - For 1 Person",
+          "price": 14.8,
+          "list": [
+            "Sweet & Sour Chicken Balls",
+            "Beef in Black Bean Sauce",
+            "Special Fried Rice"
+          ]
+        },
+        {
+          "id": "MENU_B",
+          "name": "Menu B - For 2 Persons",
+          "price": 25.8,
+          "list": [
+            "Crispy Seaweed",
+            "Sesame Prawns on Toast",
+            "Chicken with Cashewnuts in Yellow Bean Sauce",
+            "Sweet & Sour Pork (Hong Kong Style)",
+            "Special Fried Rice"
+          ]
+        },
+        {
+          "id": "MENU_C",
+          "name": "Menu C - For 2 Persons",
+          "price": 36.8,
+          "list": [
+            "Crispy Seaweed",
+            "Sesame Prawn on Toast",
+            "Kung Po Chicken",
+            "Beef with Mixed Vegetables",
+            "Roast Pork in Tasty Soya Sauce",
+            "Special Fried Rice"
+          ]
+        },
+        {
+          "id": "MENU_D",
+          "name": "Menu D - For 2 Persons",
+          "price": 42.8,
+          "list": [
+            "Crispy Seaweed",
+            "Satay Chicken on Skewer (4)",
+            "Salt & Pepper Spare Ribs",
+            "Chicken with Ginger & Spring Onions in Oyster Sauce",
+            "Beef with Cashewnuts",
+            "Sweet & Sour Pork",
+            "Special Fried Rice"
+          ]
+        },
+        {
+          "id": "MENU_E",
+          "name": "Menu E - For 3 Persons",
+          "price": 51.8,
+          "list": [
+            "Crispy Seaweed",
+            "Sesame Prawn on Toast",
+            "Spare Ribs in Mandarin Sauce",
+            "Crispy Aromatic Duck with Pancakes",
+            "Crispy Chilli Beef",
+            "Chicken in Black Bean Sauce",
+            "Pork with Cashewnuts",
+            "Special Fried Rice"
+          ]
+        }
+      ]
+    }
+  ]
+}

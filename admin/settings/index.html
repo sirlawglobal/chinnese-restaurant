@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Overview</title>
+    <link rel="stylesheet" href="../assets/styles/general.css" />
+    <link rel="stylesheet" href="../assets/styles/panels.css" />
+    <link rel="stylesheet" href="../assets/styles/settings.css" />
+  </head>
+  <body class="flex">
+    <main>
+      <div class="content">
+        <!-- Breadcrumb Navigation -->
+        <div class="settings-breadcrumbs">
+          <a href="#" id="general-tab" class="breadcrumb-item active"
+            >General</a
+          >
+          <span class="breadcrumb-separator">|</span>
+          <a href="#" id="notifications-tab" class="breadcrumb-item"
+            >Notifications</a
+          >
+          <span class="breadcrumb-separator">|</span>
+          <a href="#" id="advertisement-tab" class="breadcrumb-item"
+            >Advertisement</a
+          >
+          <span class="breadcrumb-separator">|</span>
+          <a href="#" id="security-tab" class="breadcrumb-item">Security</a>
+        </div>
+
+        <!-- Settings Views -->
+        <div id="general-view" class="settings-view">
+          <div class="settings-container">
+            <div class="profile-picture">
+              <div class="image-placeholder">
+                <span>📷</span>
+              </div>
+              <p class="upload-text">Upload Photo</p>
+            </div>
+
+            <form class="settings-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>App Name</label>
+                  <input type="text" value="ZenKonect" disabled />
+                </div>
+                <div class="form-group">
+                  <label>Date Format</label>
+                  <select>
+                    <option>DD/MM/YYYY</option>
+                    <option>MM/DD/YYYY</option>
+                    <option>YYYY/MM/DD</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Language</label>
+                  <select>
+                    <option>English</option>
+                    <option>French</option>
+                    <option>Spanish</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Time Zone</label>
+                  <select>
+                    <option>UCT</option>
+                    <option>GMT</option>
+                    <option>PST</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>User Role</label>
+                  <input type="text" value="Admin" disabled />
+                </div>
+                <div class="form-group">
+                  <label>Currency</label>
+                  <select>
+                    <option>USD</option>
+                    <option>EUR</option>
+                    <option>NGN</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>App Colour</label>
+                  <select>
+                    <option>Green</option>
+                    <option>Blue</option>
+                    <option>Red</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Search Filter</label>
+                  <select>
+                    <option>Latest</option>
+                    <option>Popular</option>
+                    <option>Relevant</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Copy Right</label>
+                  <input
+                    type="text"
+                    value="All rights Reserved@zenkonect"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <button type="submit" class="save-btn">Save</button>
+            </form>
+          </div>
+        </div>
+
+        <div
+          id="notifications-view"
+          class="settings-view"
+          style="display: none"
+        >
+          <!-- Notifications settings content here -->
+          <div class="settings-container notification">
+            <div class="toggle-group">
+              <label>Enable System Notifications</label>
+              <input type="checkbox" class="toggle-switch" />
+            </div>
+            <div class="toggle-group">
+              <label>Enable Email Notifications</label>
+              <input type="checkbox" class="toggle-switch" />
+            </div>
+            <div class="toggle-group">
+              <label>Enable Push Notifications</label>
+              <input type="checkbox" class="toggle-switch" />
+            </div>
+            <div class="toggle-group">
+              <label>Enable In-App Notifications</label>
+              <input type="checkbox" class="toggle-switch" />
+            </div>
+
+            <hr />
+
+            <div class="notification-row">
+              <span>New user Sign-up</span>
+              <div class="options">
+                <label>
+                  Email
+                  <input type="checkbox" class="toggle-switch" />
+                </label>
+                <label
+                  >Push <input type="checkbox" class="toggle-switch"
+                /></label>
+              </div>
+            </div>
+
+            <div class="notification-row">
+              <span>Payment Received</span>
+              <div class="options">
+                <label
+                  >Email <input type="checkbox" class="toggle-switch"
+                /></label>
+                <label
+                  >In-App <input type="checkbox" class="toggle-switch"
+                /></label>
+              </div>
+            </div>
+
+            <div class="notification-row">
+              <span>User Reported</span>
+              <div class="options">
+                <label
+                  >Email <input type="checkbox" class="toggle-switch"
+                /></label>
+                <label
+                  >System <input type="checkbox" class="toggle-switch"
+                /></label>
+              </div>
+            </div>
+
+            <div class="notification-row">
+              <span>Subscription Expiry</span>
+              <div class="options">
+                <label
+                  >Email <input type="checkbox" class="toggle-switch"
+                /></label>
+                <label
+                  >Push <input type="checkbox" class="toggle-switch"
+                /></label>
+              </div>
+            </div>
+
+            <div class="notification-row">
+              <span>Promotions & Updates</span>
+              <div class="options">
+                <label
+                  >Email <input type="checkbox" class="toggle-switch"
+                /></label>
+                <label
+                  >Push <input type="checkbox" class="toggle-switch"
+                /></label>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="notification-row">
+              <span>Promotions & Updates</span>
+              <div class="options">
+                <label
+                  >Email <input type="checkbox" class="toggle-switch"
+                /></label>
+                <label
+                  >In-App <input type="checkbox" class="toggle-switch"
+                /></label>
+                <label
+                  >Push <input type="checkbox" class="toggle-switch"
+                /></label>
+              </div>
+            </div>
+
+            <div class="notification-row">
+              <span>Promotions & Updates</span>
+              <select>
+                <option>Real-Time</option>
+                <option>Daily</option>
+                <option>Weekly</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="advertisement-view"
+          class="settings-view"
+          style="display: none"
+        >
+          <!-- Advertisement settings content here -->
+          <div class="adverts">
+            <!-- Stats Section -->
+            <div class="adverts__stats">
+              <div class="adverts__stats-box">
+                <h4>Total Reports</h4>
+                <p>15</p>
+                <h4>Impressions</h4>
+                <p>50,000</p>
+                <h4>Active Ads</h4>
+                <p>10</p>
+                <h4>Expired Ads</h4>
+                <p>5</p>
+                <h4>Revenue from Ads</h4>
+                <p>$2,500</p>
+              </div>
+              <div class="adverts__settings">
+                <div class="adverts__toggle">
+                  <label>Enable Ads</label>
+                  <input type="checkbox" class="toggle-switch" />
+                </div>
+                <div class="adverts__dropdown">
+                  <label>Ad Placement</label>
+                  <select>
+                    <option>Homepage</option>
+                  </select>
+                </div>
+                <div class="adverts__dropdown">
+                  <label>Ad Duration</label>
+                  <select>
+                    <option>1 Month</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ads Table -->
+            <div class="adverts__table-container">
+              <table class="adverts__table">
+                <thead>
+                  <tr>
+                    <th>Ad Image</th>
+                    <th>Ad Title</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <img src="https://picsum.photos/200?random=1" alt="Ad" />
+                    </td>
+                    <td>Summer Promo</td>
+                    <td>30 Days</td>
+                    <td>
+                      <span class="adverts__status adverts__status--active"
+                        >Active</span
+                      >
+                    </td>
+                    <td>⋮</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img src="https://picsum.photos/200?random=2" alt="Ad" />
+                    </td>
+                    <td>New Launch</td>
+                    <td>7 Days</td>
+                    <td>
+                      <span class="adverts__status adverts__status--expired"
+                        >Expired</span
+                      >
+                    </td>
+                    <td>⋮</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="adverts__pagination">
+                <span>Showing 1-10 of 78</span>
+                <div>
+                  <button>❮</button>
+                  <button>❯</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="security-view" class="settings-view" style="display: none">
+          <!-- Security settings content here -->
+          <div class="settings-container security">
+            <div class="security-header">
+              <label class="security-toggle">
+                Enable 2FA
+                <input type="checkbox" />
+                <span class="security-slider"></span>
+              </label>
+            </div>
+
+            <div class="security-settings">
+              <div class="security-setting">
+                <label>Password Reset Every:</label>
+                <select>
+                  <option>150 days</option>
+                  <option>90 days</option>
+                  <option>60 days</option>
+                </select>
+              </div>
+              <div class="security-setting">
+                <label>Auto Logout:</label>
+                <select>
+                  <option>120 mins</option>
+                  <option>60 mins</option>
+                  <option>30 mins</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="security-roles">
+              <div class="security-roles-header">
+                <span>User Roles</span>
+                <span>Permissions</span>
+              </div>
+              <div class="security-role">
+                <span>Admin</span>
+                <select>
+                  <option>Full access to all settings & data</option>
+                </select>
+              </div>
+              <div class="security-role">
+                <span>Analyst</span>
+                <select>
+                  <option>View analytics & trends only.</option>
+                </select>
+              </div>
+              <div class="security-role">
+                <span>Support</span>
+                <select>
+                  <option>Respond to user complaints & appeals.</option>
+                  <option>Access to support & troubleshooting.</option>
+                </select>
+              </div>
+            </div>
+
+            <table  class="security-sessions">
+              <thead class="security-sessions-header">
+                <th>Device Name</th>
+                <th>Location</th>
+                <th>Last Active</th>
+                <th>Actions</th>
+              </thead>
+              <tr class="security-session">
+                <td>Macbook Pro</td>
+                <td>UK</td>
+                <td>10 mins ago</td>
+                <td class="security-logout">Logout</td>
+              </tr>
+              <tr class="security-session">
+                <td>iPhone 15</td>
+                <td>USA</td>
+                <td>2 hours ago</td>
+                <td class="security-disabled">Logout</td>
+              </tr>
+            </table>
+
+            <div class="security-end-sessions">
+              <a href="#" class="security-end-all">End All Sessions</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="../scripts/components.js"></script>
+    <script src="../scripts/settings.js"></script>
+  </body>
+</html>

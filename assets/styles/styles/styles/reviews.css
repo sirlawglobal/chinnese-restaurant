@@ -1,0 +1,419 @@
+.g-af2 {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4rem 1rem;
+  width: 100%;
+}
+
+.ratings-overview {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.overall-rating {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.rating-value {
+  font-size: 3em;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.star-rating {
+  font-size: 1.2em;
+  color: #ddd;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star {
+  display: inline-block;
+}
+
+.star.filled {
+  color: #ffc107; /* Filled star color */
+}
+
+.star.half-filled {
+  position: relative;
+  overflow: hidden;
+  color: #ddd;
+}
+
+.star.half-filled::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  width: 65%;
+  overflow: hidden;
+  color: #ffc107;
+}
+
+.review-count {
+  color: #777;
+  font-size: 0.9em;
+}
+
+.category-ratings {
+  flex-grow: 1;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.category-name {
+  width: 120px;
+  color: #555;
+  font-size: 0.95em;
+}
+
+.progress-bar-container {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  height: 10px;
+  flex-grow: 1;
+  margin-left: 15px;
+  margin-right: 15px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background-color: #FF6C1F; /* Progress bar color */
+  height: 100%;
+  border-radius: 5px;
+  width: 0%; /* Set dynamically with inline style */
+}
+
+.category-value {
+  width: 30px;
+  font-size: 0.9em;
+  color: #333;
+  text-align: right;
+}
+
+
+/* CHART */
+.review-statistics {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.chart-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.legend {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.legend-color.positive {
+  background-color: #ff8a65;
+}
+
+.legend-color.negative {
+  background-color: #212121;
+}
+
+.filter-dropdown {
+  position: relative;
+}
+
+.review-dropdown-toggle {
+  background-color: #f9f9f9;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9em;
+}
+
+.review-dropdown-toggle svg {
+  width: 16px;
+  height: 16px;
+  color: #777;
+}
+
+.dropdown-menu {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: none;
+  min-width: 120px;
+  right: 0;
+  top: 100%;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+.filter-dropdown:hover .dropdown-menu {
+  display: block; /* Basic hover for demonstration - use JS for better UX */
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 8px 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-menu a:hover {
+  background-color: #eee;
+}
+
+.chart-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+
+/* REVIEWS */
+.reviews-container {
+  grid-column: span 2;
+}
+
+.reviews-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.filter-tabs {
+  gap: 1rem;
+}
+
+.filter-dropdown {
+  position: relative;
+}
+
+.review-review-dropdown-toggle {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.review-review-dropdown-toggle svg {
+  width: 16px;
+  height: 16px;
+  color: #777;
+}
+
+.dropdown-menu {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: none; /* Needs JavaScript for toggle */
+  min-width: 120px;
+  right: 0;
+  top: 100%;
+  margin-top: 5px;
+}
+
+.filter-dropdown:hover .dropdown-menu {
+  display: block; /* Basic hover for demonstration - use JS for better UX */
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 8px 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-menu a:hover {
+  background-color: #eee;
+}
+
+.review-item {
+  display: flex;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  align-items: flex-start;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 15px;
+}
+
+.review-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.review-details {
+  flex: 1;
+  gap: 1rem;
+}
+
+.review-details .detail {
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.review-title {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.review-subtitle {
+  color: #777;
+  font-size: 0.7rem;
+  margin-bottom: 8px;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  color: #ffd700;
+}
+
+.review-rating .stars {
+  font-size: 1rem;
+  margin-right: 5px;
+}
+
+.review-rating .rating-text {
+  color: #858585;
+  font-size: 0.8rem;
+  margin-right: 10px;
+}
+.review-date {
+  color: #858585;
+  font-size: 0.8rem;
+}
+
+.review-text {
+  color: #858585;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.reviewer-name {
+  font-size: 0.9rem;
+}
+
+.review-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #858585;
+  font-size: 0.8rem;
+}
+
+.review-stat {
+  display: inline-flex;
+  align-items: center;
+  & span {
+    margin-right: 0.2rem;
+  }
+}
+.review-stats svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 3px;
+  vertical-align: middle;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 8px;
+  padding: 10px 0;
+}
+
+.pagination button,
+.pagination a {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination a.active,
+.pagination a:hover {
+  background-color: #1c1c1c0d;
+}
+
+.pagination button:disabled {
+  color: #dedede;
+  cursor: not-allowed;
+}
+.paginate_button {
+  background-color: transparent;
+}

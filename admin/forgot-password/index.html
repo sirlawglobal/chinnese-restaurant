@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../assets/styles/main.css" />
+    <link rel="stylesheet" href="../assets/styles/forms.css" />
+    <link rel="stylesheet" href="../assets/styles/forgot-password.css" />
+    <title>Admin Sign In</title>
+  </head>
+  <body>
+    <main class="flex align-center justify-center wrap">
+      <section class="content">
+        <div class="logo">
+          <img src="../../assets/images/admin-logo.png" alt="Golden Dish" />
+        </div>
+        <div class="head">
+          <h3>Reset Password</h3>
+          <p>
+            Enter your email address and we’ll send you an email with
+            instructions to reset your password
+          </p>
+        </div>
+        <form>
+          <fieldset>
+            <legend>Email</legend>
+            <input type="email" name="email" id="email" required />
+          </fieldset>
+          <div class="flex align-center justify-center">
+            <button type="submit">Reset</button>
+          </div>
+        </form>
+      </section>
+      <section class="image">
+        <img src="../../assets/images/admin-img.png" alt="Golden Dish" />
+      </section>
+    </main>
+    <script>
+      // on submit redirect to /dashboard
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          window.location.href = "../dashboard";
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,517 @@
+.settings-breadcrumbs {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.settings-breadcrumbs .breadcrumb-item {
+  padding: 5px 10px;
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.settings-breadcrumbs .breadcrumb-item.active {
+  color: #000000;
+  border-bottom: 2px solid#000000;
+}
+
+.settings-breadcrumbs .breadcrumb-separator {
+  padding: 0 5px;
+  color: #999;
+}
+
+.settings-view {
+  padding: 1rem 0;
+}
+
+.settings-container {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 0.3px solid #b9b9b9;
+  text-align: center;
+  height: 100%;
+}
+
+.profile-picture {
+  margin-bottom: 20px;
+}
+
+.image-placeholder {
+  width: 60px;
+  height: 60px;
+  background: #eaeaea;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  margin: auto;
+  cursor: pointer;
+}
+
+.upload-text {
+  color: #3b82f6;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-group {
+  width: 30%;
+  text-align: left;
+}
+
+label {
+  font-size: 14px;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f8f8f8;
+}
+
+input[disabled] {
+  color: #999;
+  background: #f0f0f0;
+}
+
+.save-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 1rem auto 0;
+  width: 200px;
+}
+.save-btn:hover {
+  background: #2f66c2;
+}
+
+/* NOTIFCATIONS VIEW */
+.notification .toggle-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.notification .toggle-switch {
+  width: 40px;
+  height: 20px;
+  appearance: none;
+  background: #ddd;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.notification .toggle-switch:checked {
+  background: #000;
+}
+
+.notification .toggle-switch::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 1px;
+  left: 2px;
+  transition: 0.3s;
+}
+
+.notification .toggle-switch:checked::before {
+  left: 20px;
+}
+
+.notification hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 15px 0;
+}
+
+.notification .notification-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.notification .options {
+  display: flex;
+  gap: 1rem;
+}
+
+.notification label {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: 14px;
+  color: #555;
+}
+
+.notification input[type="checkbox"] {
+  margin-left: 5px;
+}
+
+.notification select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f8f8f8;
+  width: fit-content;
+}
+
+/* ADVERTS VIEW */
+
+/* Stats Section */
+.adverts__stats {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  border-radius: 12px;
+  border: 0.3px solid #b9b9b9;
+  margin-bottom: 20px;
+}
+
+.adverts__stats-box {
+  background: #e3f2fd;
+  padding: 1.5rem;
+  margin: 1rem;
+  border-radius: 8px;
+  width: 30%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.adverts__stats-box h4 {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.adverts__stats-box p {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Settings */
+.adverts__settings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 70%;
+  padding: 1.5rem;
+  border-left: 0.6px solid #e0e0e0;
+  margin-left: 1rem;
+  justify-content: center;
+}
+
+.adverts__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.adverts .toggle-switch {
+  width: 40px;
+  height: 20px;
+  appearance: none;
+  background: #ddd;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.adverts .toggle-switch:checked {
+  background: #000;
+}
+
+.adverts .toggle-switch::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 1px;
+  left: 2px;
+  transition: 0.3s;
+}
+
+.adverts .toggle-switch:checked::before {
+  left: 20px;
+}
+
+.adverts__dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.adverts__dropdown select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: fit-content;
+}
+
+/* Table Styles */
+.adverts__table-container {
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.adverts__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.adverts__table th,
+.adverts__table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.adverts__table th {
+  font-weight: bold;
+  color: #1c1c1c66;
+}
+
+.adverts__table img {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+}
+
+/* Status Badges */
+.adverts__status {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  display: inline-block;
+}
+
+.adverts__status--active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.adverts__status--expired {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Pagination */
+.adverts__pagination {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  font-size: 14px;
+  color: #777;
+}
+
+.adverts__pagination button {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+.adverts__pagination button:hover {
+  background: #eee;
+}
+
+/* SECURITY VIEW */
+
+/* Toggle Switch */
+.security-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.security-toggle input {
+  display: none;
+}
+
+.security-slider {
+  width: 40px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 10px;
+  margin-left: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.security-slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: 0.3s;
+}
+
+.security-toggle input:checked + .security-slider {
+  background: #000;
+}
+
+.security-toggle input:checked + .security-slider::before {
+  left: 22px;
+}
+
+/* Settings */
+.security-settings {
+  margin-top: 20px;
+}
+
+.security-setting {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.security-setting label {
+  font-weight: bold;
+  display: block;
+}
+
+.security-setting select {
+  padding: 5px;
+  width: 150px;
+}
+
+/* Roles */
+.security-roles {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.security-roles-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  color: gray;
+}
+
+.security-role {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.security-role select {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.security-role select svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.security-role select:hover {
+  background: #f5f5f5;
+}
+
+/* Sessions */
+.security-sessions {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+  width: 100%;
+}
+
+.security-sessions th,
+.security-sessions td {
+  text-align: left;
+  padding: .5rem 1rem;
+}
+.security-sessions th {
+  padding-bottom: 1rem;
+}
+
+/* .security-session {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+} */
+
+.security-logout {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.security-logout:hover {
+  text-decoration: underline;
+}
+
+.security-disabled {
+  color: gray;
+  pointer-events: none;
+}
+
+/* End All Sessions */
+.security-end-sessions {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.security-end-all {
+  color: red;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 1rem;
+}
+
+.security-end-all:hover {
+  text-decoration: underline;
+}

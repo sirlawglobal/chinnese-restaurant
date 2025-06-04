@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/styles/main.css" />
+    <link rel="stylesheet" href="../assets/styles/forms.css" />
+    <link rel="stylesheet" href="../assets/styles/signin.css" />
+    <title>Admin Sign In</title>
+  </head>
+  <body>
+    <main class="flex align-center justify-center wrap">
+      <section class="content">
+        <div class="logo">
+          <img src="../assets/images/admin-logo.png" alt="Golden Dish" />
+        </div>
+        <div class="head">
+          <h3>Sign In</h3>
+          <p>Sign in to stay connected.</p>
+        </div>
+        <form>
+          <fieldset>
+            <legend>Email</legend>
+            <input type="email" name="email" id="email" required />
+          </fieldset>
+          <fieldset>
+            <legend>Password</legend>
+            <input type="password" name="password" id="password" required />
+          </fieldset>
+          <div class="flex justify-between align-center">
+            <div class="remember flex align-center">
+              <input type="checkbox" name="remember" id="remember" />
+              <label for="remember">Remember Me?</label>
+            </div>
+            <a href="../forgot-password/">Forgot Password</a>
+          </div>
+          <div class="flex align-center justify-center">
+            <button type="submit">Sign In</button>
+          </div>
+        </form>
+      </section>
+      <section class="image">
+        <img src="../assets/images/admin-img.png" alt="Golden Dish" />
+      </section>
+    </main>
+    <script>
+      // on submit redirect to /dashboard
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          window.location.href = "../dashboard";
+        });
+    </script>
+  </body>
+</html>

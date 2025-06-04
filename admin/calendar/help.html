@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/styles/general.css" />
+    <link rel="stylesheet" href="../assets/styles/panels.css" />
+    <title>Restaurant Scheduler</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        overflow-x: hidden;
+      }
+
+      .container {
+        display: flex;
+        width: 119.9vw;
+        height: 100vh;
+        transition: transform 0.5s ease;
+        position: relative;
+      }
+
+      .schedule-details {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        overflow-y: auto;
+        background-color: white;
+        position: relative;
+      }
+
+      /* Schedule Details Styles */
+      .sidebar {
+        width: 20vw;
+        height: 100vh;
+        background-color: white;
+        border-right: 1px solid #eee;
+        padding: 20px;
+        position: sticky;
+        top: 0;
+        overflow-y: auto;
+      }
+
+      .inner-content {
+        padding: 20px;
+        width: 80vw;
+        /* z-index: 2; */
+      }
+
+      .schedule-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 0 20px;
+      }
+
+      h2 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .schedule-item {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .schedule-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .menu-updates-tag {
+        background-color: #ffe8d6;
+        color: #9e6a35;
+        border-radius: 15px;
+        padding: 6px 12px;
+        font-size: 12px;
+        display: inline-block;
+        margin-bottom: 15px;
+      }
+
+      .schedule-details-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #555;
+      }
+
+      .schedule-details-row svg {
+        margin-right: 8px;
+        color: #888;
+      }
+
+      .team-section {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      .team-title {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 10px;
+      }
+
+      .team-members {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .team-member {
+        display: flex;
+        align-items: center;
+        background-color: #f5f5f5;
+        border-radius: 20px;
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        /* background-color: #ddd; */
+        margin-right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: white;
+        background-color: #555;
+      }
+
+      .menu-team {
+        display: flex;
+        align-items: center;
+        background-color: #f5f5f5;
+        border-radius: 20px;
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .team-count {
+        background-color: #ddd;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        margin-left: 8px;
+      }
+
+      .notes-section {
+        margin-top: 20px;
+      }
+
+      .notes-title {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 10px;
+      }
+
+      .notes-content {
+        font-size: 13px;
+        color: #333;
+        line-height: 1.4;
+      }
+
+      .options-btn {
+        background: transparent;
+        border: none;
+        font-size: 18px;
+        color: #555;
+        cursor: pointer;
+      }
+
+      /* Calendar Styles */
+      .calendar-header {
+        /* display: flex; */
+        /* padding: 0 10px; */
+        margin-bottom: 1rem;
+      }
+      .calendar-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+      }
+
+      .navigate {
+        background: transparent;
+        border: none;
+        font-size: 2rem;
+        color: #555;
+        cursor: pointer;
+      }
+
+      .view-selector {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .view-selector select {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      .view-controls {
+        display: flex;
+        gap: 10px;
+      }
+
+      .view-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: white;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .view-btn.active {
+        background-color: #fb651e;
+        color: white;
+        border-color: #fb651e;
+      }
+
+      .submit-btn {
+        /* width: 100%; */
+        padding: 0.5rem 1rem;
+        background-color: #fb651e;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+      }
+
+      .calendar-filter {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+
+      .filter-tag {
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+      }
+
+      .filter-tag.meetings {
+        background-color: #ffeee5;
+        color: #fb651e;
+      }
+
+      .filter-tag.menu {
+        background-color: #fff2e5;
+        color: #fb951e;
+      }
+
+      .filter-tag.inventory {
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      .filter-tag.events {
+        background-color: #e5e5e5;
+        color: #666;
+      }
+
+      .filter-count {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        margin-left: 8px;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 15px;
+      }
+
+      .calendar-day-header {
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        padding-bottom: 10px;
+      }
+
+      .calendar-day {
+        min-height: 120px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 10px;
+        position: relative;
+      }
+
+      .day-number {
+        font-size: 16px;
+        color: #888;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .calendar-day.today {
+        background-color: #d45114;
+        color: #000;
+        font-weight: bold;
+        & .day-number {
+          color: white;
+        }
+      }
+
+      .event {
+        border-radius: 8px;
+        padding: 8px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: white;
+      }
+
+      .event-time {
+        font-size: 10px;
+        margin-top: 5px;
+        opacity: 0.8;
+      }
+
+      .event.new-dish {
+        background-color: #fb651e;
+      }
+
+      .event.team-check {
+        background-color: #ffb980;
+      }
+
+      .event.inventory {
+        background-color: #1e1e1e;
+      }
+
+      .event-people {
+        display: flex;
+        margin-top: 8px;
+      }
+
+      .event-people .avatar {
+        width: 18px;
+        height: 18px;
+        font-size: 8px;
+        margin-right: -5px;
+        border: 1px solid white;
+      }
+
+      /* New Schedule Styles */
+      .new-schedule {
+        padding: 1rem;
+        /* max-width: 500px; */
+        /* margin: 0 auto; */
+        width: 20vw;
+        height: 100vh;
+        overflow-y: auto;
+        background-color: white;
+        /* position: absolute; */
+        top: 0;
+        right: 0;
+        /* z-index: 10; */
+      }
+
+      .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .form-title {
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .close-btn {
+        background: transparent;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-size: 14px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+      }
+
+      .date-picker {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        background-color: white;
+        cursor: pointer;
+      }
+
+      .date-picker svg {
+        margin-right: 8px;
+        color: #888;
+      }
+
+      .time-picker {
+        display: flex;
+        align-items: center;
+      }
+
+      .time-input {
+        flex-grow: 1;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px 0 0 8px;
+        font-size: 16px;
+      }
+
+      .time-ampm {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-left: none;
+        border-radius: 0 8px 8px 0;
+        background-color: white;
+        display: flex;
+        align-items: center;
+      }
+
+      .time-ampm svg {
+        margin-left: 8px;
+        color: #888;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      /* Helper for the sliding animation */
+      .slide-left {
+        transform: translateX(-20vw);
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 100%;
+          position: relative;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid #eee;
+        }
+
+        .content {
+          margin-left: 0;
+        }
+      }
+    </style>
+
+    <style>
+      /* Add these styles to your existing <style> block */
+
+      /* Week View Styles */
+      .week-header {
+        text-align: center;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+        white-space: pre-line; /* Preserve line breaks */
+        grid-column: span 7;
+      }
+
+      .calendar-row {
+        display: grid;
+        grid-template-columns: 50px repeat(7, 1fr); /* Time column + 7 days */
+        grid-column: span 7;
+      }
+
+      .day-headers {
+        grid-template-columns: 50px repeat(7, 1fr);
+        text-align: center;
+        font-weight: bold;
+        border-bottom: 1px solid #eee;
+      }
+
+      .time-header {
+        border-bottom: 1px solid #eee;
+      }
+
+      .time-slot {
+        padding: 8px;
+        border-right: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        font-size: 0.8em;
+        text-align: center;
+        position: relative;
+      }
+
+      .day-cell {
+        padding: 8px;
+        border-right: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        min-height: 50px; /*Adjust as needed*/
+        position: relative; /* For event positioning */
+      }
+
+      .week-event {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 5px;
+        margin: 2px;
+        font-size: 0.75em;
+        position: absolute; /* Position within the day cell */
+        top: 0;
+        left: 0;
+        width: calc(100% - 4px);
+        box-sizing: border-box;
+      }
+
+      .week-event .event-title {
+        font-weight: bold;
+      }
+
+      .week-event .event-time {
+        font-size: 0.9em;
+        color: #666;
+      }
+
+      /* Year View Styles */
+      .year-view {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(250px, 1fr)
+        ); /* Adjust min width as needed */
+        gap: 15px;
+      }
+
+      .month-container {
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+        display: grid;
+        /* grid-template-columns: repeat(7, 1fr); */
+      }
+
+      .mini-month-header {
+        font-weight: bold;
+        margin-bottom: 5px;
+        cursor: pointer;
+      }
+
+      .mini-calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+      }
+
+      .mini-day-header {
+        font-size: 0.7em;
+        color: #777;
+        text-align: center;
+      }
+
+      .mini-day {
+        font-size: 0.8em;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+        padding: 5px;
+      }
+
+      .mini-day.empty {
+        background: none;
+        cursor: default;
+      }
+
+      .mini-day.has-event {
+        background-color: #e0f7fa; /* Light blue for days with events */
+        color: #00838f;
+      }
+
+      .mini-day:hover {
+        background-color: #f0f0f0;
+      }
+
+      /* Day View Styles */
+      .day-view.calendar-grid {
+        display: grid;
+        grid-template-columns: 80px 1fr; /* Time column and event column */
+      }
+
+      .day-view .calendar-day-header {
+        grid-column: 1 / 3;
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+        border-bottom: 1px solid #eee;
+      }
+
+      .day-view-column {
+        display: flex;
+        flex-direction: column;
+        grid-column: 1 / 3;
+      }
+
+      .time-slot-container {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+        font-size: 0.8em;
+        text-align: left;
+        position: relative; /* For positioning events within */
+        display: grid;
+        grid-template-columns: 10% 1fr;
+      }
+
+      .event-area {
+        position: relative;
+      }
+
+      .day-event {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 8px;
+        margin: 5px;
+        font-size: 0.9em;
+        position: absolute;
+        top: 0;
+        left: 70px;
+        width: calc(100% - 90px);
+        box-sizing: border-box;
+        z-index: 1; /* Ensure it appears above other elements */
+      }
+
+      .day-event .event-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .day-event .event-details {
+        color: #666;
+        font-size: 0.85em;
+        margin-bottom: 3px;
+      }
+
+      .day-event .event-people {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 5px;
+      }
+
+      .day-event .avatar {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.7em;
+      }
+
+      .day-event .event-notes {
+        font-size: 0.8em;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <!-- Schedule Details View -->
+      <div class="schedule-details" id="scheduleDetails">
+        <div class="sidebar">
+          <h2>Schedule Details</h2>
+
+          <div class="schedule-item">
+            <div class="schedule-title">Weekly Specials Review</div>
+            <div class="menu-updates-tag">Menu Updates</div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2V5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M16 2V5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M3.5 9.09H20.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Apr 7, 2025
+            </div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 8V13"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 22C7.17 22 3.25 18.08 3.25 13.25C3.25 8.42 7.17 4.5 12 4.5C16.83 4.5 20.75 8.42 20.75 13.25"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 2H15"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              3:00 PM - 4:00 PM
+            </div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 12V15"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7.5 10.5H16.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 18V7.8C7 6.11984 7 5.27976 7.32698 4.63803C7.6146 4.07354 8.07354 3.6146 8.63803 3.32698C9.27976 3 10.1198 3 11.8 3H16.2C17.8802 3 18.7202 3 19.362 3.32698C19.9265 3.6146 20.3854 4.07354 20.673 4.63803C21 5.27976 21 6.11984 21 7.8V12.2C21 13.8802 21 14.7202 20.673 15.362C20.3854 15.9265 19.9265 16.3854 19.362 16.673C18.7202 17 17.8802 17 16.2 17H7Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 17V19.5C7 20.6046 6.10457 21.5 5 21.5V21.5C3.89543 21.5 3 20.6046 3 19.5V17H7Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Kitchen
+            </div>
+
+            <div class="team-section">
+              <div class="team-title">Team</div>
+              <div class="team-members">
+                <div class="team-member">
+                  <div class="avatar">HC</div>
+                  Head Chef
+                </div>
+                <div class="team-member">
+                  <div class="avatar">SC</div>
+                  Sous Chef
+                </div>
+              </div>
+              <div class="menu-team">
+                <div class="avatar">MD</div>
+                Menu Development Team
+                <div class="team-count">+3</div>
+              </div>
+            </div>
+
+            <div class="notes-section">
+              <div class="notes-title">Notes</div>
+              <div class="notes-content">
+                Finalize weekly specials and update menu options for coming
+                weeks.
+              </div>
+            </div>
+          </div>
+
+          <div class="schedule-item">
+            <div class="schedule-title">Weekly Specials Review</div>
+            <div class="menu-updates-tag">Menu Updates</div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2V5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M16 2V5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M3.5 9.09H20.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Apr 7, 2025
+            </div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 8V13"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 22C7.17 22 3.25 18.08 3.25 13.25C3.25 8.42 7.17 4.5 12 4.5C16.83 4.5 20.75 8.42 20.75 13.25"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 2H15"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              3:00 PM - 4:00 PM
+            </div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 12V15"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7.5 10.5H16.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 18V7.8C7 6.11984 7 5.27976 7.32698 4.63803C7.6146 4.07354 8.07354 3.6146 8.63803 3.32698C9.27976 3 10.1198 3 11.8 3H16.2C17.8802 3 18.7202 3 19.362 3.32698C19.9265 3.6146 20.3854 4.07354 20.673 4.63803C21 5.27976 21 6.11984 21 7.8V12.2C21 13.8802 21 14.7202 20.673 15.362C20.3854 15.9265 19.9265 16.3854 19.362 16.673C18.7202 17 17.8802 17 16.2 17H7Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 17V19.5C7 20.6046 6.10457 21.5 5 21.5V21.5C3.89543 21.5 3 20.6046 3 19.5V17H7Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Kitchen
+            </div>
+          </div>
+        </div>
+        <div class="inner-content">
+          <div class="calendar-header">
+            <div class="calendar-controls">
+              <div class="view-selector">
+                <select id="monthSelector">
+                  <option value="0">January</option>
+                  <option value="1">February</option>
+                  <option value="2">March</option>
+                  <option value="3">April</option>
+                  <option value="4">May</option>
+                  <option value="5">June</option>
+                  <option value="6">July</option>
+                  <option value="8">September</option>
+                  <option value="9">October</option>
+                  <option value="10">November</option>
+                  <option value="11">December</option>
+                </select>
+                <select id="yearSelector"></select>
+              </div>
+              <div class="view-buttons">
+                <button class="view-btn active" data-view="month">Month</button>
+                <button class="view-btn" data-view="week">Week</button>
+                <button class="view-btn" data-view="day">Day</button>
+                <button class="view-btn" data-view="year">Year</button>
+              </div>
+
+              <button id="addScheduleBtn" class="submit-btn">
+                + Add Schedule
+              </button>
+            </div>
+            <div class="calendar-filter">
+              <div class="filter-tag meetings">
+                <span>Meetings</span>
+                <span class="filter-count">6</span>
+              </div>
+              <div class="filter-tag menu">
+                <span>Menu Updates</span>
+                <span class="filter-count">4</span>
+              </div>
+              <div class="filter-tag inventory">
+                <span>Inventory Checks</span>
+                <span class="filter-count">5</span>
+              </div>
+              <div class="filter-tag events">
+                <span>Events</span>
+                <span class="filter-count">5</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="calendar-grid-header flex align-center justify-between">
+            <button class="navigate" id="prevViewBtn">&lt;</button>
+            <div class="calendar-day-header" id="calendarDayHeader">
+              <h1 id="calendarTitle">May 2025</h1>
+            </div>
+            <button class="navigate" id="nextViewBtn">&gt;</button>
+          </div>
+
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+      </div>
+
+      <!-- New Schedule Form -->
+      <div class="new-schedule" id="newSchedule">
+        <div class="form-header">
+          <h2 class="form-title">New Schedule</h2>
+          <button class="close-btn" id="closeNewSchedule">&times;</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input type="text" class="form-control" id="scheduleTitle" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <input type="text" class="form-control" id="scheduleCategory" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-control" id="scheduleDate" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Time</label>
+          <input
+            type="time"
+            class="form-control"
+            id="scheduleTime"
+            value="12:30"
+          />
+          <input
+            type="time"
+            class="form-control"
+            id="scheduleEndTime"
+            value=""
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Team</label>
+          <input type="text" class="form-control" id="scheduleTeam" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Venue</label>
+          <input type="text" class="form-control" id="scheduleVenue" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <textarea class="form-control" id="scheduleNotes" rows="3"></textarea>
+        </div>
+
+        <button class="submit-btn" id="createScheduleBtn">Create</button>
+      </div>
+    </div>
+
+    <script>
+      // DOM Elements
+      const container = document.getElementById("container");
+      const scheduleDetails = document.getElementById("scheduleDetails");
+      const newSchedule = document.getElementById("newSchedule");
+      const addScheduleBtn = document.getElementById("addScheduleBtn");
+      const closeNewScheduleBtn = document.getElementById("closeNewSchedule");
+
+      const newScheduleForm = document.getElementById("newSchedule");
+      const createScheduleBtn = document.getElementById("createScheduleBtn");
+      const titleInput = document.getElementById("scheduleTitle");
+      const categoryInput = document.getElementById("scheduleCategory");
+      const dateInput = document.getElementById("scheduleDate");
+      const timeInput = document.getElementById("scheduleTime");
+      const endTimeInput = document.getElementById("scheduleEndTime");
+      const teamInput = document.getElementById("scheduleTeam");
+      const venueInput = document.getElementById("scheduleVenue");
+      const notesInput = document.getElementById("scheduleNotes");
+
+      const monthSelector = document.getElementById("monthSelector");
+      const yearSelector = document.getElementById("yearSelector");
+      const calendarGrid = document.getElementById("calendarGrid");
+      const viewButtons = document.querySelectorAll(".view-btn");
+      const prevViewBtn = document.getElementById("prevViewBtn");
+      const nextViewBtn = document.getElementById("nextViewBtn");
+
+      prevViewBtn.addEventListener("click", navigatePrevious);
+      nextViewBtn.addEventListener("click", navigateNext);
+
+      let currentDate = new Date();
+      let currentMonth = currentDate.getMonth();
+      let currentYear = currentDate.getFullYear();
+      let currentView = "month"; // Default view
+
+      // Calendar events (for demonstration)
+      let events = [
+        {
+          id: 1,
+          title: "New Seasonal Dish Tasting",
+          date: "2025-05-03",
+          time: "10:30 AM - 12:30 PM",
+          startTime: "10:30 AM",
+          endTime: "12:30 PM",
+          type: "new-dish",
+          people: ["HC", "SC", "+3"],
+        },
+        {
+          id: 2,
+          title: "Weekly Team Check-in",
+          date: "2025-05-04",
+          time: "11:00 AM - 12:30 PM",
+          startTime: "11:00 AM",
+          endTime: "12:30 PM",
+          type: "team-check",
+        },
+        {
+          id: 3,
+          title: "Inventory Audit",
+          date: "2025-05-04",
+          time: "10:30 AM - 12:30 PM",
+          startTime: "10:30 AM",
+          endTime: "12:30 PM",
+          type: "inventory",
+        },
+        {
+          id: 4,
+          title: "Weekly Team Check-in",
+          date: "2025-05-11",
+          time: "11:30 AM - 12:30 PM",
+          startTime: "11:30 AM",
+          endTime: "12:30 PM",
+          type: "team-check",
+        },
+        {
+          id: 5,
+          title: "Inventory Audit",
+          date: "2025-05-11",
+          time: "11:30 AM - 12:30 PM",
+          startTime: "11:30 AM",
+          endTime: "12:30 PM",
+          type: "inventory",
+        },
+        {
+          id: 6,
+          title: "New Seasonal Dish Tasting",
+          date: "2025-05-13",
+          time: "11:30 AM - 12:30 PM",
+          startTime: "11:30 AM",
+          endTime: "12:30 PM",
+          type: "new-dish",
+          people: ["HC", "SC", "+3"],
+        },
+      ];
+
+      //   Function to parse the time string and update events
+      function updateEventTimes(event) {
+        const parts = event.time.split(" - ");
+        event.startTime = parts[0].trim();
+        // event.endTime = parts[1].trim();
+        return event;
+      }
+
+      // Update the initial events array
+      events = events.map(updateEventTimes);
+
+      // Event Listeners
+      addScheduleBtn.addEventListener("click", showNewScheduleForm);
+      closeNewScheduleBtn.addEventListener("click", hideNewScheduleForm);
+
+      // Today's date for the form
+      const today = new Date();
+      const defaultDateFormatted = `${today.getFullYear()}-${String(
+        today.getMonth() + 1
+      ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+      let selectedDate = defaultDateFormatted;
+
+      function populateYearSelector() {
+        const startYear = currentYear - 10;
+        const endYear = currentYear + 10;
+        for (let i = startYear; i <= endYear; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent = i;
+          if (i === currentYear) {
+            option.selected = true;
+          }
+          yearSelector.appendChild(option);
+        }
+      }
+
+      function navigatePrevious() {
+        if (currentView === "month") {
+          currentMonth--;
+          if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          }
+        } else if (currentView === "week") {
+          const firstDayOfCurrentWeek = getStartOfWeek(currentDate);
+          currentDate = new Date(
+            firstDayOfCurrentWeek.getFullYear(),
+            firstDayOfCurrentWeek.getMonth(),
+            firstDayOfCurrentWeek.getDate() - 7
+          );
+        } else if (currentView === "day") {
+          currentDate.setDate(currentDate.getDate() - 1);
+        } else if (currentView === "year") {
+          currentYear--;
+        }
+        updateCalendarView(currentView);
+      }
+
+      function navigateNext() {
+        if (currentView === "month") {
+          currentMonth++;
+          if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+          }
+        } else if (currentView === "week") {
+          const firstDayOfCurrentWeek = getStartOfWeek(currentDate);
+          currentDate = new Date(
+            firstDayOfCurrentWeek.getFullYear(),
+            firstDayOfCurrentWeek.getMonth(),
+            firstDayOfCurrentWeek.getDate() + 7
+          );
+        } else if (currentView === "day") {
+          currentDate.setDate(currentDate.getDate() + 1);
+        } else if (currentView === "year") {
+          currentYear++;
+        }
+        updateCalendarView(currentView);
+      }
+
+      // Function to generate the calendar grid for a given month and year (MODIFIED)
+      function generateMonthView(month, year) {
+        calendarGrid.classList.add("month-view");
+        calendarGrid.classList.remove("year-view", "week-view", "day-view");
+        calendarGrid.innerHTML = `
+            <div class="calendar-day-header">Sun</div>
+            <div class="calendar-day-header">Mon</div>
+            <div class="calendar-day-header">Tue</div>
+            <div class="calendar-day-header">Wed</div>
+            <div class="calendar-day-header">Thu</div>
+            <div class="calendar-day-header">Fri</div>
+            <div class="calendar-day-header">Sat</div>
+          `;
+
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+        const daysInMonth = lastDayOfMonth.getDate();
+        const startingDay = firstDayOfMonth.getDay();
+
+        const today = new Date();
+        const currentMonthToday = today.getMonth();
+        const currentYearToday = today.getFullYear();
+        const currentDateToday = today.getDate();
+
+        for (let i = 0; i < startingDay; i++) {
+          const emptyCell = document.createElement("div");
+          emptyCell.classList.add("calendar-day", "empty");
+          calendarGrid.appendChild(emptyCell);
+        }
+
+        for (let i = 1; i <= daysInMonth; i++) {
+          const dayCell = document.createElement("div");
+          dayCell.classList.add("calendar-day");
+          dayCell.dataset.year = year;
+          dayCell.dataset.month = month;
+          dayCell.dataset.day = i;
+          dayCell.style.cursor = "pointer";
+
+          if (
+            currentYearToday === year &&
+            currentMonthToday === month &&
+            currentDateToday === i
+          ) {
+            dayCell.classList.add("today");
+          }
+
+          dayCell.addEventListener("click", (event) => {
+            // Check if the click target is the day cell itself or the day number
+            if (
+              event.target === dayCell ||
+              event.target.classList.contains("day-number")
+            ) {
+              const year = parseInt(dayCell.dataset.year);
+              const month = parseInt(dayCell.dataset.month);
+              const day = parseInt(dayCell.dataset.day);
+              const newSelectedDate = new Date(year, month, day);
+
+              // Format the date for the new schedule form
+              const formattedDate = `${newSelectedDate.getFullYear()}-${String(
+                newSelectedDate.getMonth() + 1
+              ).padStart(2, "0")}-${String(newSelectedDate.getDate()).padStart(
+                2,
+                "0"
+              )}`;
+              const dateInput = document.getElementById("scheduleDate");
+              dateInput.value = formattedDate;
+              selectedDate = formattedDate;
+
+              showNewScheduleForm(); // Open the new schedule form
+            }
+          });
+
+          const dayNumber = document.createElement("div");
+          dayNumber.classList.add("day-number");
+          dayNumber.textContent = i;
+          dayCell.appendChild(dayNumber);
+
+          const eventsOnThisDay = getEventsForDate(new Date(year, month, i));
+          eventsOnThisDay.forEach((event) => {
+            const eventDiv = document.createElement("div");
+            eventDiv.classList.add("event", event.type);
+            eventDiv.style.cursor = "pointer"; // Indicate event is clickable
+            eventDiv.dataset.year = year;
+            eventDiv.dataset.month = month;
+            eventDiv.dataset.day = i;
+            eventDiv.addEventListener("click", showDayViewForEvent); // New event listener
+            eventDiv.innerHTML = `
+        <div>${event.title}</div>
+        <div class="event-time">${event.time}</div>
+        ${
+          event.people
+            ? `<div class="event-people">${event.people
+                .map((person) => `<div class="avatar">${person}</div>`)
+                .join("")}</div>`
+            : ""
+        }
+      `;
+            dayCell.appendChild(eventDiv);
+          });
+
+          calendarGrid.appendChild(dayCell);
+        }
+      }
+
+      function showDayViewForEvent(event) {
+        event.stopPropagation();
+        const eventDiv = event.target.closest(".event");
+        if (eventDiv) {
+          console.log("Clicked Event Dataset:", eventDiv.dataset);
+          const year = parseInt(eventDiv.dataset.year);
+          const month = parseInt(eventDiv.dataset.month);
+          const day = parseInt(eventDiv.dataset.day);
+
+          if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+            const newSelectedDate = new Date(year, month, day);
+            // console.log("Selected Date for Day View:", newSelectedDate);
+            currentDate = newSelectedDate;
+            updateCalendarView("day");
+          } else {
+            console.error(
+              "Could not parse date from event dataset:",
+              eventDiv.dataset
+            );
+          }
+        } else {
+          console.error("Clicked element is not within an event div.");
+        }
+      }
+
+      function generateWeekView(date) {
+        calendarGrid.classList.add("week-view");
+        calendarGrid.classList.remove("year-view", "day-view", "month-view");
+        calendarGrid.innerHTML = ""; // Clear the previous grid
+
+        const startOfWeek = getStartOfWeek(date);
+        const endOfWeek = new Date(
+          startOfWeek.getFullYear(),
+          startOfWeek.getMonth(),
+          startOfWeek.getDate() + 6
+        );
+
+        const monthName = startOfWeek.toLocaleString("en-US", {
+          month: "long",
+        });
+        const startDateFormatted = `${startOfWeek.toLocaleString("en-US", {
+          weekday: "short",
+        })} ${startOfWeek.getDate()}`;
+        const endDateFormatted = `${endOfWeek.toLocaleString("en-US", {
+          weekday: "short",
+        })} ${endOfWeek.getDate()}`;
+
+        const weekHeader = document.createElement("div");
+        weekHeader.classList.add("week-header");
+        weekHeader.textContent = `${monthName}\n${startDateFormatted} - ${endDateFormatted}`;
+        calendarGrid.appendChild(weekHeader);
+
+        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const headerRow = document.createElement("div");
+        headerRow.classList.add("calendar-row", "day-headers");
+        const emptyHeader = document.createElement("div"); // For the time column
+        emptyHeader.classList.add("time-header");
+        headerRow.appendChild(emptyHeader);
+        daysOfWeek.forEach((day) => {
+          const dayHeader = document.createElement("div");
+          dayHeader.classList.add("day-header-cell");
+          dayHeader.textContent = day;
+          headerRow.appendChild(dayHeader);
+        });
+        calendarGrid.appendChild(headerRow);
+
+        for (let hour = 0; hour < 24; hour++) {
+          const timeRow = document.createElement("div");
+          timeRow.classList.add("calendar-row");
+          const timeCell = document.createElement("div");
+          timeCell.classList.add("time-slot");
+          const formattedHour = String(hour).padStart(2, "0");
+          timeCell.textContent = `${formattedHour}:00`;
+          timeRow.appendChild(timeCell);
+
+          for (let i = 0; i < 7; i++) {
+            const currentDateOfWeek = new Date(
+              startOfWeek.getFullYear(),
+              startOfWeek.getMonth(),
+              startOfWeek.getDate() + i
+            );
+            const dayCell = document.createElement("div");
+            dayCell.classList.add("day-cell");
+            const eventsOnThisHour = getEventsForDateTime(
+              currentDateOfWeek,
+              hour
+            );
+            eventsOnThisHour.forEach((event) =>
+              addEventToCellInWeekView(dayCell, event)
+            );
+            timeRow.appendChild(dayCell);
+          }
+          calendarGrid.appendChild(timeRow);
+        }
+      }
+
+      function addEventToCellInWeekView(cell, event) {
+        const eventDiv = document.createElement("div");
+        eventDiv.classList.add("event", event.type, "week-event");
+        eventDiv.innerHTML = `
+    <div class="event-title">${event.title}</div>
+    <div class="event-time">${event.time}</div>
+    ${
+      event.people
+        ? `<div class="event-people">${event.people
+            .map((person) => `<div class="avatar">${person}</div>`)
+            .join("")}</div>`
+        : ""
+    }
+  `;
+        cell.appendChild(eventDiv);
+      }
+
+      // Update the view button event listener to re-render if already active
+      viewButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const view = e.target.dataset.view;
+          if (view === currentView) {
+            updateCalendarView(view); // Re-render the current view
+          } else {
+            updateCalendarView(view);
+          }
+        });
+      });
+
+      //   function generateDayView(date) {
+      //     calendarGrid.classList.add("day-view");
+      //     calendarGrid.classList.remove("year-view", "week-view", "month-view");
+      //     calendarGrid.innerHTML = `<div class="calendar-day-header">Time</div><div class="day-view-column"></div>`;
+      //     const dayViewColumn = calendarGrid.querySelector(".day-view-column");
+
+      //     const eventsOnThisDay = getEventsForDateTime(date);
+      //     console.log("Events on this day:", eventsOnThisDay); // <--- ADD THIS
+
+      //     for (let hour = 0; hour < 24; hour++) {
+      //       const timeSlot = document.createElement("div");
+      //       timeSlot.classList.add("time-slot");
+      //       const formattedHour = String(hour).padStart(2, "0");
+      //       timeSlot.textContent = `${formattedHour}:00`;
+      //       dayViewColumn.appendChild(timeSlot);
+
+      //       const eventsInThisHour = eventsOnThisDay.filter((event) => {
+      //         const eventHourStart = parseInt(event.time.split(":")[0]);
+      //         console.log(
+      //           `Checking hour ${hour}, event time: ${event.time}, start hour: ${eventHourStart}`
+      //         ); // <--- ADD THIS
+      //         return eventHourStart === hour;
+      //       });
+
+      //       console.log(`Events in hour ${hour}:`, eventsInThisHour); // <--- ADD THIS
+
+      //       eventsInThisHour.forEach((event) =>
+      //         addEventToDayView(timeSlot, event)
+      //       );
+      //     }
+      //   }
+
+      //       function addEventToDayView(timeSlotElement, event) {
+      //         const eventDiv = document.createElement("div");
+      //         eventDiv.classList.add("event", event.type, "day-event");
+      //         eventDiv.innerHTML = `
+      //     <div class="event-title">${event.title}</div>
+      //     <div class="event-details">${event.time} ${
+      //           event.venue ? `(${event.venue})` : ""
+      //         }</div>
+      //     ${
+      //       event.people
+      //         ? `<div class="event-people">${event.people
+      //             .map((person) => `<div class="avatar">${person}</div>`)
+      //             .join("")}</div>`
+      //         : ""
+      //     }
+      //     <div class="event-notes">${event.notes || ""}</div>
+      //   `;
+      //         timeSlotElement.appendChild(eventDiv);
+      //       }
+
+      function generateYearView(year) {
+        calendarGrid.innerHTML = "";
+        calendarGrid.classList.add("year-view");
+        calendarGrid.classList.remove("day-view", "week-view", "month-view"); // Add a class for specific styling
+
+        for (let month = 0; month < 12; month++) {
+          const monthContainer = document.createElement("div");
+          monthContainer.classList.add("month-container");
+          generateMiniMonth(month, year, monthContainer);
+          calendarGrid.appendChild(monthContainer);
+        }
+      }
+
+      function generateMiniMonth(month, year, container) {
+        container.innerHTML = ""; // Clear previous content
+
+        const monthName = new Date(year, month, 1).toLocaleString("en-US", {
+          month: "long",
+        });
+        const monthHeader = document.createElement("div");
+        monthHeader.classList.add("mini-month-header");
+        monthHeader.textContent = monthName;
+        monthHeader.dataset.month = month; // Store month for navigation
+        monthHeader.dataset.year = year; // Store year for navigation
+        monthHeader.addEventListener("click", navigateToMonthView);
+        container.appendChild(monthHeader);
+
+        const miniCalendarGrid = document.createElement("div");
+        miniCalendarGrid.classList.add("mini-calendar-grid");
+
+        const dayHeaders = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        dayHeaders.forEach((header) => {
+          const headerCell = document.createElement("div");
+          headerCell.classList.add("mini-day-header");
+          headerCell.textContent = header;
+          miniCalendarGrid.appendChild(headerCell);
+        });
+
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+        const daysInMonth = lastDayOfMonth.getDate();
+        const startingDay = firstDayOfMonth.getDay();
+
+        for (let i = 0; i < startingDay; i++) {
+          const emptyCell = document.createElement("div");
+          emptyCell.classList.add("mini-day", "empty");
+          miniCalendarGrid.appendChild(emptyCell);
+        }
+
+        for (let i = 1; i <= daysInMonth; i++) {
+          const dayCell = document.createElement("div");
+          dayCell.classList.add("mini-day");
+          dayCell.textContent = i;
+          dayCell.dataset.month = month; // Store month for navigation
+          dayCell.dataset.year = year; // Store year for navigation
+          dayCell.dataset.day = i; // Store day for navigation
+          dayCell.addEventListener("click", navigateToMonthView);
+
+          const eventsOnThisDay = getEventsForDate(new Date(year, month, i));
+          if (eventsOnThisDay.length > 0) {
+            dayCell.classList.add("has-event"); // You can enhance this with more visual cues
+          }
+          miniCalendarGrid.appendChild(dayCell);
+        }
+
+        container.appendChild(miniCalendarGrid);
+      }
+
+      function navigateToMonthView(event) {
+        console.log("====================================");
+        console.log(event);
+        console.log("====================================");
+        const month = parseInt(event.target.dataset.month);
+        const year = parseInt(event.target.dataset.year);
+        currentMonth = month;
+        currentYear = year;
+        monthSelector.value = currentMonth;
+        yearSelector.value = currentYear;
+        updateCalendarView("month");
+      }
+
+      function getStartOfWeek(date) {
+        const day = date.getDay();
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+        return new Date(date.setDate(diff));
+      }
+
+      function getEventsForDate(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        return events.filter((event) => {
+          const eventDate = new Date(event.date);
+          return (
+            eventDate.getFullYear() === year &&
+            eventDate.getMonth() === month &&
+            eventDate.getDate() === day
+          );
+        });
+      }
+
+      function getEventsForDateTime(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        return events.filter((event) => {
+          const eventDate = new Date(event.date);
+          return (
+            eventDate.getFullYear() === year &&
+            eventDate.getMonth() === month &&
+            eventDate.getDate() === day
+          );
+        });
+      }
+
+      function addEventToCell(event) {
+        const eventDiv = document.createElement("div");
+        eventDiv.classList.add("event", event.type);
+        eventDiv.innerHTML = `
+    <div>${event.title}</div>
+    <div class="event-time">${event.time}</div>
+    ${
+      event.people
+        ? `<div class="event-people">${event.people
+            .map((person) => `<div class="avatar">${person}</div>`)
+            .join("")}</div>`
+        : ""
+    }
+  `;
+
+        const eventDate = new Date(event.date);
+        const dayOfMonth = eventDate.getDate();
+        console.log("Event Day:", dayOfMonth);
+
+        const dayCells = calendarGrid.querySelectorAll(
+          ".calendar-day:not(.empty)"
+        );
+        dayCells.forEach((cell) => {
+          const dayNumberElement = cell.querySelector(".day-number");
+          console.log("Day Number Element:", dayNumberElement);
+          if (dayNumberElement) {
+            console.log("Day Number Text:", dayNumberElement.textContent);
+          }
+          if (
+            dayNumberElement &&
+            parseInt(dayNumberElement.textContent) === dayOfMonth
+          ) {
+            cell.appendChild(eventDiv);
+          }
+        });
+      }
+
+      function updateCalendarView(view) {
+        currentView = view;
+        viewButtons.forEach((btn) => btn.classList.remove("active"));
+        document
+          .querySelector(`.view-btn[data-view="${view}"]`)
+          .classList.add("active");
+
+        if (currentView === "month") {
+          generateMonthView(currentMonth, currentYear);
+          monthSelector.value = currentMonth;
+          yearSelector.value = currentYear;
+        } else if (currentView === "week") {
+          generateWeekView(currentDate);
+          // You might want to update a header here to show the current week
+        } else if (currentView === "day") {
+          generateDayView(currentDate);
+          // You might want to update a header here to show the current day
+        } else if (currentView === "year") {
+          generateYearView(currentYear);
+          yearSelector.value = currentYear;
+        }
+      }
+
+      function generateDayView(date) {
+        calendarGrid.classList.add("day-view");
+        calendarGrid.classList.remove("year-view", "week-view", "month-view");
+        calendarGrid.innerHTML = `<div class="calendar-day-header">Time</div><div class="day-view-column"></div>`;
+        const dayViewColumn = calendarGrid.querySelector(".day-view-column");
+
+        const eventsOnThisDay = getEventsForDateTime(date); // Get all events for the day
+
+        for (let hour = 0; hour < 24; hour++) {
+          const timeSlotContainer = document.createElement("div"); // Container for time label and events
+          timeSlotContainer.classList.add("time-slot-container");
+
+          const timeLabel = document.createElement("div");
+          timeLabel.classList.add("time-slot-label");
+          const formattedHour = String(hour).padStart(2, "0");
+          timeLabel.textContent = `${formattedHour}:00`;
+          timeSlotContainer.appendChild(timeLabel);
+
+          const eventArea = document.createElement("div");
+          eventArea.classList.add("event-area"); // Area to hold events for this hour
+          timeSlotContainer.appendChild(eventArea);
+
+          const eventsInThisHour = eventsOnThisDay.filter((event) => {
+            const eventStartHour = parseInt(event.time.split(":")[0]);
+            const eventEndHour = event.endTime
+              ? parseInt(event.endTime.split(":")[0])
+              : eventStartHour + 1; // Assume 1-hour duration if no end time
+            return eventStartHour <= hour && hour < eventEndHour; // Check if the hour falls within the event's duration
+          });
+
+          if (eventsInThisHour.length > 0) {
+            // Logic to calculate widths and positions of overlapping events
+            const overlaps = findOverlappingEvents(eventsInThisHour);
+            const positions = calculateEventPositions(
+              eventsInThisHour,
+              overlaps
+            );
+
+            eventsInThisHour.forEach((event, index) => {
+              const eventDiv = addEventToDayView(event);
+              eventDiv.style.width = `${positions[event.id].width}%`;
+              eventDiv.style.left = `${positions[event.id].left}%`;
+              eventArea.appendChild(eventDiv);
+            });
+          }
+
+          dayViewColumn.appendChild(timeSlotContainer);
+        }
+      }
+
+      function addEventToDayView(event) {
+        const eventDiv = document.createElement("div");
+        eventDiv.classList.add("event", event.type, "day-event");
+        eventDiv.innerHTML = `
+    <div class="event-title">${event.title}</div>
+    <div class="event-details">${event.time} ${
+          event.venue ? `(${event.venue})` : ""
+        }</div>
+    ${
+      event.people
+        ? `<div class="event-people">${event.people
+            .map((person) => `<div class="avatar">${person}</div>`)
+            .join("")}</div>`
+        : ""
+    }
+    <div class="event-notes">${event.notes || ""}</div>
+  `;
+        return eventDiv;
+      }
+
+      function findOverlappingEvents(events) {
+        // This function needs to determine which events in the given array overlap in time.
+        // A more sophisticated implementation would compare start and end times.
+        // For a very basic approach, we can just consider all events in the same hour as overlapping.
+        const overlaps = {};
+        for (let i = 0; i < events.length; i++) {
+          overlaps[events[i].id] =
+            events.filter(
+              (e) =>
+                e.id !== events[i].id &&
+                parseInt(e.time.split(":")[0]) ===
+                  parseInt(events[i].time.split(":")[0])
+            ).length > 0;
+        }
+        return overlaps;
+      }
+
+      function calculateEventPositions(events, overlaps) {
+        const positions = {};
+        const numOverlapping = events.filter((e) => overlaps[e.id]).length;
+        const baseWidth = numOverlapping > 0 ? 100 / (numOverlapping + 1) : 100;
+        let currentLeft = 0;
+
+        events.forEach((event) => {
+          positions[event.id] = { width: baseWidth, left: currentLeft };
+          if (overlaps[event.id]) {
+            currentLeft += baseWidth;
+          } else {
+            currentLeft = 0; // Reset for the next non-overlapping event (simplistic)
+          }
+        });
+
+        return positions;
+      }
+
+      populateYearSelector();
+      updateCalendarView(currentView); // Initial call to set the default view
+      monthSelector.value = currentMonth;
+
+      monthSelector.addEventListener("change", (e) => {
+        currentMonth = parseInt(e.target.value);
+        updateCalendarView(currentView);
+      });
+
+      yearSelector.addEventListener("change", (e) => {
+        currentYear = parseInt(e.target.value);
+        updateCalendarView(currentView);
+      });
+
+      viewButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          updateCalendarView(e.target.dataset.view);
+        });
+      });
+
+      // Function to show the new schedule form with sliding animation
+      function showNewScheduleForm() {
+        container.classList.add("slide-left");
+      }
+
+      // Function to hide the new schedule form with sliding animation
+      function hideNewScheduleForm() {
+        container.classList.remove("slide-left");
+      }
+
+      //   createScheduleBtn.addEventListener("click", (e) => {
+      //     e.preventDefault();
+
+      //     const newEvent = {
+      //       title: titleInput.value,
+      //       type: categoryInput.value,
+      //       date: dateInput.value,
+      //       //   date: selectedDate,
+      //       time: timeInput.value,
+      //       team: teamInput.value.split(",").map((item) => item.trim()), // Assuming comma-separated
+      //       venue: venueInput.value,
+      //       notes: notesInput.value,
+      //       people: teamInput.value.split(",").map((item) => item.trim()), // Assuming team is people
+      //     };
+
+      //     events.push(newEvent); // Add the new event to the array
+      //     // addEventToCalendar(newEvent);
+
+      //     // Update the calendar view to reflect the new event
+      //     updateCalendarView(currentView);
+
+      //     // Hide the new schedule form
+      //     hideNewScheduleForm();
+
+      //     // Clear the form
+      //     // newScheduleForm.reset();
+      //     resetForm();
+      //     alert("New schedule created successfully!");
+      //   });
+
+      //   //   Initial load of events from local storage (if implemented later)
+      //   if (localStorage.getItem("restaurantSchedule")) {
+      //     events = JSON.parse(localStorage.getItem("restaurantSchedule"));
+      //     updateCalendarView(currentView);
+      //   }
+
+      //   // Function to save events to local storage (to be called when events change)
+      //   function saveScheduleToLocalStorage() {
+      //     localStorage.setItem("restaurantSchedule", JSON.stringify(events));
+      //   }
+
+      //   // Call saveScheduleToLocalStorage whenever the events array is updated
+      //   const originalPush = Array.prototype.push;
+      //   Array.prototype.push = function (...args) {
+      //     const result = originalPush.apply(this, args);
+      //     if (this === events) {
+      //       saveScheduleToLocalStorage();
+      //     }
+      //     return result;
+      //   };
+
+      // Helper function to map category name to CSS class
+
+      createScheduleBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const timeParts = timeInput.value.split(" - "); // Assuming the input is also "startTime - endTime"
+        const startTime = timeParts[0]
+          ? timeParts[0].trim()
+          : timeInput.value.trim();
+        const endTime = timeParts[1] ? timeParts[1].trim() : endTimeInput.value;
+
+        const newEvent = {
+          title: titleInput.value,
+          type: categoryInput.value,
+          date: dateInput.value,
+          time: timeInput.value,
+          startTime: startTime,
+          endTime: endTime,
+          team: teamInput.value.split(",").map((item) => item.trim()),
+          venue: venueInput.value,
+          notes: notesInput.value,
+          people: teamInput.value.split(",").map((item) => item.trim()),
+        };
+
+        events.push(newEvent);
+        updateCalendarView(currentView);
+        hideNewScheduleForm();
+        resetForm();
+        alert("New schedule created successfully!");
+      });
+
+      // Local Storage Handling
+      if (localStorage.getItem("restaurantSchedule")) {
+        events = JSON.parse(localStorage.getItem("restaurantSchedule"));
+        // Ensure existing stored events have startTime and endTime
+        events = events.map((event) => {
+          if (!event.startTime && event.time) {
+            return updateEventTimes(event);
+          }
+          return event;
+        });
+        updateCalendarView(currentView);
+      }
+
+      function saveScheduleToLocalStorage() {
+        localStorage.setItem("restaurantSchedule", JSON.stringify(events));
+      }
+
+      const originalPush = Array.prototype.push;
+      Array.prototype.push = function (...args) {
+        const result = originalPush.apply(this, args);
+        if (this === events) {
+          // Ensure new events also have startTime and endTime before saving
+          args.forEach((newEvent) => {
+            if (!newEvent.startTime && newEvent.time) {
+              updateEventTimes(newEvent);
+            }
+          });
+          saveScheduleToLocalStorage();
+        }
+        return result;
+      };
+
+      function getCategoryClass(category) {
+        const categoryLower = category.toLowerCase();
+        if (categoryLower.includes("dish") || categoryLower.includes("tasting"))
+          return "new-dish";
+        if (categoryLower.includes("team") || categoryLower.includes("check"))
+          return "team-check";
+        if (
+          categoryLower.includes("inventory") ||
+          categoryLower.includes("audit")
+        )
+          return "inventory";
+        return "new-dish"; // Default
+      }
+
+      // Add event to calendar UI
+      function addEventToCalendar(event) {
+        console.log("Added event to calendar:", event);
+
+        // Get date from event
+        const eventDate = new Date(event.date);
+        const day = eventDate.getDate();
+
+        // Find the calendar day cell with this day number
+        const dayCells = document.querySelectorAll(".calendar-day");
+        let targetCell = null;
+
+        dayCells.forEach((cell) => {
+          const dayNumber = cell.querySelector(".day-number").textContent;
+          if (parseInt(dayNumber) === day) {
+            targetCell = cell;
+          }
+        });
+
+        if (targetCell) {
+          // Create event element
+          const eventElement = document.createElement("div");
+          eventElement.className = `event ${event.type}`;
+
+          // Create event content
+          let eventContent = `
+                    <div>${event.title}</div>
+                    <div class="event-time">${event.time}</div>
+                `;
+
+          // Add people if applicable
+          if (event.team) {
+            eventContent += `
+                        <div class="event-people">
+                            <div class="avatar">HC</div>
+                        </div>
+                    `;
+          }
+
+          eventElement.innerHTML = eventContent;
+
+          // Add to target cell
+          targetCell.appendChild(eventElement);
+        }
+      }
+
+      // Reset the form fields
+      function resetForm() {
+        document.getElementById("scheduleTitle").value = "";
+        document.getElementById("scheduleCategory").value = "";
+        document.getElementById("scheduleTime").value = "12:32";
+        document.getElementById("scheduleTeam").value = "";
+        document.getElementById("scheduleVenue").value = "";
+        document.getElementById("scheduleNotes").value = "";
+
+        selectedDate = defaultDateFormatted;
+      }
+
+      // Make calendar day cells clickable to add events on specific days
+      //   const dayElements = document.querySelectorAll(".calendar-day");
+      //   dayElements.forEach((day) => {
+      //     day.addEventListener("click", (e) => {
+      //       // Only trigger if clicked directly on the day cell, not on an event
+      //       if (e.target === day || e.target.classList.contains("day-number")) {
+      //         const dayNumber = day.querySelector(".day-number").textContent;
+      //         const date = new Date(2025, 4, parseInt(dayNumber)); // May 2025
+      //         selectedDate = `2025-05-${dayNumber.padStart(2, "0")}`;
+
+      //         // Update the date picker display
+      //         const options = { year: "numeric", month: "long", day: "numeric" };
+      //         const formattedDate = date.toLocaleDateString("en-US", options);
+
+      //         // Show form for adding event
+      //         showNewScheduleForm();
+      //       }
+      //     });
+      //   });
+    </script>
+  </body>
+</html>

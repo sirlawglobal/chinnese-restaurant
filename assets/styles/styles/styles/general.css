@@ -1,0 +1,254 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Sora:wght@100..800&display=swap");
+
+:root {
+  /* font-size: ; */
+  font-size: calc(62.5% + 0.390625vw);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f9f4f0;
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+input:focus,
+input:active,
+input:visited,
+textarea:focus,
+textarea:active,
+textarea:visited {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: none;
+  -webkit-text-fill-color: black;
+  -webkit-box-shadow: 0 0 0px 1000px #00000000 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #3f3f3f8c;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+section {
+  padding: 2vw;
+}
+
+main {
+  width: 82%;
+  overflow: auto;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 500;
+}
+h2 {
+  font-size: 2.3rem;
+  font-weight: 500;
+}
+h3 {
+  font-size: 2rem;
+  font-weight: 500;
+}
+h4 {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+h5 {
+  font-size: 1.429rem;
+  font-weight: 500;
+}
+h6,
+.big {
+  font-size: 1.214rem;
+  font-weight: 500;
+}
+.small {
+  font-size: 0.857rem;
+}
+small {
+  font-size: 0.714rem;
+}
+p,
+label,
+span,
+input,
+select,
+option,
+strong,
+a {
+  font-size: 0.9rem;
+}
+
+label {
+  display: block;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+img::selection {
+  background-color: #000;
+}
+
+.button {
+  display: block;
+  padding: 8px 16px;
+  width: 100%;
+  min-width: 100px;
+  max-width: 200px;
+  text-align: center;
+  background-color: transparent;
+  margin: auto;
+  font-weight: 600;
+  transition: all 0.3s;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.grid {
+  display: grid;
+}
+.g-af3 {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
+}
+.g-af {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.row {
+  flex-direction: row;
+}
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.nowrap {
+  flex-wrap: nowrap;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-stretch {
+  align-items: stretch;
+}
+
+.align-baseline {
+  align-items: baseline;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.by-2 {
+  width: 50%;
+}
+.by-3 {
+  width: 30%;
+}
+
+.hidden {
+  display: none;
+}
+
+.card {
+  background-color: white;
+  border-radius: .5rem;
+  padding: 1rem;
+}
+
+.filter {
+  cursor: pointer;
+}
+.filter strong {
+  font-weight: 500;
+  font-size: 0.7rem;
+}

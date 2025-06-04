@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../assets/styles/general.css">
+    <link rel="stylesheet" href="../../assets/styles/forms.css">
+    <title>Verify Code</title>
+  </head>
+  <body>
+    <main>
+      <form method="post" class="verify">
+        <div class="title">
+          <h1>Verification</h1>
+          <p>Enter your 4 digits code that you received on your email.</p>
+        </div>
+        <!-- four input boxes. each takes one number alone. once one is filled th cursor moves to the next -->
+        <div class="form-group flex align-center justify-between">
+          <input type="text" name="code" required maxlength="1" />
+          <input type="text" name="code" required maxlength="1" />
+          <input type="text" name="code" required maxlength="1" />
+          <input type="text" name="code" required maxlength="1" />
+        </div>
+        <!-- timer till page closes itself -->
+        <p>00:30</p>
+        <div class="form-group flex align-center justify-center">
+          <button type="submit">Verify</button>
+        </div>
+        <p>If you didn’t receive a code! <a>Resend</a></p>
+      </form>
+    </main>
+    <script>
+      // Get the input fields
+      var inputs = document.querySelectorAll("input");
+      // Add event listener to each input field
+      inputs.forEach(function (input, index) {
+        input.addEventListener("input", function () {
+          // If the input is not empty
+          if (input.value) {
+            // If the input is not the last input field
+            if (index < inputs.length - 1) {
+              // Move the focus to the next input field
+              inputs[index + 1].focus();
+            }
+          }
+        });
+      });
+
+      // when backspace is clicked, move the cursor to the previous input field
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Backspace") {
+          inputs.forEach(function (input, index) {
+            if (
+              document.activeElement === input &&
+              input.value === "" &&
+              index > 0
+            ) {
+              inputs[index - 1].focus();
+              inputs[index - 1].value = ""; // Clear the previous input field
+            }
+          });
+        }
+        // when left arrow key is clicked, move the cursor to the previous input field
+        else if (event.key === "ArrowLeft") {
+          inputs.forEach(function (input, index) {
+            if (document.activeElement === input && index > 0) {
+              inputs[index - 1].focus();
+            }
+          });
+        }
+        // when right arrow key is clicked, move the cursor to the next input field
+        else if (event.key === "ArrowRight") {
+          inputs.forEach(function (input, index) {
+            if (document.activeElement === input && index < inputs.length - 1) {
+              inputs[index + 1].focus();
+            }
+          });
+        }
+      });
+    </script>
+    <script>
+      // Get the form
+      var form = document.querySelector("form");
+      // Get the error message
+      var error = document.querySelector(".error");
+      // Add event listener to the form
+      form.addEventListener("submit", function (event) {
+        // If the code is not 4 digits
+        if (form.code.value.length !== 4) {
+          // Show the error message
+          error.style.display = "block";
+          // Prevent the form from submitting
+          event.preventDefault();
+        }
+      });
+    </script>
+  </body>
+</html>
