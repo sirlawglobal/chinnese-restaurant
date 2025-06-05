@@ -19,7 +19,7 @@
           <p>Get started to start feeding like a king.</p>
         </div>
      <!-- <form id="registrationForm" method="POST" action="register.php"> -->
-     <form id="registrationForm" method="POST" >
+     <form id="register-form" method="POST" >
   <fieldset>
     <legend>Fullname</legend>
     <input type="text" name="name" id="name" required />
@@ -27,6 +27,10 @@
   <fieldset>
     <legend>Phone</legend>
     <input type="tel" name="phone" id="phone" required />
+  </fieldset>
+  <fieldset>
+    <legend>Role</legend>
+    <input type="text" name="role" id="role" required />
   </fieldset>
   <fieldset>
     <legend>Email</legend>
@@ -52,45 +56,62 @@
         <img src="../assets/images/admin-img.png" alt="Golden Dish" />
       </section>
     </main>
-    <script>
-  document.querySelector('form').addEventListener('submit', async function (e) {
-    e.preventDefault(); // Prevent default form submission
+   <script>
+  const registerForm = document.getElementById("register-form");
 
-    const form = e.target;
-    const formData = new FormData(form);
+  registerForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    // Convert FormData to plain object (optional, but easier for JSON)
-    const data = {};
-    formData.forEach((value, key) => {
-      
-      data[key.toLowerCase()] = value; // lowercase keys to match PHP expected keys
-    });
+    const formData = new FormData(registerForm);
+    const payload = {
+      data_type: "register",
+      name: formData.get("name"),
+      role: formData.get("role"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      password: formData.get("password")
+    };
 
-    
-// console.log(data);
-
-    try {
-   const response = await fetch('/chinnese-restaurant/BackEnd/controller/auth/register.php', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(data)
-});
-
-      const result = await response.json();
-
-      if (result.success) {
-        alert(result.message);
-        form.reset(); // clear form on success
-      } else {
-        alert('Error: ' + result.message);
-      }
-    } catch (error) {
-      alert('An unexpected error occurred.');
-      console.error(error);
-    }
+    send_data("register", payload);
   });
+
+  function send_data(data_type = "register", payload = {}) {
+    const submitBtn = document.getElementById("register-btn");
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Registering...";
+    }
+
+    const ajax = new XMLHttpRequest();
+    ajax.onreadystatechange = function () {
+      if (ajax.readyState === 4) {
+        if (ajax.status === 200 && ajax.responseText.trim() !== "") {
+          handle_result(ajax.responseText, data_type);
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Register";
+        }
+      }
+    };
+
+    ajax.open("POST", "/chinnese-restaurant/BackEnd/controller/auth/register.php", true);
+    ajax.setRequestHeader("Content-Type", "application/json");
+    ajax.send(JSON.stringify(payload));
+  }
+
+  function handle_result(result, data_type) {
+    const obj = JSON.parse(result);
+    if (obj.data_type !== data_type) return;
+
+    if (data_type === "register") {
+      alert(obj.message);
+      if (obj.success) {
+        document.getElementById("register-form").reset();
+      }
+    }
+  }
 </script>
 
   </body>
