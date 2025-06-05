@@ -103,7 +103,33 @@
         </div>
         <div class="flex justify-center">
           <div class="dishes">
-            <!-- Dishes will be populated dynamically based on cart items -->
+            <!-- Static dishes remain as-is -->
+            <div class="dish flex align-center justify-between">
+              <div class="dish__details">
+                <h3 class="dish__title">Dal Fry Rice Bowl - Fried With Ghee</h3>
+                <span class="dish__price">£180</span>
+                <p class="dish__description">
+                  Brunch: One meal to rule them all! Grab this mega saver combo
+                  with your choice of 2 veg wraps, Aloo Paratha (2 pcs), chole
+                  and Curd lunchbox and 2 choco lava cakes. This is just bliss
+                  on a plate!
+                </p>
+              </div>
+              <button class="button button--add">Add +</button>
+            </div>
+            <div class="dish flex align-center justify-between">
+              <div class="dish__details">
+                <h3 class="dish__title">Dal Fry Rice Bowl - Fried With Ghee</h3>
+                <span class="dish__price">£180</span>
+                <p class="dish__description">
+                  Brunch: One meal to rule them all! Grab this mega saver combo
+                  with your choice of 2 veg wraps, Aloo Paratha (2 pcs), chole
+                  and Curd lunchbox and 2 choco lava cakes. This is just bliss
+                  on a plate!
+                </p>
+              </div>
+              <button class="button button--add">Add +</button>
+            </div>
           </div>
           <div class="cart">
             <div class="flex justify-between align-center cart__header">
@@ -163,21 +189,17 @@
 
       document.addEventListener("DOMContentLoaded", function () {
         const cartContainer = document.querySelector(".cart__content");
-        const dishesContainer = document.querySelector(".dishes");
         const cartCount = document.querySelector(".cart__count");
         const cartSubtotal = document.querySelector(".cart__subtotal__price");
         const cartButton = document.querySelector(".button--cart");
         const cartBadge = cartButton.querySelector(".cart-badge");
         let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
-        // Function to render cart items and dishes
+        // Function to render cart items
         function renderCartItems() {
           cartContainer.innerHTML = "";
-          dishesContainer.innerHTML = "";
-          
           if (cartItems.length === 0) {
             cartContainer.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
-            dishesContainer.innerHTML = '<p class="empty-dishes-message">No items in your cart to display</p>';
             cartCount.textContent = "0 Items";
             cartSubtotal.textContent = "£0";
             cartBadge.textContent = "0";
@@ -185,56 +207,48 @@
             return;
           }
 
-          // Get categories from localStorage
-          const categories = JSON.parse(localStorage.getItem("menu_categories")) || [];
+        // Get categories from localStorage once (parse to object)
+const categories = JSON.parse(localStorage.getItem("menu_categories")) || [];
 
-          // Helper function to get category name by id
-          function getCategoryNameById(id) {
-            const category = categories.find(cat => cat.id === id);
-            return category ? category.name : "Unknown";
-          }
+// console.log("Categories loaded:", categories);
 
-          // Render items in cart
-          cartItems.forEach((item, index) => {
-            const categoryName = getCategoryNameById(item.category);
+// Helper function to get category name by id
+function getCategoryNameById(id) {
+  console.log("Looking for category with id:", id);
+  const category = categories.find(cat => cat.id === id);
+  return category ? category.name : "Unknown";
+}
 
-            // Render in cart
-            const cartItem = document.createElement("div");
-            cartItem.className = "cart__item";
-            cartItem.innerHTML = `
-              <p class="dish__origin">from <span>${DOMPurify.sanitize(categoryName)}</span></p>
-              <div class="flex justify-between align-center">
-                <div class="item__details">
-                  <h4 class="item__title">${DOMPurify.sanitize(item.name)} (${DOMPurify.sanitize(item.portion)})</h4>
-                  <p class="item__price">£${(parseFloat(item.price) || 0).toFixed(2)}</p>
-                </div>
-                <div class="cart__actions">
-                  <button class="action__button" aria-label="Decrease quantity of ${DOMPurify.sanitize(item.name)}">-</button>
-                  <input class="item__count" type="number" min="1" value="${item.quantity}" aria-label="Quantity of ${DOMPurify.sanitize(item.name)}" />
-                  <button class="action__button" aria-label="Increase quantity of ${DOMPurify.sanitize(item.name)}">+</button>
-                </div>
-              </div>
-            `;
-            cartContainer.appendChild(cartItem);
+// Then when rendering cart items:
+cartItems.forEach((item) => {
+  // Convert category id to name
+  const categoryName = getCategoryNameById(item.category);
 
-            // Render in dishes with full description
-            const dishItem = document.createElement("div");
-            dishItem.className = "dish flex align-center justify-between";
-            dishItem.innerHTML = `
-              <div class="dish__details">
-                <h3 class="dish__title">${DOMPurify.sanitize(item.name)}</h3>
-                <span class="dish__price">£${(parseFloat(item.price) || 0).toFixed(2)}</span>
-                <p class="dish__description">${DOMPurify.sanitize(item.description || "No description available")}</p>
-              </div>
-              <button class="button button--add" style='visibility:hidden'>Add +</button>
-            `;
-            dishesContainer.appendChild(dishItem);
-          });
+   console.log("categoryName:", categoryName);
 
-          updateCartBadge();
-          updateTotalPrice();
-          initCartItems();
-          initDishButtons();
+  const cartItem = document.createElement("div");
+  cartItem.className = "cart__item";
+  cartItem.innerHTML = `
+    <p class="dish__origin">from <span>${DOMPurify.sanitize(categoryName)}</span></p>
+    <div class="flex justify-between align-center">
+      <div class="item__details">
+        <h4 class="item__title">${DOMPurify.sanitize(item.name)} (${DOMPurify.sanitize(item.portion)})</h4>
+        <p class="item__price">£${(parseFloat(item.price) || 0).toFixed(2)}</p>
+      </div>
+      <div class="cart__actions">
+        <button class="action__button" aria-label="Decrease quantity of ${DOMPurify.sanitize(item.name)}">-</button>
+        <input class="item__count" type="number" min="1" value="${item.quantity}" aria-label="Quantity of ${DOMPurify.sanitize(item.name)}" />
+        <button class="action__button" aria-label="Increase quantity of ${DOMPurify.sanitize(item.name)}">+</button>
+      </div>
+    </div>
+  `;
+  cartContainer.appendChild(cartItem);
+});
+
+updateCartBadge();
+updateTotalPrice();
+initCartItems();
+
         }
 
         // Function to calculate and update the total price
@@ -257,7 +271,7 @@
           localStorage.setItem("cart", JSON.stringify(cartItems));
         }
 
-        // Initialize quantity controls for each cart item
+        // Initialize quantity controls for each item
         function initCartItems() {
           const currentItems = document.querySelectorAll(".cart__item");
           currentItems.forEach((item, index) => {
@@ -306,23 +320,36 @@
           });
         }
 
-        // Initialize add buttons for dishes
-        function initDishButtons() {
-          document.querySelectorAll(".button--add").forEach((button, index) => {
-            // Remove existing listeners to prevent duplicates
-            const newButton = button.cloneNode(true);
-            button.replaceWith(newButton);
+        // Handle adding items from static dishes
+        document.querySelectorAll(".button--add").forEach((button) => {
+          button.addEventListener("click", () => {
+            const dish = button.closest(".dish");
+            const name = dish.querySelector(".dish__title").textContent;
+            const priceText = dish.querySelector(".dish__price").textContent;
+            const price = parseFloat(priceText.replace(/[^0-9.]/g, "")) || 0;
 
-            newButton.addEventListener("click", () => {
-              const item = cartItems[index];
-              item.quantity++;
-              updateCartBadge();
-              renderCartItems();
-              cartBadge.classList.add("bump");
-              setTimeout(() => cartBadge.classList.remove("bump"), 300);
-            });
+            const existingItem = cartItems.find(
+              (item) => item.name === name && item.portion === "standard"
+            );
+            if (existingItem) {
+              existingItem.quantity++;
+            } else {
+              cartItems.push({
+                id: Date.now(), // Temporary ID for static dishes
+                name,
+                price,
+                portion: "standard",
+                category: "Static Dishes",
+                quantity: 1,
+              });
+            }
+
+            updateCartBadge();
+            renderCartItems();
+            cartBadge.classList.add("bump");
+            setTimeout(() => cartBadge.classList.remove("bump"), 300);
           });
-        }
+        });
 
         // Initial render
         renderCartItems();
@@ -330,7 +357,6 @@
         // Observe cart container for dynamic updates
         const observer = new MutationObserver(() => {
           initCartItems();
-          initDishButtons();
           updateTotalPrice();
         });
 
