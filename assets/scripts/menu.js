@@ -163,11 +163,11 @@ if (item.description) {
   const itemPortion = hasOptions ? firstOption.portion : "standard";
 
 
- const backendUploadsUrl = "/chinese-food/BackEnd"; // adjust if needed
+ const backendUploadsUrl = "/chinnese-restaurant/BackEnd"; // adjust if needed
 
 const imageSrc = item.image_url
   ? backendUploadsUrl + item.image_url
-  : "/chinese-food/avarterdefault.jpg";
+  : "/chinnese-restaurant/avarterdefault.jpg";
 
 
 dishCard.innerHTML = `
