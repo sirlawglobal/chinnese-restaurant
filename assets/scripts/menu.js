@@ -32,7 +32,7 @@ localStorage.setItem("menu_categories", JSON.stringify(simplifiedCategories));
           const dishesTitle = document.querySelector(".dishes__title");
           const dishesGrid = document.querySelector(".dishes__grid");
           navList.innerHTML = "";
-
+data.categories = data.categories.filter(category => category.name !== "SET MENU");
           // Create navigation items
           data.categories.forEach((category, index) => {
             console.log("Category111:", category);
