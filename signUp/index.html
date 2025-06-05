@@ -62,17 +62,21 @@
     // Convert FormData to plain object (optional, but easier for JSON)
     const data = {};
     formData.forEach((value, key) => {
+      
       data[key.toLowerCase()] = value; // lowercase keys to match PHP expected keys
     });
-// fetch("/chinese-food/BackEnd/controller/inventory/get_menu.php")
+
+    
+// console.log(data);
+
     try {
-      const response = await fetch('/chinese-food/BackEnd/auth/register.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
+   const response = await fetch('/chinnese-restaurant/BackEnd/controller/auth/register.php', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+});
 
       const result = await response.json();
 

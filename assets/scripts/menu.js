@@ -6,7 +6,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      fetch("/chinese-food/BackEnd/controller/inventory/get_menu.php")
+      fetch("/chinnese-restaurant/BackEnd/controller/inventory/get_menu.php")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
