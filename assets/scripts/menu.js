@@ -6,7 +6,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      fetch("/chinese-food/BackEnd/controller/inventory/get_menu.php")
+      fetch("/chinnese-restaurant/BackEnd/controller/inventory/get_menu.php")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -181,11 +181,11 @@ if (item.description) {
   const itemPortion = hasOptions ? firstOption.portion : "standard";
 
 
- const backendUploadsUrl = "/chinese-food/BackEnd"; // adjust if needed
+ const backendUploadsUrl = "/chinnese-restaurant/BackEnd"; // adjust if needed
 
 const imageSrc = item.image_url
   ? backendUploadsUrl + item.image_url
-  : "/chinese-food/avarterdefault.jpg";
+  : "/chinnese-restaurant/avarterdefault.jpg";
 
 
 dishCard.innerHTML = `
