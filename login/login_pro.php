@@ -31,25 +31,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             session_regenerate_id(true);
             $_SESSION['user'] = $user;
            //var_dump( $_SESSION['user']);die;
-           if (isAdmin()){
-redirect('admin/index.php');
-           }else{
-redirect('user/index.php');
-           }
+
+redirect(ROOT);
+
 
            
             exit;
         } else {
            // var_dump($user['password']);die;
             $_SESSION['fail'] = "Invalid password.";
-            redirect('user/login.php');
+            redirect(ROOT .'/login.php');
         }
     } else {
         $_SESSION['fail'] = "User not found.";
-        redirect('user/login.php');
+        redirect(ROOT .'/login.php');
     }
 
-redirect('index.php');
+redirect(ROOT);
     exit;
 }
 ?>
