@@ -62,9 +62,21 @@
               <li><a href="#">About</a></li>
               <li><a href="../contact/">Contact</a></li>
             </ul>
-            <div class="buttons">
+            <!-- <div class="buttons">
               <a class="button button-primary" href="./menu/">Order Now</a>
-            </div>
+            </div> -->
+
+              <div class="buttons">
+          <!-- <a class="button button-primary" href="../login/">Order Now</a> -->
+<?php  if(isLoggedIn()): ?> 
+          <a class="button button-primary" href="../BackEnd/controller/auth/logout.php">Logout</a>
+           <?php  else: ?> 
+            <a class="button button-primary" href="../login/">Log in</a>
+              <?php  endif; ?> 
+
+          <!-- http://localhost/chinnese-restaurant/login/ -->
+          <!-- <a class="button button-primary" href="./menu/">Order Now</a> -->
+        </div>
           </nav>
         </div>
       </header>

@@ -1,3 +1,9 @@
+<?php 
+require_once __DIR__ . '/BackEnd/config/init.php';
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,8 +26,14 @@
           <li><a href="#">About</a></li>
           <li><a href="./contact/">Contact</a></li>
         </ul>
-        <div class="buttons">
-          <a class="button button-primary" href="login/">Login in</a>
+ 
+
+        <div class="buttons"> 
+          <?php  if(isLoggedIn()): ?> 
+         <a class="button button-primary" href="BackEnd/controller/auth/logout.php">Logout</a>
+           <?php  else: ?> 
+            <a class="button button-primary" href="login/">Log in</a>
+              <?php  endif; ?> 
           <!-- <a class="button button-primary" href="./menu/">Order Now</a> -->
         </div>
       </nav>
