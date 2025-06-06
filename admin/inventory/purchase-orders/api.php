@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../config/init.php';
+require_once __DIR__ . '/../../../BackEnd/config/init.php';
 
 header('Content-Type: application/json');
 
@@ -36,22 +36,24 @@ try {
         exit;
     }
 
-    foreach ($orders as &$row) {
-        $status = strtolower($row['status']);
-        switch ($status) {
-            case 'pending':
-                $row['delivery_progress'] = 20;
-                break;
-            case 'shipped':
-                $row['delivery_progress'] = 60;
-                break;
-            case 'delivered':
-                $row['delivery_progress'] = 100;
-                break;
-            default:
-                $row['delivery_progress'] = 0;
-        }
+foreach ($orders as &$row) {
+$row->order_id = formatOrderId($row->order_id, $row->order_date);
+    $status = strtolower($row->status);
+    switch ($status) {
+        case 'pending':
+            $row->delivery_progress = 20;
+            break;
+        case 'shipped':
+            $row->delivery_progress = 60;
+            break;
+        case 'delivered':
+            $row->delivery_progress = 100;
+            break;
+        default:
+            $row->delivery_progress = 0;
     }
+}
+
 
     echo json_encode([
         "success" => true,

@@ -1,3 +1,7 @@
+<?php 
+require_once __DIR__ . '/../../../BackEnd/config/init.php';
+requireAdmin();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -187,117 +191,201 @@
     </div>
   </main>
 
-  <script>
-    $(document).ready(function () {
-      // Initialize DataTable
-      const table = $("#inventory-table").DataTable({
-        paging: true,
-        pageLength: 10,
-        language: {
-          paginate: {
-            previous: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.9254 4.55806C13.1915 4.80214 13.1915 5.19786 12.9254 5.44194L8.4375 9.55806C8.17138 9.80214 8.17138 10.1979 8.4375 10.4419L12.9254 14.5581C13.1915 14.8021 13.1915 15.1979 12.9254 15.4419C12.6593 15.686 12.2278 15.686 11.9617 15.4419L7.47378 11.3258C6.67541 10.5936 6.67541 9.40641 7.47378 8.67418L11.9617 4.55806C12.2278 4.31398 12.6593 4.31398 12.9254 4.55806Z" fill="#1C1C1C"/></svg>`,
-            next: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.07459 15.4419C6.80847 15.1979 6.80847 14.8021 7.07459 14.5581L11.5625 10.4419C11.8286 10.1979 11.8286 9.80214 11.5625 9.55806L7.07459 5.44194C6.80847 5.19786 6.80847 4.80214 7.07459 4.55806C7.34072 4.31398 7.77219 4.31398 8.03831 4.55806L12.5262 8.67418C13.3246 9.40641 13.3246 10.5936 12.5262 11.3258L8.03831 15.4419C7.77219 15.686 7.34072 15.686 7.07459 15.4419Z" fill="#1C1C1C"/></svg>`,
-          },
-          lengthMenu: "Show _MENU_ entries",
-          info: "Showing _START_ to _END_ of _TOTAL_ entries",
-          infoEmpty: "Showing 0 to 0 of 0 entries",
-          infoFiltered: "(filtered from _MAX_ total entries)",
-          search: "Search:",
-          zeroRecords: "No matching records found",
+<script>
+  $(document).ready(function () {
+    const table = $("#inventory-table").DataTable({
+      paging: true,
+      pageLength: 10,
+      language: {
+        paginate: {
+          previous: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.9254 4.55806C13.1915 4.80214 13.1915 5.19786 12.9254 5.44194L8.4375 9.55806C8.17138 9.80214 8.17138 10.1979 8.4375 10.4419L12.9254 14.5581C13.1915 14.8021 13.1915 15.1979 12.9254 15.4419C12.6593 15.686 12.2278 15.686 11.9617 15.4419L7.47378 11.3258C6.67541 10.5936 6.67541 9.40641 7.47378 8.67418L11.9617 4.55806C12.2278 4.31398 12.6593 4.31398 12.9254 4.55806Z" fill="#1C1C1C"/></svg>`,
+          next: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.07459 15.4419C6.80847 15.1979 6.80847 14.8021 7.07459 14.5581L11.5625 10.4419C11.8286 10.1979 11.8286 9.80214 11.5625 9.55806L7.07459 5.44194C6.80847 5.19786 6.80847 4.80214 7.07459 4.55806C7.34072 4.31398 7.77219 4.31398 8.03831 4.55806L12.5262 8.67418C13.3246 9.40641 13.3246 10.5936 12.5262 11.3258L8.03831 15.4419C7.77219 15.686 7.34072 15.686 7.07459 15.4419Z" fill="#1C1C1C"/></svg>`,
         },
-        columns: [
-          {
-            data: null,
-            render: () => '<input type="checkbox" />',
-            orderable: false,
+        lengthMenu: "Show _MENU_ entries",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        infoEmpty: "Showing 0 to 0 of 0 entries",
+        infoFiltered: "(filtered from _MAX_ total entries)",
+        search: "Search:",
+        zeroRecords: "No matching records found",
+      },
+      columns: [
+        {
+          data: null,
+          render: function () {
+            return '<input type="checkbox" />';
           },
-          {
-            data: null,
-            render: (data) => `${data.orderId}<br /><small>${data.orderDate}</small>`,
+          orderable: false,
+        },
+        {
+          data: "order_id",
+          render: function (data) {
+            return data;
           },
-          {
-            data: null,
-            render: (data) => `${data.item}<br /><small>${data.category}</small>`,
+        },
+        {
+          data: null,
+          render: function (data) {
+            return `${data.item}<br /><small>${data.category || 'N/A'}</small>`;
           },
-          { data: "vendor" },
-          {
-            data: "status",
-            render: (data) => `<span class="status ${data.toLowerCase()}">${data}</span>`,
+        },
+        { data: "vendor" },
+        {
+          data: "status",
+          render: function (data) {
+            return `<span class="status ${data.toLowerCase()}">${data}</span>`;
           },
-          {
-            data: null,
-            render: (data) => `
-              <div class="delivery-progress">
-                <div class="flex justify-between align-center">
-                  <div class="progress-bar-container">
-                    <div class="progress-bar ${data.status.toLowerCase()}" style="width: ${data.deliveryProgress}%"></div>
+        },
+        {
+          data: null,
+          render: function (data) {
+            try {
+              return `
+                <div class="delivery-progress">
+                  <div class="flex justify-between align-center">
+                    <div class="progress-bar-container">
+                      <div class="progress-bar ${data.status.toLowerCase()}" style="width: ${data.delivery_progress || 0}%"></div>
+                    </div>
+                    ${data.delivery_progress || 0}%
                   </div>
-                  ${data.deliveryProgress}%
-                </div>
-                <small>${data.status === "Delivered" ? "Arrived" : "Arrive"} ${data.deliveryDate}</small>
-              </div>`,
+                  <small>${data.status === "delivered" ? "Arrived" : data.status === "pending" ? "Arrive" : data.status === "shipping" ? "In Transit" : "N/A"} ${new Date(data.schedule_date || data.order_date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) || 'N/A'}</small>
+                </div>`;
+            } catch (e) {
+              console.error("Delivery render error for order_id", data.order_id, e);
+              return "Error rendering delivery";
+            }
           },
-          { data: "unitPrice", render: (data) => `$${data.toFixed(2)}` },
-          { data: "quantity" },
-          { data: "totalPrice", render: (data) => `$${data.toFixed(2)}` },
-          {
-            data: null,
-            render: (data) => `
-              <button class="receive-button ${data.status === "Delivered" ? "received" : ""}">
-                ${data.status === "Delivered" ? "Received" : "Receive"}
-              </button>`,
-            orderable: false,
+        },
+        {
+          data: "unit_price",
+          render: function (data) {
+            try {
+              return `$${parseFloat(data).toFixed(2)}`;
+            } catch (e) {
+              console.error("Unit price error for order_id", data.order_id, e);
+              return "$0.00";
+            }
           },
-        ],
-      });
-
-      // Load mockup data
-      if (typeof purchaseOrders !== 'undefined') {
-        table.rows.add(purchaseOrders).draw();
-      } else {
-        console.error("Mockup data (purchaseOrders) not found. Ensure mockup.js is loaded correctly.");
-        table.rows.add([]).draw(); // Draw empty table if data is missing
-      }
-
-      // Handle "Receive" button clicks (mocked behavior)
-      $("#inventory-table").on("click", ".receive-button", function () {
-        const row = $(this).closest("tr");
-        const data = table.row(row).data();
-        if (data.status !== "Delivered") {
-          // Mock status update
-          data.status = "Delivered";
-          data.deliveryProgress = 100;
-          table.row(row).data(data).draw(); // Update row
-          alert("Order marked as received! (Mocked)");
-        }
-      });
-
-      // Handle filter tabs (All, Pending, Shipped, Delivered)
-      $(".inventory-actions .tabs .tab").on("click", function () {
-        $(".inventory-actions .tabs .tab").removeClass("active");
-        $(this).addClass("active");
-        const status = $(this).text();
-        if (status === "All") {
-          table.column(4).search("").draw();
-        } else {
-          table.column(4).search(status).draw();
-        }
-      });
-
-      // Handle category dropdown filter
-      $(".dropdown-menu a").on("click", function (e) {
-        e.preventDefault();
-        const category = $(this).text();
-        const dropdownToggle = $(this).closest(".dropdown").find(".inventory-dropdown-toggle");
-        dropdownToggle.contents().first().replaceWith(category);
-        if (category === "All Category") {
-          table.column(2).search("").draw();
-        } else {
-          table.column(2).search(category).draw();
-        }
-      });
+        },
+        { data: "quantity" },
+        {
+          data: "total_price",
+          render: function (data) {
+            try {
+              return `$${parseFloat(data).toFixed(2)}`;
+            } catch (e) {
+              console.error("Total price error for order_id", data.order_id, e);
+              return "$0.00";
+            }
+          },
+        },
+        {
+          data: null,
+          render: function (data) {
+            return `
+              <button class="receive-button ${data.status === "delivered" ? "received" : ""}" data-order-id="${data.order_id.split('\n')[0]}">
+                ${data.status === "delivered" ? "Received" : "Receive"}
+              </button>`;
+          },
+          orderable: false,
+        },
+      ],
     });
-  </script>
+
+    $.ajax({
+      url: "./api.php",
+      method: "GET",
+      dataType: "json",
+      cache: false,
+      success: function (response) {
+        console.log("Full Response:", response);
+        console.log("Data Array:", response.data);
+        if (response.success && Array.isArray(response.data)) {
+          table.clear().rows.add(response.data).draw();
+          console.log("Table rows added:", table.data().length);
+        } else {
+          console.error("API Error or invalid data:", response.message, response.error);
+          table.clear().draw();
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX Error:", error, xhr.responseText);
+        table.clear().draw();
+      },
+    });
+
+  $("#inventory-table").on("click", ".receive-button", function () {
+  const button = $(this);
+  const orderId = button.data("order-id"); // e.g., "PO102"
+  const row = button.closest("tr");
+  const data = table.row(row).data();
+
+  if (data.status !== "delivered") {
+    // Extract the original id by removing "PO" and subtracting 100
+    const originalId = parseInt(orderId.replace('PO', '')) - 100;
+    $.ajax({
+      url: "./update.php",
+      method: "POST",
+      dataType: "json",
+      data: {
+        order_id: originalId, // Send the original id (e.g., 2)
+        status: "delivered"
+      },
+      success: function (response) {
+        if (response.success) {
+          // Reload data from api.php to ensure consistency
+          $.ajax({
+            url: "./api.php",
+            method: "GET",
+            dataType: "json",
+            cache: false,
+            success: function (response) {
+              if (response.success && Array.isArray(response.data)) {
+                table.clear().rows.add(response.data).draw();
+                alert("Order " + orderId.replace('PO', '') + " marked as received!");
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("AJAX Error reloading data:", error, xhr.responseText);
+              alert("Error reloading table data.");
+            }
+          });
+        } else {
+          console.error("Update failed:", response.message, response.error);
+          alert("Failed to update order status: " + response.message);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX Error updating status:", error, xhr.responseText);
+        alert("Error updating order status.");
+      }
+    });
+  }
+});
+
+    $(".inventory-actions .tabs .tab").on("click", function () {
+      $(".inventory-actions .tabs .tab").removeClass("active");
+      $(this).addClass("active");
+      const status = $(this).text().toLowerCase();
+      if (status === "all") {
+        table.column(4).search("").draw();
+      } else {
+        table.column(4).search(`^${status}$`, true, false).draw();
+      }
+    });
+
+    $(".dropdown-menu a").on("click", function (e) {
+      e.preventDefault();
+      const category = $(this).text();
+      const dropdownToggle = $(this).closest(".dropdown").find(".inventory-dropdown-toggle");
+      dropdownToggle.contents().first().replaceWith(category);
+      if (category === "All Category") {
+        table.column(2).search("").draw();
+      } else {
+        table.column(2).search(category).draw();
+      }
+    });
+  });
+</script>
     <script src="../../scripts/components.js"></script>
   </body>
 </html>
