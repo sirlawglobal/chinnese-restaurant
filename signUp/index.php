@@ -4,10 +4,9 @@ require_once __DIR__ . '/../BackEnd/config/init.php';
 if(isLoggedIn())
 {
 
-  
   if(isAdmin()){
 $role = true;
-//var_dump( $role);die;
+var_dump( $role);die;
   } else{
  $role = false;
     redirect($url ."menu");
