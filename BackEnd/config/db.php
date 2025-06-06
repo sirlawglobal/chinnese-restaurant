@@ -5,6 +5,15 @@ define('DB_NAME', 'chinesse_restaurant');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('ROOT', 'http://localhost/chinnese-restaurant/');
+
+
+// define('DB_HOST', 'localhost');
+// define('DB_NAME', 'dgn128_chinese');
+// define('DB_USER', 'dgn128_SirlawDev');
+// define('DB_PASS', '~N#8[OaHegr)');
+// define('ROOT', 'http://dgn128.pro/chinnese-restaurant/');
+
+
 // Global DB state for query diagnostics
 $GLOBALS['DB_STATE'] = [
     'affected_rows'   => 0,
