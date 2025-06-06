@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../BackEnd/config/init.php';  ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -240,7 +241,9 @@
       }
     };
 
-    ajax.open("POST", "http://localhost/chinnese-restaurant/contact/contact.php", true);
+  let ROOTS = "<?= ROOT ?>"; // This works ONLY inside a PHP file
+  ajax.open("POST", ROOTS + "/contact/contact.php", true);
+ // ajax.open("POST", "http://localhost/chinnese-restaurant/contact/contact.php", true);
     ajax.setRequestHeader("Content-Type", "application/json");
     ajax.send(JSON.stringify(payload));
   }
