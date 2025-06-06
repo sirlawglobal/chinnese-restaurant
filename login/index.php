@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../BackEnd/config/init.php';  ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,7 +7,7 @@
     <link rel="stylesheet" href="../assets/styles/main.css" />
     <link rel="stylesheet" href="../assets/styles/forms.css" />
     <link rel="stylesheet" href="../assets/styles/signin.css" />
-    <title>Admin Sign In</title>
+    <title>Sign In</title>
   </head>
   <body>
     <main class="flex align-center justify-center wrap">
@@ -17,8 +18,9 @@
         <div class="head">
           <h3>Sign In</h3>
           <p>Sign in to stay connected.</p>
+          
         </div>
-        <form id="login-form">
+        <form id="login-form" method="POST">
           <fieldset>
             <legend>Email</legend>
             <input type="email" name="email" id="email" required />
@@ -44,6 +46,8 @@
       </section>
     </main>
     <script>
+
+
 document.querySelector('form').addEventListener('submit', function (e) {
   e.preventDefault();
 
@@ -79,7 +83,9 @@ function send_data(data_type = "login", payload = {}) {
       }
     }
   };
-ajax.open("POST", "http://localhost/chinnese-restaurant/backEnd/controller/auth/login.php", true);
+   let ROOTS = "<?= ROOT ?>"; // This works ONLY inside a PHP file
+  ajax.open("POST", ROOTS + "/backEnd/controller/auth/login.php", true);
+
   ajax.setRequestHeader("Content-Type", "application/json");
   ajax.send(JSON.stringify(payload));
 }
