@@ -27,6 +27,91 @@
     <script src="./mockup.js"></script>
   </head>
   <body class="flex">
+    <style>
+      /* inventory.css */
+#inventory-table_wrapper {
+  font-family: inherit; /* Match your app's font */
+}
+
+#inventory-table th, #inventory-table td {
+  padding: 10px; /* Match padding from static table */
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* Style the STATUS column */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status.pending::before {
+  background-color: black;
+}
+
+.status.shipped::before {
+  background-color: #f5a623; /* Orange */
+}
+
+.status.delivered::before {
+  background-color: #f5a623; /* Orange */
+}
+
+/* Style the DELIVERY progress bar */
+.delivery-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.progress-bar-container {
+  width: 100px; /* Match width from static table */
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.progress-bar.pending {
+  background-color: black;
+}
+
+.progress-bar.shipped {
+  background-color: #f5a623; /* Orange */
+}
+
+.progress-bar.delivered {
+  background-color: #f5a623; /* Orange */
+}
+
+/* Style the ACTION buttons */
+.receive-button {
+  padding: 5px 10px;
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.receive-button.received {
+  background-color: #f5a623; /* Orange */
+  color: white;
+  border: none;
+}
+    </style>
     <main>
     <div class="content">
       <div class="top tabs">
