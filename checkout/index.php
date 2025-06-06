@@ -1,3 +1,19 @@
+<?php 
+require_once __DIR__ . '/../BackEnd/config/init.php';
+
+// var_dump( $_SESSION['user']);
+
+if(isLoggedIn())
+{
+$role = true;
+}else{
+ $role = false;
+    // redirect($url ."menu");
+    // exit();
+  }  
+ 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,6 +26,7 @@
     <script src="//cdn.jsdelivr.net/npm/dompurify@2.1.0/dist/purify.min.js"></script>
     <!-- Include Flutterwave SDK -->
     <script src="https://checkout.flutterwave.com/v3.js"></script>
+    
   </head>
   <body>
     <div class="sprite" hidden></div>
@@ -41,7 +58,13 @@
               <svg class="icon"><use href="#bag"></use></svg>
               <span class="cart-badge">0</span>
             </button>
-            <button class="button button--signin">Sign in</button>
+            <!-- <button class="button button--signin">Sign in</button> -->
+              <div class="buttons">
+            <?php  if(isLoggedIn()): ?> 
+                 <a class="button button-primary" href="../BackEnd/controller/auth/logout.php">Logout</a>
+           <?php  else: ?> 
+            <a class="button button-primary" href="../login/">Log in</a>
+              <?php  endif; ?> 
           </div>
         </div>
       </header>
@@ -65,6 +88,8 @@
                 aria-label="Delivery address"
                 required
               ></textarea>
+
+  <?php  if(isset($role) && $role == false): ?> 
               <div class="guest-email" id="guestEmailContainer">
               <label for="guestEmail" class="form-label">Email </label>
               <input
@@ -79,6 +104,8 @@
     width: 100%; border: 1px solid rgba(2, 2, 2, 0.589);"
               />
             </div>
+<?php endif;?>
+
               <h3 class="flex align-center order__type">
                 <svg class="icon">
                   <use href="#location"></use>
@@ -231,14 +258,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const proceedToPaymentBtn = document.getElementById("proceedToPayment");
   const guestEmailContainer = document.getElementById("guestEmailContainer");
   let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-  let orderType = "now";
 
+  let orderType = "now";
   // Toggle guest email field visibility
-  if (isUserLoggedIn()) {
-    guestEmailContainer.style.display = "none"; // Hide for logged-in users
-  } else {
-    guestEmailContainer.style.display = "block"; // Show for guests
-  }
+  // if (isUserLoggedIn()) {
+  //   guestEmailContainer.style.display = "none"; // Hide for logged-in users
+  // } else {
+  //   guestEmailContainer.style.display = "block"; // Show for guests
+  // }
+  console.log("Initial cart items1:", cartItems);
 
   // Toggle order type buttons
   orderNowBtn.addEventListener("click", () => {
@@ -257,6 +285,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to render cart items
   function renderCartItems() {
+    console.log("Initial cart items:", cartItems);
     cartContainer.innerHTML = "";
     if (cartItems.length === 0) {
       cartContainer.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
@@ -279,6 +308,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Render cart items
     cartItems.forEach((item, index) => {
+        console.log("Initial cart items12:", item);
+      console.log(`Rendering item ${index + 1}:`, item);
       const categoryName = getCategoryNameById(item.category);
       const cartItem = document.createElement("div");
       cartItem.className = "cart__item";

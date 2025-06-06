@@ -1,3 +1,5 @@
+<?php require_once __DIR__ . '/../BackEnd/config/init.php';  ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,10 +28,18 @@
           <li><a href="../contact/">Contact</a></li>
         </ul>
         <div class="buttons">
-          <a class="button button-primary" href="../login/">Order Now</a>
+          <!-- <a class="button button-primary" href="../login/">Order Now</a> -->
+<?php  if(isLoggedIn()): ?> 
+          <a class="button button-primary" href="../BackEnd/controller/auth/logout.php">Logout</a>
+           <?php  else: ?> 
+            <a class="button button-primary" href="../login/">Log in</a>
+              <?php  endif; ?> 
+
           <!-- http://localhost/chinnese-restaurant/login/ -->
           <!-- <a class="button button-primary" href="./menu/">Order Now</a> -->
         </div>
+
+        
       </nav>
       <div class="header__top full-width">
         <div class="flex justify-end align-center wrap full-width">
@@ -47,7 +57,7 @@
             </svg>
           </a>
           <!-- <button class="button button--signin" href="../login/">Sign in</button> -->
-           <button class="button button--signin" onclick="window.location.href='../login/'">Sign in</button>
+           <!-- <button class="button button--signin" onclick="window.location.href='../login/'">Sign in</button> -->
 
         </div>
       </div>
