@@ -15,7 +15,7 @@
         })
         .then((data) => {
           // console.log("Menu data loaded successfully:", data);
-          // console.log("Categoriesbf4:", data.data.categories);
+          // console.log("Categories:", data.data.categories);
           data = data.data;
 
 
@@ -32,12 +32,10 @@ localStorage.setItem("menu_categories", JSON.stringify(simplifiedCategories));
           const dishesTitle = document.querySelector(".dishes__title");
           const dishesGrid = document.querySelector(".dishes__grid");
           navList.innerHTML = "";
-
 data.categories = data.categories.filter(category => category.name !== "SET MENU");
-
           // Create navigation items
           data.categories.forEach((category, index) => {
-            // console.log("Category111:", category);
+            console.log("Category111:", category);
             const navItem = document.createElement("li");
             navItem.className = "nav__item";
             navItem.textContent = category.name.toLowerCase();
@@ -65,6 +63,26 @@ data.categories = data.categories.filter(category => category.name !== "SET MENU
             renderDishes(data.categories[0]);
           }
 
+//           // Find the category with name "starter" (case insensitive)
+// const starterCategory = data.categories.find(cat => cat.name.toLowerCase() === "starter");
+
+// // If found, select it; otherwise fallback to first category
+// const initialCategory = starterCategory || data.categories[0];
+
+// if (initialCategory) {
+//   // Set active nav item for the selected category
+//   const navItems = navList.querySelectorAll(".nav__item");
+//   navItems.forEach((navItem) => {
+//     if (navItem.textContent.toLowerCase() === initialCategory.name.toLowerCase()) {
+//       navItem.classList.add("nav__item--active");
+//     } else {
+//       navItem.classList.remove("nav__item--active");
+//     }
+//   });
+
+//   // Render dishes for the starter category or fallback
+//   renderDishes(initialCategory);
+// }
 
 
           function renderDishes(category) {
@@ -91,7 +109,7 @@ data.categories = data.categories.filter(category => category.name !== "SET MENU
             dishesGrid.innerHTML = "";
 
           category.items.forEach((item) => {
-  // console.log("Rendering item:", item);
+  console.log("Rendering item:", item);
 
   const dishCard = document.createElement("article");
   dishCard.className = "dish";
@@ -122,7 +140,7 @@ data.categories = data.categories.filter(category => category.name !== "SET MENU
   let descriptionHTML = "";
 if (item.description) {
   const decodedDesc = decodeHTML(item.description);
-  // console.log("Decoded description:", decodedDesc);
+  console.log("Decoded description:", decodedDesc);
 
   // Try to extract the array part inside brackets
   const match = decodedDesc.match(/\[(.*)\]/);
@@ -208,7 +226,7 @@ dishCard.innerHTML = `
           fetch("../assets/data/menu.json")
             .then((response) => response.json())
             .then((data) => {
-              // console.log("Using fallback static data");
+              console.log("Using fallback static data");
               // You can call renderDishes here as well if needed
             });
         });
@@ -224,7 +242,7 @@ dishCard.innerHTML = `
 
       function updateCartBadge() {
 
-        // console.log('cartItems', cartItems);
+        console.log('cartItems', cartItems);
         const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
         cartBadge.textContent = totalItems;
         cartBadge.style.display = totalItems > 0 ? "flex" : "none";

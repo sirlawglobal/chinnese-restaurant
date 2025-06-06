@@ -226,7 +226,7 @@
                 <span class="dish__price">£${(parseFloat(item.price) || 0).toFixed(2)}</span>
                 <p class="dish__description">${DOMPurify.sanitize(item.description || "No description available")}</p>
               </div>
-              <button class="button button--add" style='visibility:hidden'>Add +</button>
+              <button class="button button--add"  style='visibility:hidden'>Add +</button>
             `;
             dishesContainer.appendChild(dishItem);
           });
