@@ -209,7 +209,7 @@ $categories = getCategories(); // returns array of associative arrays by default
 <?php endif;?>
     </select>
   </div>
-  <div class="dropdown">
+<div class="dropdown">
     <select id="statusFilter" class="inventory-dropdown-toggle">
       <option value="">All Status</option>
       <option value="Available">Available</option>
@@ -675,10 +675,18 @@ $(document).ready(function () {
   const table = $('#inventory-table').DataTable({
     ajax: '../../../BackEnd/controller/inventory/fetch_inventory.php',
     columns: [
-      { data: null, defaultContent: '<input type="checkbox" />' },
+      { data: null, defaultContent: '<input type="checkbox" />' }, // Checkbox
       { data: 1 }, // Item
       { data: 2 }, // Category
-      { data: 3 }, // Status
+      {
+        data: 3, // Status
+        render: function (data, type, row) {
+          if (type === 'filter' || type === 'sort') {
+            return data ? $(data).text().trim() : ''; // Extract plain text
+          }
+          return data; // Use HTML for display
+        }
+      },
       { data: 4 }, // Qty in Stock
       { data: 5 }, // Qty in Reorder
       { data: 6 }  // Action
@@ -704,15 +712,16 @@ $(document).ready(function () {
 
   // Custom filtering for category and status
   $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-  const categoryFilter = $('#categoryFilter').val();
-  const statusFilter = $('#statusFilter').val();
-  const category = data[2];
-  const status = $(data[3]).text();
-  console.log('Status Filter:', statusFilter, 'Row Status:', status); // Debug log
-  const categoryMatch = !categoryFilter || category === categoryFilter;
-  const statusMatch = !statusFilter || status === statusFilter;
-  return categoryMatch && statusMatch;
-});
+    const categoryFilter = $('#categoryFilter').val();
+    const statusFilter = $('#statusFilter').val();
+    const category = data[2] ? data[2].trim() : '';
+    const status = data[3] ? data[3].trim() : ''; // Plain text from render
+    console.log('Category Filter:', categoryFilter, 'Row Category:', category);
+    console.log('Status Filter:', statusFilter, 'Row Status:', status);
+    const categoryMatch = !categoryFilter || category === categoryFilter;
+    const statusMatch = !statusFilter || status === statusFilter;
+    return categoryMatch && statusMatch;
+  });
 
   // Apply filters when dropdowns change
   $('#categoryFilter, #statusFilter').on('change', function () {
@@ -798,7 +807,6 @@ $(document).ready(function () {
       })
     })
       .then(res => {
-        // Debug: Log raw response
         res.text().then(text => {
           console.log('Raw response from place_reorder.php:', text);
           try {

@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../../config/init.php';
-// Fetch inventory items with category names
 $sql = "
     SELECT 
         i.id,
@@ -12,26 +11,23 @@ $sql = "
     LEFT JOIN categories c ON i.category_id = c.id
 ";
 
-$items = db_query($sql, [], 'assoc'); // Using your db_query() function
-
+$items = db_query($sql, [], 'assoc');
 $data = [];
 
 if ($items !== false) {
     foreach ($items as $item) {
-        // Determine stock status
         $status = 'Available';
         $statusClass = 'available';
-
-        if ((int)$item['stock_quantity'] == 0) {
+        $stock = (int)$item['stock_quantity'];
+        if ($stock == 0) {
             $status = 'Out of Stock';
             $statusClass = 'out-of-stock';
-        } elseif ((int)$item['stock_quantity'] <= 10) {
+        } elseif ($stock <= 10) {
             $status = 'Low';
             $statusClass = 'low';
         }
+        error_log("Item: {$item['name']}, Status: {$status}"); // Debug log
 
-        // Calculate stock progress bar percentage
-        $stock = (int)$item['stock_quantity'];
         $reorder = (int)$item['reorder_quantity'];
         $percent = ($reorder > 0) ? min(100, ($stock / $reorder) * 100) : 0;
         $percent = number_format($percent, 2);
@@ -45,28 +41,28 @@ if ($items !== false) {
             </div>
         ";
 
-       $data[] = [
-    '', // checkbox column
-    htmlspecialchars($item['name']),
-    htmlspecialchars($item['category'] ?? 'Uncategorized'),
-    "<span class='status {$statusClass}'>{$status}</span>",
-    $stockHtml,
-    $reorder,
-    "<div class='action'>
-        <button class='reorder-button' 
-                data-id='{$item['id']}' 
-                data-name=\"" . htmlspecialchars($item['name']) . "\">
-            Reorder
-        </button>
-        <button class='update-stock-button' 
-                data-id='{$item['id']}' 
-                data-name=\"" . htmlspecialchars($item['name']) . "\">
-            Update Stock
-        </button>
-    </div>"
-];
-
+        $data[] = [
+            '', // Checkbox (index 0)
+            htmlspecialchars($item['name']), // Item (index 1)
+            htmlspecialchars($item['category'] ?? 'Uncategorized'), // Category (index 2)
+            "<span class='status {$statusClass}'>" . htmlspecialchars($status) . "</span>", // Status (index 3)
+            $stockHtml, // Qty in Stock (index 4)
+            $reorder, // Qty in Reorder (index 5)
+            "<div class='action'>
+                <button class='reorder-button' 
+                        data-id='{$item['id']}' 
+                        data-name=\"" . htmlspecialchars($item['name']) . "\">
+                    Reorder
+                </button>
+                <button class='update-stock-button' 
+                        data-id='{$item['id']}' 
+                        data-name=\"" . htmlspecialchars($item['name']) . "\">
+                    Update Stock
+                </button>
+            </div>" // Action (index 6)
+        ];
     }
 }
 
+header('Content-Type: application/json');
 echo json_encode(['data' => $data]);
