@@ -1,5 +1,6 @@
 <?php
 // Database connection configuration
+//var_dump(password_hash("charles.com", PASSWORD_DEFAULT));die; 
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'chinesse_restaurant');
 define('DB_USER', 'root');
@@ -85,6 +86,14 @@ function db_query(string $query, array $data = [], string $data_type = 'object')
         $GLOBALS['DB_STATE']['has_error'] = true;
         return false;
     }
+}
+
+
+// to select category
+function getCategories($asObjects = false) {
+    $dataType = $asObjects ? 'object' : 'assoc';
+    // Use your db_query helper to get categories from the table `categories`
+    return db_query("SELECT * FROM categories ORDER BY name ASC", [], $dataType);
 }
 
 // Utility function to handle file upload
