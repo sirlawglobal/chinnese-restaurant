@@ -106,6 +106,15 @@ function uploadImage($file) {
 }
 
 // Mail Settings
+// if (!defined('MAIL_HOST'))         define('MAIL_HOST', 'smtp.gmail.com');
+// if (!defined('MAIL_PORT'))         define('MAIL_PORT', 587);
+// if (!defined('MAIL_USERNAME'))     define('MAIL_USERNAME', 'charlesebuka1@gmail.com');
+// if (!defined('MAIL_PASSWORD'))     define('MAIL_PASSWORD', 'vKKomvnytrbzfmlr');
+// if (!defined('MAIL_ENCRYPTION'))   define('MAIL_ENCRYPTION', 'tls');
+// if (!defined('MAIL_FROM_EMAIL'))   define('MAIL_FROM_EMAIL', 'charlesebuka1@gmail.com');
+// if (!defined('MAIL_FROM_NAME'))    define('MAIL_FROM_NAME', 'Cedigitalweb');
+
+// Mail Settings Configuration
 if (!defined('MAIL_HOST'))         define('MAIL_HOST', 'smtp.gmail.com');
 if (!defined('MAIL_PORT'))         define('MAIL_PORT', 587);
 if (!defined('MAIL_USERNAME'))     define('MAIL_USERNAME', 'charlesebuka1@gmail.com');
