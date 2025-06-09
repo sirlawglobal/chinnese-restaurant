@@ -1,18 +1,17 @@
 <?php
-// login.php - backend AJAX handler
 require_once __DIR__ . '/../../config/init.php';
 
-header('Content-Type: application/json');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: " . ROOT . "sign-in.php");
+    exit;
+}
 
-$response = ['success' => false, 'message' => ''];
-$data = json_decode(file_get_contents("php://input"), true);
-
-$email = trim($data['email'] ?? '');
-$password = $data['password'] ?? '';
+$email = trim($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
 
 if (!$email || !$password) {
-    $response['message'] = "Email and password are required.";
-    echo json_encode($response);
+    $_SESSION['fail'] = "Email and password are required.";
+    header("Location: " . ROOT . "sign-in.php");
     exit;
 }
 
@@ -28,23 +27,19 @@ if ($user && count($user) > 0) {
         session_regenerate_id(true);
         $_SESSION['user'] = $user;
 
-        $response['success'] = true;
-        $response['message'] = "Login successful!";
-
-        // Redirect based on role
         if ($user['role'] === 'admin') {
-            $response['redirect'] = ROOT . 'admin/dashboard';
+            header("Location: " . ROOT . "admin/dashboard");
         } else {
-            $response['redirect'] = ROOT . 'menu';
+            header("Location: " . ROOT . "menu");
         }
+        exit;
 
     } else {
-        $response['message'] = "Invalid password.";
+        $_SESSION['fail'] = "Invalid password.";
     }
 } else {
-    $response['message'] = "User not found.";
+    $_SESSION['fail'] = "User not found.";
 }
 
-$response['data_type'] = 'login';
-echo json_encode($response);
+header("Location: " . ROOT . "sign-in.php");
 exit;

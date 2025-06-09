@@ -1,5 +1,6 @@
 <?php
 // Database connection configuration
+//var_dump(password_hash("charles.com", PASSWORD_DEFAULT));die; 
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'chinesse_restaurant');
 define('DB_USER', 'root');
@@ -96,6 +97,14 @@ function db_query(string $query, array $data = [], string $data_type = 'object')
     }
 }
 
+
+// to select category
+function getCategories($asObjects = false) {
+    $dataType = $asObjects ? 'object' : 'assoc';
+    // Use your db_query helper to get categories from the table `categories`
+    return db_query("SELECT * FROM categories ORDER BY name ASC", [], $dataType);
+}
+
 // Utility function to handle file upload
 function uploadImage($file) {
     $uploadDir = dirname(__DIR__) . '/uploads/';
@@ -117,9 +126,9 @@ function uploadImage($file) {
 // Mail Settings
 if (!defined('MAIL_HOST'))         define('MAIL_HOST', 'smtp.gmail.com');
 if (!defined('MAIL_PORT'))         define('MAIL_PORT', 587);
-if (!defined('MAIL_USERNAME'))     define('MAIL_USERNAME', 'charlesebuka1@gmail.com');
-if (!defined('MAIL_PASSWORD'))     define('MAIL_PASSWORD', 'vKKomvnytrbzfmlr');
+if (!defined('MAIL_USERNAME'))     define('MAIL_USERNAME', 'chinneserestaurant@gmail.com');
+if (!defined('MAIL_PASSWORD'))     define('MAIL_PASSWORD', 'tlwmfcqfwkfzmvbu');
 if (!defined('MAIL_ENCRYPTION'))   define('MAIL_ENCRYPTION', 'tls');
-if (!defined('MAIL_FROM_EMAIL'))   define('MAIL_FROM_EMAIL', 'charlesebuka1@gmail.com');
-if (!defined('MAIL_FROM_NAME'))    define('MAIL_FROM_NAME', 'Cedigitalweb');
+if (!defined('MAIL_FROM_EMAIL'))   define('MAIL_FROM_EMAIL', 'chinneserestaurant@gmail.com');
+if (!defined('MAIL_FROM_NAME'))    define('MAIL_FROM_NAME', 'chinneserestaurant');
 ?>
