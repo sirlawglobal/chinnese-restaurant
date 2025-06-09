@@ -9,6 +9,56 @@
   <title>Golden Dish | Menu</title>
   <link rel="stylesheet" href="../assets/styles/main.css" />
   <link rel="stylesheet" href="../assets/styles/menu.css" />
+
+  <style>
+  /* Styles for dish actions, review button, modal, and tooltip *//* Styles for review modal and buttons */
+.dish__review {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.dish__review:hover {
+  background: #e0e0e0;
+}
+
+.review-modal label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.review-modal input,
+.review-modal textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.review-modal button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.review-modal .close-modal {
+  background: #dc3545;
+}
+
+.review-modal button:hover {
+  opacity: 0.9;
+}
+</style>
   
 </head>
 
