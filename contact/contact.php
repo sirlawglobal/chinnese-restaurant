@@ -27,20 +27,18 @@ if (!$email || !$message) {
     exit;
 }
 
-// ✅ GET ADMIN EMAIL
-$query = "SELECT email FROM users WHERE LOWER(role) = 'admin' LIMIT 1";
-$result = db_query($query, [], 'assoc');
-$adminEmail = $result[0]['email'] ?? null;
+// Get admin email (assuming stored in a config or hardcoded for simplicity)
+$adminEmail = 'admin@example.com'; // Replace with actual admin email or fetch from config
 
 if (!$adminEmail) {
     echo json_encode([
         'data_type' => 'message',
-        'message' => 'No admin email found.'
+        'message' => 'No admin email configured.'
     ]);
     exit;
 }
 
-// ✅ PREPARE EMAIL CONTENT
+// Prepare email content
 $subject = "New Contact Message from $name";
 $htmlMessage = "
     <h2>New Contact Form Submission</h2>
@@ -51,23 +49,31 @@ $htmlMessage = "
 ";
 $plainMessage = "Name: $name\nEmail: $email\nTelephone: $telephone\nMessage: $message";
 
-// ✅ ATTEMPT TO SEND EMAIL
+// Attempt to send email
 $mailStatus = sendMail($adminEmail, $name, $subject, $htmlMessage, $plainMessage) ? 'sent' : 'failed';
 
-// ✅ INSERT INTO DB WITH STATUS
-$insertQuery = "INSERT INTO messages (name, email, telephone, message, status) 
-                VALUES (:name, :email, :telephone, :message, :status)";
-$params = [
+// Insert into messages
+$insertMessageQuery = "INSERT INTO messages (name, email, telephone, message, status) 
+                      VALUES (:name, :email, :telephone, :message, :status)";
+$messageParams = [
     'name' => $name,
     'email' => $email,
     'telephone' => $telephone,
     'message' => $message,
-    'status' => $mailStatus
+    'status' => $mailStatus === 'sent' ? 'pending' : $mailStatus
 ];
+$insertedMessage = db_query($insertMessageQuery, $messageParams, 'insert');
+$message_id = $insertedMessage ? db_query("SELECT LAST_INSERT_ID() AS id", [], 'assoc')[0]['id'] : null;
 
-$inserted = db_query($insertQuery, $params);
+if ($insertedMessage && $message_id) {
+    // Insert initial chat message
+    $insertChatQuery = "INSERT INTO chat_messages (message_id, text, is_admin) VALUES (:message_id, :text, FALSE)";
+    $chatParams = [
+        'message_id' => $message_id,
+        'text' => $message
+    ];
+    db_query($insertChatQuery, $chatParams, 'insert');
 
-if ($inserted) {
     echo json_encode([
         'data_type' => 'message',
         'message' => $mailStatus === 'sent'
@@ -80,3 +86,4 @@ if ($inserted) {
         'message' => 'Failed to save your message.'
     ]);
 }
+?>
