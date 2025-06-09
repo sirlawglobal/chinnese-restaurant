@@ -294,7 +294,7 @@ $dayNames = array_merge(array_slice($dayNames, 1), array_slice($dayNames, 0, 1))
       </div>
     </main>
     <script src="../scripts/components.js"></script>
-    <script src="../scripts/orders.js"></script>
+    <!-- <script src="../scripts/orders.js"></script> -->
     <!-- <script>
       // Initialize charts with dynamic data
       document.addEventListener('DOMContentLoaded', function() {
