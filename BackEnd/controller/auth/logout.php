@@ -8,7 +8,7 @@ session_regenerate_id(true);
 $host = $_SERVER['HTTP_HOST'];
 
 // Build absolute URL to your login page
-$redirectUrl = "http://$host/chinnese-restaurant/login/";
+$redirectUrl = "http://$host/chinnese-restaurant/";
 
 // Redirect
 header("Location: $redirectUrl");
