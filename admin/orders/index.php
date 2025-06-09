@@ -270,7 +270,8 @@ $dayNames = array_merge(array_slice($dayNames, 1), array_slice($dayNames, 0, 1))
                 $statusClass = strtolower(str_replace(' ', '', $order['status']));
                 $orderType = ucfirst($order['order_type']);
                 $address = !empty($order['delivery_address']) ? htmlspecialchars($order['delivery_address']) : '-';
-                $customer = !empty($order['customer_name']) ? htmlspecialchars($order['customer_name']) : htmlspecialchars($order['guest_email']);
+                $customer = htmlspecialchars($order['user_email'] ?: $order['guest_email']);
+htmlspecialchars($order['guest_email']);
                 $totalAmount = '$' . number_format($order['total_amount'], 2);
                 
                 // Format date/time
@@ -294,7 +295,7 @@ $dayNames = array_merge(array_slice($dayNames, 1), array_slice($dayNames, 0, 1))
       </div>
     </main>
     <script src="../scripts/components.js"></script>
-    <script src="../scripts/orders.js"></script>
+    <!-- <script src="../scripts/orders.js"></script> -->
     <!-- <script>
       // Initialize charts with dynamic data
       document.addEventListener('DOMContentLoaded', function() {

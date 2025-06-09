@@ -176,29 +176,32 @@ if ($order_type === 'schedule' && (empty($schedule_date) || empty($schedule_time
 try {
     $pdo->beginTransaction();
 
-    // Insert into orders table
+ 
+
     $stmt = $pdo->prepare("
-        INSERT INTO `orders` (
-            `user_id`, `tx_ref`, `delivery_address`, `order_notes`, 
-            `order_type`, `schedule_date`, `schedule_time`, 
-            `total_amount`, `status`, `transaction_id`, `guest_email`, `created_at`
-        ) VALUES (
-            :user_id, :tx_ref, :delivery_address, :order_notes, 
-            :order_type, :schedule_date, :schedule_time, 
-            :total_amount, 'pending', NULL, :guest_email, NOW()
-        )
-    ");
-    $stmt->execute([
-        ':user_id' => $user_id,
-        ':tx_ref' => $tx_ref,
-        ':delivery_address' => $delivery_address,
-        ':order_notes' => $order_notes,
-        ':order_type' => $order_type,
-        ':schedule_date' => $schedule_date,
-        ':schedule_time' => $schedule_time,
-        ':total_amount' => $total_amount,
-        ':guest_email' => $guest_email
-    ]);
+    INSERT INTO `orders` (
+        `user_id`, `tx_ref`, `delivery_address`, `order_notes`, 
+        `order_type`, `schedule_date`, `schedule_time`, 
+        `total_amount`, `status`, `transaction_id`, `guest_email`, `user_email`, `created_at`
+    ) VALUES (
+        :user_id, :tx_ref, :delivery_address, :order_notes, 
+        :order_type, :schedule_date, :schedule_time, 
+        :total_amount, 'pending', NULL, :guest_email, :user_email, NOW()
+    )
+");
+$stmt->execute([
+    ':user_id' => $user_id,
+    ':tx_ref' => $tx_ref,
+    ':delivery_address' => $delivery_address,
+    ':order_notes' => $order_notes,
+    ':order_type' => $order_type,
+    ':schedule_date' => $schedule_date,
+    ':schedule_time' => $schedule_time,
+    ':total_amount' => $total_amount,
+    ':guest_email' => $guest_email,
+    ':user_email' => $user_email
+]);
+
     $order_id = $pdo->lastInsertId();
 
     // Insert into order_items table

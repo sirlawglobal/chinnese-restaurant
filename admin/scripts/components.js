@@ -20,6 +20,10 @@ const pageMap = {
     page: "Menu",
     icon: "menu",
   },
+  "/menu2/": {
+    page: "Menu02",
+    icon: "menu",
+  },
   "/inventory/": {
     page: "Inventory",
     icon: "inventory",
@@ -380,11 +384,13 @@ const sidebar = `
                       }
                     })
                     .join("")}
-                  <a href="${getRelativePath("../")}" 
+                    
+                  <a href="${getRelativePath("/BackEnd/controller/auth/logout.php")}" 
                      class="${currentPath === "/" ? "active" : ""}">
                       <svg class="icon"><use href="#logout"></use></svg>
                       Logout
                   </a>
+                  
               </div>
           </nav>
       </aside>
