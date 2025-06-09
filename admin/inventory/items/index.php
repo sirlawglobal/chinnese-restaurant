@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../BackEnd/config/init.php';
+requireAdmin();
 $categories = getCategories(); // returns array of associative arrays by default
 ?>
 <!DOCTYPE html>

@@ -12,7 +12,41 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
   </head>
+  <style>
+   .messages-container {
+    flex-grow: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+.message {
+    max-width: 70% !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    margin-bottom: 0 !important;
+    position: relative !important;
+    word-wrap: break-word !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.message-incoming {
+    align-self: flex-start !important;
+    background-color: white !important;
+    border-top-left-radius: 0 !important;
+}
+
+.message-outgoing {
+    align-self: flex-end !important;
+    background-color: var(--chat-bg-dark) !important;
+    border-top-right-radius: 0 !important;
+}
+  </style>
   <body class="flex">
+
     <main>
       <div class="content flex">
         <div class="inner-content flex">
@@ -154,5 +188,24 @@
     </main>
     <script src="../scripts/components.js"></script>
     <script src="../scripts/messages.js"></script>
+    <script>
+
+
+document.getElementById('sendButton').addEventListener('click', async () => {
+    const messageInput = document.getElementById('messageInput').value;
+    if (messageInput.trim()) {
+        const response = await fetch('../messages/send_message.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `chatId=${currentChatId}&text=${encodeURIComponent(messageInput)}&is_admin=1`
+        });
+        if (response.ok) {
+            document.getElementById('messageInput').value = '';
+            renderMessages(currentChatId);
+            renderChatList(); // Refresh to remove badge
+        }
+    }
+});
+    </script>
   </body>
 </html>
