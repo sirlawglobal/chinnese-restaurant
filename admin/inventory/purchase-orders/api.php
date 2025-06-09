@@ -8,6 +8,7 @@ $sql = "
         o.id AS order_id,
         o.created_at AS order_date,
         oi.item_name AS item,
+        'Food' AS category, -- Placeholder since category isn't in the schema
         (SELECT u.name FROM users u WHERE u.id = o.user_id LIMIT 1) AS vendor,
         o.status,
         o.delivery_address AS delivery_info,
