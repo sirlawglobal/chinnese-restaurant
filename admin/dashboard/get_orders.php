@@ -1,21 +1,35 @@
 <?php
+// get_orders.php
 header('Content-Type: application/json');
 require_once '../../BackEnd/config/db.php';
 
 try {
     $pdo = db_connect();
     
-    $query = "SELECT `id`, `user_id`, `tx_ref`, `delivery_address`, `order_notes`, `order_type`, 
-              `schedule_date`, `schedule_time`, `total_amount`, `status`, `transaction_id`, 
-              `guest_email`, `created_at`, `user_email` 
-              FROM `orders` 
-              ORDER BY `created_at` DESC 
-              LIMIT 10";
+    // Fetch orders
+    $ordersQuery = "SELECT `id`, `user_id`, `tx_ref`, `status`, `total_amount`, 
+                   `user_email`, `guest_email`, `created_at`
+                   FROM `orders` 
+                   ORDER BY `created_at` DESC 
+                   LIMIT 10";
+    $ordersStmt = $pdo->query($ordersQuery);
+    $orders = $ordersStmt->fetchAll(PDO::FETCH_ASSOC);
     
-    $stmt = $pdo->query($query);
-    $orders = $stmt->fetchAll();
+    // Fetch items for each order
+    $result = [];
+    foreach ($orders as $order) {
+        $itemsQuery = "SELECT `item_name`, `price`, `quantity` 
+                      FROM `order_items` 
+                      WHERE `order_id` = ?";
+        $itemsStmt = $pdo->prepare($itemsQuery);
+        $itemsStmt->execute([$order['id']]);
+        $items = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $order['items'] = $items;
+        $result[] = $order;
+    }
     
-    echo json_encode($orders);
+    echo json_encode($result);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
