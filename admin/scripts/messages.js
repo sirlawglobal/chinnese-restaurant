@@ -95,20 +95,28 @@ async function renderMessages(chatId) {
         console.log('API response data:', result);
         if (result.data_type === "chat") {
             messagesContainer.innerHTML = "";
-            result.data.messages.forEach((message) => {
-                console.log('Processing message:', message);
+            // Sort messages by time
+            result.data.messages.sort((a, b) => {
+                const timeA = parseMessageTime(a.time);
+                const timeB = parseMessageTime(b.time);
+                console.log(`Sorting: ${a.time} (${timeA}) vs ${b.time} (${timeB})`);
+                return timeA - timeB;
+            }).forEach((message) => {
+                console.log('Processing message:', message.text, 'is_admin:', message.is_admin, 'Class assigned:', message.is_admin === "1" ? "message-outgoing" : "message-incoming");
                 const isAdmin = message.is_admin === "1";
                 const messageElement = document.createElement("div");
                 messageElement.className = `message ${isAdmin ? "message-outgoing" : "message-incoming"}`;
-                console.log('Applied class:', messageElement.className);
                 messageElement.dataset.messageId = message.id;
                 messageElement.innerHTML = `
                     <div>${message.text}</div>
-                    <div class="message-time">
-                        ${message.time}
-                        ${isAdmin ? `<span class="message-status">${getStatusIcon("replied")}</span>` : ""}
-                    </div>
+                    <div class="message-time">${message.time}</div>
                 `;
+                if (!isAdmin) {
+                    const avatar = document.createElement("div");
+                    avatar.className = "chat-item-avatar";
+                    avatar.textContent = message.initials || "U";
+                    messagesContainer.appendChild(avatar);
+                }
                 messagesContainer.appendChild(messageElement);
             });
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -118,6 +126,32 @@ async function renderMessages(chatId) {
     } catch (error) {
         console.error('Error in renderMessages:', error);
     }
+}
+
+// Parse time string to timestamp for sorting
+function parseMessageTime(timeStr) {
+    const now = new Date();
+    const [timePart, dayPart] = timeStr.split(", ");
+    let [hours, minutes] = timePart.split(":");
+    let period = minutes ? minutes.split(" ")[1] : "AM";
+    minutes = minutes ? minutes.split(" ")[0] : "00";
+    hours = parseInt(hours, 10);
+    if (period === "PM" && hours !== 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+
+    let date = new Date(now);
+    if (dayPart === "Yesterday") {
+        date.setDate(date.getDate() - 1);
+    } else if (dayPart === "Monday" || dayPart === "Tuesday" || dayPart === "Wednesday" || dayPart === "Thursday" || dayPart === "Friday" || dayPart === "Saturday" || dayPart === "Sunday") {
+        const today = now.getDay(); // 0-6 (Sunday-Saturday)
+        const targetDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].indexOf(dayPart);
+        let diff = targetDay - today;
+        if (diff < 0) diff += 7; // If target is in the past week, adjust to last week
+        date.setDate(date.getDate() - (7 - diff));
+    }
+    date.setHours(hours, minutes, 0, 0);
+    console.log(`Parsed ${timeStr} to ${date.getTime()}`);
+    return date.getTime();
 }
 
 async function setActiveChat(chatId) {

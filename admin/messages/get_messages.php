@@ -41,4 +41,3 @@ if ($chat) {
         'message' => 'Chat not found.'
     ]);
 }
-?>

@@ -341,35 +341,34 @@
 }
 
 .messages-container {
-    flex-grow: 1;
-    padding: 1rem 0;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  flex-grow: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .message {
-    max-width: 70%;
-    padding: 8px 12px;
-    border-radius: 8px;
-    margin-bottom: 0;
-    position: relative;
-    word-wrap: break-word;
-    display: block;
+  max-width: 50%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  position: relative;
+  word-wrap: break-word;
 }
 
 .message-incoming {
-    align-self: flex-start;
-    background-color: white;
-    border-top-left-radius: 0;
+  align-self: flex-start;
+  background-color: white;
+  border-top-left-radius: 0;
 }
 
 .message-outgoing {
-    align-self: flex-end;
-    background-color: var(--chat-bg-dark);
-    border-top-right-radius: 0;
+  align-self: flex-end;
+  background-color: var(--chat-bg-dark);
+  border-top-right-radius: 0;
 }
+
 .message-time {
   font-size: 11px;
   color: var(--text-muted);
