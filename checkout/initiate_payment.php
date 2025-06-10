@@ -176,52 +176,59 @@ if ($order_type === 'schedule' && (empty($schedule_date) || empty($schedule_time
 try {
     $pdo->beginTransaction();
 
- 
-
+    // Insert into orders table (unchanged)
     $stmt = $pdo->prepare("
-    INSERT INTO `orders` (
-        `user_id`, `tx_ref`, `delivery_address`, `order_notes`, 
-        `order_type`, `schedule_date`, `schedule_time`, 
-        `total_amount`, `status`, `transaction_id`, `guest_email`, `user_email`, `created_at`
-    ) VALUES (
-        :user_id, :tx_ref, :delivery_address, :order_notes, 
-        :order_type, :schedule_date, :schedule_time, 
-        :total_amount, 'pending', NULL, :guest_email, :user_email, NOW()
-    )
-");
-$stmt->execute([
-    ':user_id' => $user_id,
-    ':tx_ref' => $tx_ref,
-    ':delivery_address' => $delivery_address,
-    ':order_notes' => $order_notes,
-    ':order_type' => $order_type,
-    ':schedule_date' => $schedule_date,
-    ':schedule_time' => $schedule_time,
-    ':total_amount' => $total_amount,
-    ':guest_email' => $guest_email,
-    ':user_email' => $user_email
-]);
+        INSERT INTO `orders` (
+            `user_id`, `tx_ref`, `delivery_address`, `order_notes`, 
+            `order_type`, `schedule_date`, `schedule_time`, 
+            `total_amount`, `status`, `transaction_id`, `guest_email`, `user_email`, `created_at`
+        ) VALUES (
+            :user_id, :tx_ref, :delivery_address, :order_notes, 
+            :order_type, :schedule_date, :schedule_time, 
+            :total_amount, 'pending', NULL, :guest_email, :user_email, NOW()
+        )
+    ");
+    $stmt->execute([
+        ':user_id' => $user_id,
+        ':tx_ref' => $tx_ref,
+        ':delivery_address' => $delivery_address,
+        ':order_notes' => $order_notes,
+        ':order_type' => $order_type,
+        ':schedule_date' => $schedule_date,
+        ':schedule_time' => $schedule_time,
+        ':total_amount' => $total_amount,
+        ':guest_email' => $guest_email,
+        ':user_email' => $user_email
+    ]);
 
     $order_id = $pdo->lastInsertId();
 
-    // Insert into order_items table
+    // Insert into order_items table with category_id
     $stmt = $pdo->prepare("
         INSERT INTO `order_items` (
-            `order_id`, `item_name`, `portion`, `price`, `quantity`
+            `order_id`, `item_name`, `portion`, `category_id`, `price`, `quantity`
         ) VALUES (
-            :order_id, :item_name, :portion, :price, :quantity
+            :order_id, :item_name, :portion, :category_id, :price, :quantity
         )
     ");
     foreach ($cart as $item) {
         $item_name = trim(strip_tags($item['name'] ?? '')); 
         $portion = trim(strip_tags($item['portion'] ?? '')); 
+        $category_id = isset($item['category']) ? intval($item['category']) : null;
+
+        // Validate item data
         if (empty($item_name)) {
             throw new Exception("Item name cannot be empty");
         }
+        if (is_null($category_id) || $category_id <= 0) {
+            throw new Exception("Invalid or missing category ID for item: {$item_name}");
+        }
+
         $stmt->execute([
             ':order_id' => $order_id,
             ':item_name' => $item_name,
             ':portion' => $portion,
+            ':category_id' => $category_id,
             ':price' => floatval($item['price'] ?? 0),
             ':quantity' => intval($item['quantity'] ?? 1)
         ]);
@@ -236,7 +243,7 @@ $stmt->execute([
         'tx_ref' => $tx_ref
     ];
 
-    // Send email notification if recipient email is available
+    // Send email notification (unchanged)
     $recipient_email = $user_email ?: $guest_email;
     if ($recipient_email) {
         $order_data = [
@@ -251,7 +258,6 @@ $stmt->execute([
         $mail_result = send_order_email($recipient_email, $order_id, $order_data, $cart);
         if ($mail_result !== true) {
             error_log("Failed to send order email to: {$recipient_email} - {$mail_result}");
-            // Only include error details if in development
             if (ini_get('display_errors')) {
                 $response['email_warning'] = 'Confirmation email could not be sent';
             }

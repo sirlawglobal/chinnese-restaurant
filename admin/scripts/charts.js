@@ -1,71 +1,85 @@
-// Wait for DOM to load
-document.addEventListener("DOMContentLoaded", function () {
-  // Get all chart contexts first
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+  // Get all chart contexts
   const revenueCtx = document.getElementById("revenueChart").getContext("2d");
   const categoryCtx = document.getElementById("categoryChart").getContext("2d");
   const ordersCtx = document.getElementById("ordersChart").getContext("2d");
 
-  // Global configuration for horizontal-only gridlines
+  // Global chart configuration
   Chart.defaults.scale.grid = {
-    drawOnChartArea: true, // Allow gridlines on the chart
-    drawTicks: false, // Hide tick-mark lines
-    color: "rgba(0, 0, 0, 0.1)", // Light gray gridlines
-    borderDash: [3, 3], // Dashed lines (optional)
-    lineWidth: 1, // Thin lines
+    drawOnChartArea: true,
+    drawTicks: false,
+    color: "rgba(0, 0, 0, 0.1)",
+    borderDash: [3, 3],
+    lineWidth: 1,
   };
-
-  // Disable vertical gridlines specifically for all charts
-  Chart.defaults.scales.category.grid = {
-    display: false, // This kills vertical gridlines for category axes (x-axis)
-  };
+  Chart.defaults.scales.category.grid = { display: false };
   Chart.defaults.plugins.legend.labels.usePointStyle = true;
   Chart.defaults.plugins.legend.labels.pointStyle = "rectRounded";
 
-  new Chart(revenueCtx, {
+  // Fetch data from APIs
+  try {
+    // Fetch revenue data
+    const revenueResponse = await fetch('../dashboard/get_revenue_data.php');
+    const revenueData = await revenueResponse.json();
+    
+    // Fetch category data
+    const categoryResponse = await fetch('../dashboard/get_category_data.php');
+    const categoryData = await categoryResponse.json();
+    
+    // Fetch orders data
+    const ordersResponse = await fetch('../dashboard/get_orders_data.php');
+    const ordersData = await ordersResponse.json();
+
+    // Initialize charts with dynamic data
+    initRevenueChart(revenueCtx, revenueData);
+    initCategoryChart(categoryCtx, categoryData);
+    initOrdersChart(ordersCtx, ordersData);
+  } catch (error) {
+    console.error('Error loading chart data:', error);
+  }
+});
+
+function initRevenueChart(ctx, data) {
+  new Chart(ctx, {
     type: "line",
     data: {
-      labels: ["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+      labels: data.labels.reverse(), // Reverse to show oldest to newest
       datasets: [
         {
           label: "Income",
-          data: [11000, 10800, 11500, 10200, 16300, 12000, 14500, 17500],
+          data: data.revenue,
           borderColor: "#ff6600",
           backgroundColor: "rgba(255, 102, 0, 0.1)",
           tension: 0.4,
-          pointRadius: 0, // Default state - no points visible
-          pointHoverRadius: 6, // Point appears on hover
+          pointRadius: 0,
+          pointHoverRadius: 6,
           pointBackgroundColor: "#ff6600",
-          fill: false,
+          fill: true,
         },
         {
           label: "Expense",
-          data: [5400, 5200, 5800, 5000, 6200, 5100, 6300, 7500],
+          data: data.expense,
           borderColor: "#000000",
           backgroundColor: "rgba(0, 0, 0, 0.1)",
           tension: 0.4,
-          pointRadius: 0, // Default state - no points visible
-          pointHoverRadius: 6, // Point appears on hover
+          pointRadius: 0,
+          pointHoverRadius: 6,
           pointBackgroundColor: "#000000",
-          fill: false,
+          fill: true,
         },
       ],
     },
     options: {
       responsive: true,
-      interaction: {
-        intersect: false,
-        mode: "index",
-      },
+      interaction: { intersect: false, mode: "index" },
       plugins: {
-        legend: {
-          display: true,
-          position: "top",
-          align: "end",
-        },
+        legend: { display: true, position: "top", align: "end" },
         tooltip: {
           callbacks: {
             label: function (context) {
-              return `${context.dataset.label}: ${context.formattedValue}`;
+              return `${context.dataset.label}: $${context.raw.toFixed(2)}`;
             },
           },
         },
@@ -74,20 +88,22 @@ document.addEventListener("DOMContentLoaded", function () {
         y: {
           beginAtZero: true,
           ticks: {
-            callback: (value) => `${value / 1000}K`,
+            callback: (value) => `$${(value / 1000).toFixed(1)}K`,
           },
         },
       },
     },
   });
+}
 
-  new Chart(categoryCtx, {
+function initCategoryChart(ctx, data) {
+  new Chart(ctx, {
     type: "doughnut",
     data: {
-      labels: ["Seafood", "Seafood", "Seafood", "Seafood"],
+      labels: data.labels,
       datasets: [
         {
-          data: [30, 25, 25, 20],
+          data: data.data,
           backgroundColor: ["#FF6600", "#FFE8D0", "#000000", "#444444"],
           borderWidth: 0,
           hoverOffset: 10,
@@ -102,15 +118,9 @@ document.addEventListener("DOMContentLoaded", function () {
           position: "bottom",
           labels: {
             generateLabels: (chart) => {
-              const total = chart.data.datasets[0].data.reduce(
-                (a, b) => a + b,
-                0
-              );
+              const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
               return chart.data.labels.map((label, i) => ({
-                text: `${label}: ${(
-                  (chart.data.datasets[0].data[i] / total) *
-                  100
-                ).toFixed(1)}%`,
+                text: `${label}: ${((chart.data.datasets[0].data[i] / total) * 100).toFixed(1)}%`,
                 fillStyle: chart.data.datasets[0].backgroundColor[i],
                 hidden: false,
                 lineWidth: 0,
@@ -122,7 +132,9 @@ document.addEventListener("DOMContentLoaded", function () {
         tooltip: {
           callbacks: {
             label: function (context) {
-              return `${context.label}: ${context.formattedValue}%`;
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = ((context.raw / total) * 100).toFixed(1);
+              return `${context.label}: ${percentage}% (${context.raw} items)`;
             },
           },
         },
@@ -130,22 +142,29 @@ document.addEventListener("DOMContentLoaded", function () {
       cutout: "65%",
     },
   });
+}
 
-  const orders = [130, 125, 160, 185, 150, 135, 140]; // Data
-  const highlightIndex = 3; // Thursday
-
-  const backgroundColors = orders.map((_, i) =>
+function initOrdersChart(ctx, data) {
+  // Find index of current day to highlight
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const today = new Date().getDay(); // 0 (Sunday) to 6 (Saturday)
+  const highlightIndex = today;
+  
+  const backgroundColors = data.data.map((_, i) => 
     i === highlightIndex ? "#FF6600" : "#FFE8D0"
   );
 
-  new Chart(ordersCtx, {
+  // Shorten day names for display
+  const shortLabels = data.labels.map(label => label.substring(0, 3));
+
+  new Chart(ctx, {
     type: "bar",
     data: {
-      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      labels: shortLabels,
       datasets: [
         {
           label: "Orders",
-          data: orders,
+          data: data.data,
           backgroundColor: backgroundColors,
           borderRadius: 6,
           barThickness: 30,
@@ -156,36 +175,24 @@ document.addEventListener("DOMContentLoaded", function () {
       scales: {
         y: {
           beginAtZero: true,
-          max: 200,
-          ticks: {
-            stepSize: 50,
-          },
-          grid: {
-            drawBorder: false,
-          },
+          ticks: { stepSize: Math.ceil(Math.max(...data.data) / 5) },
+          grid: { drawBorder: false },
         },
-        x: {
-          grid: {
-            display: false,
-          },
-        },
+        x: { grid: { display: false } },
       },
       plugins: {
         legend: { display: false },
         tooltip: {
           callbacks: {
             label: (ctx) => `${ctx.raw} orders`,
-            title: (ctx) =>
-              ctx[0].label === "Thu" ? "Thursday" : ctx[0].label,
+            title: (ctx) => data.labels[ctx.dataIndex],
           },
           backgroundColor: "#000",
           titleColor: "#fff",
           bodyColor: "#fff",
-          bodyFont: {
-            weight: "bold",
-          },
+          bodyFont: { weight: "bold" },
         },
       },
     },
   });
-});
+}
