@@ -63,9 +63,19 @@
         </div>
         <a href="../forgot-password/">Forgot Password</a>
       </div>
-      <div class="flex align-center justify-center">
+      <!-- <div class="flex align-center justify-center">
         <button type="submit" id="submitBtn">Sign In</button>
-      </div>
+      </div> -->
+
+      <div class="flex align-center justify-center">
+           <button type="submit" id="submitBtn">Sign In</button>
+          </div>
+
+            <div class="flex align-center justify-center">
+              <p>No acccount yet?</p>
+
+               <a  href="../signUp/">Sign up</a>
+          </div>
     </form>
   </section>
   <section class="image">
