@@ -591,69 +591,60 @@
 
     <script>
 // Function to fetch and display orders
+
+
 async function fetchAndDisplayOrders() {
   try {
     const response = await fetch('get_orders.php');
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const orders = await response.json();
     const tableBody = document.getElementById('orders-table-body');
-    if (!tableBody) throw new Error('Table body element not found');
+    
     tableBody.innerHTML = '';
 
-    console.log('Fetched orders:', orders);
-
-    for (const order of orders) {
-      const orderItemsResponse = await fetch(`get_order_items.php?order_id=${order.id}`);
-      if (!orderItemsResponse.ok) {
-        console.error(`Failed to fetch items for order ${order.id}: ${orderItemsResponse.status}`);
-        continue;
-      }
-      const orderItems = await orderItemsResponse.json();
-      console.log(`Order ${order.id} items:`, orderItems); // Debug: Log items
-
-      // Validate and convert item prices to numbers
-      const validatedItems = orderItems.map(item => ({
-        ...item,
-        price: parseFloat(item.price) || 0,
-        quantity: parseInt(item.quantity, 10) || 0
-      }));
-
-      const row = document.createElement('tr');
+    orders.forEach(order => {
+      // Calculate total quantity
+      const totalQty = order.items.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
+      
+      // Format customer email
+      const customerEmail = order.user_email || order.guest_email || 'Guest';
+      
+      // Determine status class
       let statusClass = '';
       if (order.status.toLowerCase().includes('process')) statusClass = 'process';
       else if (order.status.toLowerCase().includes('cancel')) statusClass = 'cancelled';
       else if (order.status.toLowerCase().includes('complete')) statusClass = 'completed';
 
-      const total = validatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
-
+      const row = document.createElement('tr');
       row.innerHTML = `
         <td>ORD${order.id}</td>
-        <td><button class="view-items-btn" data-order-id="${order.id}" data-items='${JSON.stringify(validatedItems)}'>View details</button></td>
-        <td>${validatedItems.length}</td>
-        <td>$${total}</td>
-        <td>${order.user_email || order.guest_email || 'Guest'}</td>
+        <td>
+          <button class="view-items-btn" data-order-id="${order.id}" 
+                  data-items='${JSON.stringify(order.items)}'>
+            View details
+          </button>
+        </td>
+        <td>${totalQty}</td>
+        <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
+        <td>${customerEmail}</td>
         <td><span class="status ${statusClass}">${order.status}</span></td>
       `;
 
       tableBody.appendChild(row);
-    }
+    });
 
+    // Initialize DataTable
     if ($.fn.DataTable.isDataTable('#orders-table')) {
       $('#orders-table').DataTable().destroy();
     }
-
     $('#orders-table').DataTable({ pageLength: 5 });
 
+    // Add event listeners to view buttons
     document.querySelectorAll('.view-items-btn').forEach(button => {
       button.addEventListener('click', (e) => {
         const orderId = e.target.dataset.orderId;
-        try {
-          const items = JSON.parse(e.target.dataset.items);
-          console.log('Parsed items for order', orderId, ':', items); // Debug: Log parsed items
-          showOrderItemsPopup(orderId, items);
-        } catch (error) {
-          console.error('Error parsing items for order', orderId, error);
-        }
+        const items = JSON.parse(e.target.dataset.items);
+        showOrderItemsPopup(orderId, items);
       });
     });
 
@@ -661,6 +652,7 @@ async function fetchAndDisplayOrders() {
     console.error('Error in fetchAndDisplayOrders:', error);
   }
 }
+
 function showOrderItemsPopup(orderId, items) {
   try {
     console.log('Items received:', items); // Debug: Log the items array
