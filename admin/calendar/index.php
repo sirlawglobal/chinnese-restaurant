@@ -1,3 +1,12 @@
+<?php
+
+
+require_once __DIR__ . '/../../BackEnd/config/init.php';
+// if (!isset($_SESSION['user_id'])) {
+//     header('Location: login_page.php');
+//     exit;
+//}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>

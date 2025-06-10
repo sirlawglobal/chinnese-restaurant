@@ -32,10 +32,11 @@ $userEmail = $result[0]['email'];
 $userName = $result[0]['name'];
 
 // Insert admin message
-$insertQuery = "INSERT INTO chat_messages (message_id, text, is_admin) VALUES (:message_id, :text, TRUE)";
+$insertQuery = "INSERT INTO chat_messages (message_id, text, is_admin,created_at) VALUES (:message_id, :text, TRUE,:created_at)";
 $insertParams = [
     'message_id' => $chatId,
-    'text' => $message
+    'text' => $message,
+     'created_at' => date('Y-m-d H:i:s')
 ];
 $inserted = db_query($insertQuery, $insertParams, 'insert');
 

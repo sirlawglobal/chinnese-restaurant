@@ -26,15 +26,19 @@
     <link rel="stylesheet" href="../assets/styles/main.css" />
     <link rel="stylesheet" href="../assets/styles/contact.css" />
     <script defer="" src="/script.js"></script>
-    <script
-      src="https://www.google.com/recaptcha/api.js"
-      async=""
-      defer=""
-    ></script>
 
     <title>Contact Us</title>
     <style>
-      /* Custom styles for textarea and reCAPTCHA */
+      /* Custom styles for textarea */
+      .form__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      .form__grid .grid__item {
+        display: flex;
+        align-items: center;
+      }
       .form__grid .grid__item textarea {
         width: 100%;
         padding: 10px;
@@ -51,8 +55,8 @@
         outline: none;
         box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
       }
-      .g-recaptcha {
-        margin-top: 15px;
+      .message-field {
+        grid-column: 1 / -1; /* Span all columns to force it below */
       }
     </style>
   </head>
@@ -149,7 +153,7 @@
                     <input type="tel" name="telephone" placeholder="Telephone" />
                   </div>
                 </div>
-                <div class="grid__item align-center">
+                <div class="grid__item align-center message-field">
                   <div class="icon">
                     <i class="fa fa-commenting" aria-hidden="true" style="font-size: 30px"></i>
                   </div>
@@ -163,9 +167,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- reCAPTCHA -->
-              <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
 
               <button id="submitBtn" class="button--submit" type="submit">
                 <img
@@ -205,4 +206,77 @@
         </div>
       </div>
       <nav class="footer__nav">
-        <a href="#" class="footer__link">About us
+        <a href="#" class="footer__link">About us</a>
+        <a href="#" class="footer__link">Delivery</a>
+        <a href="#" class="footer__link">Help & Support</a>
+        <a href="#" class="footer__link">T&C</a>
+      </nav>
+    </footer>
+
+    <script>
+      const sprite = document.getElementById("sprite");
+      (async () => {
+        const data = await fetch("../assets/icons-sprite.svg").then(
+          (response) => response.text()
+        );
+        sprite.innerHTML = data;
+      })();
+    </script>
+
+    <script>
+      const contactForm = document.getElementById("contact-form");
+      const submitBtn = document.getElementById("submitBtn");
+
+      contactForm.addEventListener("submit", function (e) {
+        e.preventDefault(); // Stop default form submission
+
+        const formData = new FormData(contactForm);
+        const payload = Object.fromEntries(formData.entries());
+        payload.data_type = "message"; // include data_type for backend switch
+
+        send_data("message", payload);
+      });
+
+      function send_data(data_type = "message", payload = {}) {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Sending...";
+        }
+
+        const ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function () {
+          if (ajax.readyState === 4) {
+            if (ajax.status === 200 && ajax.responseText.trim() !== "") {
+              handle_result(ajax.responseText, data_type);
+            }
+
+            // Re-enable button regardless of result
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Send";
+            }
+          }
+        };
+
+        let ROOTS = "<?= ROOT ?>";
+        ajax.open("POST", ROOTS + "/contact/contact.php", true);
+        ajax.setRequestHeader("Content-Type", "application/json");
+        ajax.send(JSON.stringify(payload));
+      }
+
+      function handle_result(result, data_type) {
+        try {
+          const obj = JSON.parse(result);
+          if (obj.data_type !== data_type) return;
+
+          if (data_type === "message") {
+            alert(obj.message);
+            contactForm.reset(); // clear form
+          }
+        } catch (e) {
+          console.error("Invalid JSON response", result);
+        }
+      }
+    </script>
+  </body>
+</html>
