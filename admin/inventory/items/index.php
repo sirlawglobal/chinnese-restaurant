@@ -386,6 +386,8 @@ $categories = getCategories(); // returns array of associative arrays by default
 </form>
 
 
+
+
 <script>
   // JavaScript to handle dynamic form behavior
   document.getElementById('has_options').addEventListener('change', function () {

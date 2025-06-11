@@ -1,16 +1,16 @@
+
+
 <?php
 require_once __DIR__ . '/../BackEnd/config/init.php';
 
-
-
-// Fetch user email if logged in
-$userEmail = isLoggedIn() && isset($_SESSION['user']['email']) && !empty($_SESSION['user']['email']) ? $_SESSION['user']['email'] : '';
+// Fetch user data if logged in
+$userEmail = isLoggedIn() && isset($_SESSION['user']['email']) ? $_SESSION['user']['email'] : '';
+$fullName = isLoggedIn() && isset($_SESSION['user']['name']) ? $_SESSION['user']['name'] : '';
 $role = isLoggedIn();
 
 // Debugging session data
-error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail: " . $userEmail);
+error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail: " . $userEmail . ", fullName: " . $fullName);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +23,87 @@ error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail:
     <script src="//cdn.jsdelivr.net/npm/dompurify@2.1.0/dist/purify.min.js"></script>
     <!-- Include Flutterwave SDK -->
     <script src="https://checkout.flutterwave.com/v3.js"></script>
+
+    <style>
+        .guest-info {
+    margin: 15px 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}
+
+.spinner-border {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: text-bottom;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border .75s linear infinite;
+}
+
+.spinner-border-sm {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-width: 0.2em;
+}
+
+/* Payment Processing Spinner */
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 0.2em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-rotate 0.75s linear infinite;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+@keyframes spinner-rotate {
+    to { transform: rotate(360deg); }
+}
+
+/* Payment Button States */
+.button--checkout {
+    transition: all 0.3s ease;
+}
+
+.button--checkout:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background-color: gray;
+    /* background-color: var(--primary-color); */
+}
+
+/* Error Message */
+#paymentError {
+    color: #dc3545;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+    </style>
 </head>
 <body>
     <div class="sprite" hidden></div>
@@ -83,20 +164,32 @@ error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail:
                             required
                         ></textarea>
 
-                        <?php if (!$role): ?>
-                            <div class="guest-email" id="guestEmailContainer">
-                                <label for="guestEmail" class="form-label">Email</label>
-                                <input
-                                    type="email"
-                                    id="guestEmail"
-                                    class="form-input"
-                                    placeholder="Enter your email"
-                                    aria-label="Guest email"
-                                    style="border-radius: 10px; padding: 8px; width: 100%; border: 1px solid rgba(2, 2, 2, 0.589);"
-                                    required
-                                />
-                            </div>
-                        <?php endif; ?>
+                       <?php if (!$role): ?>
+            <div class="guest-info" id="guestInfoContainer">
+                <!-- <div class="form-group">
+                    <label for="guestFullName" class="form-label">Full Name</label>
+                    <input
+                        type="text"
+                        id="guestFullName"
+                        class="form-input"
+                        placeholder="Surname first e.g. John Doe"
+                        aria-label="Guest full name"
+                        required
+                    />
+                </div> -->
+                <div class="form-group">
+                    <label for="guestEmail" class="form-label">Email</label>
+                    <input
+                        type="email"
+                        id="guestEmail"
+                        class="form-input"
+                        placeholder="Enter your email"
+                        aria-label="Guest email"
+                        required
+                    />
+                </div>
+            </div>
+        <?php endif; ?>
 
                         <h3 class="flex align-center order__type">
                             <svg class="icon"><use href="#location"></use></svg>
@@ -380,132 +473,162 @@ error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail:
             return "GD_" + Math.floor(Math.random() * 1000000000) + "_" + Date.now();
         }
 
-        proceedToPaymentBtn.addEventListener("click", async () => {
-            const deliveryAddress = DOMPurify.sanitize(document.getElementById("deliveryAddress").value);
-            const orderNotes = DOMPurify.sanitize(document.getElementById("orderNotes").value);
-            const scheduleDate = document.getElementById("scheduleDate").value;
-            const scheduleTime = document.getElementById("scheduleTime").value;
-            const guestEmail = DOMPurify.sanitize(document.getElementById("guestEmail")?.value || "");
+      proceedToPaymentBtn.addEventListener("click", async () => {
+    // Disable button and show processing state immediately
+    proceedToPaymentBtn.disabled = true;
+    proceedToPaymentBtn.innerHTML = `
+        <span class="spinner"></span>
+        Processing Payment...
+    `;
+    
+    try {
+        const deliveryAddress = DOMPurify.sanitize(document.getElementById("deliveryAddress").value);
+        const orderNotes = DOMPurify.sanitize(document.getElementById("orderNotes").value);
+        const scheduleDate = document.getElementById("scheduleDate").value;
+        const scheduleTime = document.getElementById("scheduleTime").value;
+        const guestEmail = DOMPurify.sanitize(document.getElementById("guestEmail")?.value || "");
+        const guestFullName ='Guest';
 
-            // Debugging: Log inputs
-            console.log("Payment Inputs - isLoggedIn:", isLoggedIn, "userEmail:", userEmail, "guestEmail:", guestEmail);
-
-            // Validation
-            if (!deliveryAddress.trim()) {
-                alert("Please provide a delivery address.");
+        // Validation
+        if (!deliveryAddress.trim()) {
+            showError("Please provide a delivery address.");
+            return;
+        }
+        if (orderType === "schedule" && (!scheduleDate || !scheduleTime)) {
+            showError("Please select a date and time for scheduled order.");
+            return;
+        }
+        if (!cartItems || cartItems.length === 0) {
+            showError("Your cart is empty.");
+            return;
+        }
+        if (!isLoggedIn) {
+            if (!guestEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
+                showError("Please provide a valid email address for guest checkout.");
                 return;
             }
-            if (orderType === "schedule" && (!scheduleDate || !scheduleTime)) {
-                alert("Please select a date and time for scheduled order.");
+            if (!guestFullName.trim()) {
+                showError("Please provide your full name for guest checkout.");
                 return;
             }
-            if (!cartItems || cartItems.length === 0) {
-                alert("Your cart is empty.");
-                return;
+        }
+
+        // Calculate total
+        let itemTotalValue = 0;
+        cartItems.forEach((item) => {
+            let price = typeof item.price === 'string' ? parseFloat(item.price.replace('£', '').trim()) : parseFloat(item.price);
+            if (isNaN(price) || price < 0) {
+                console.error(`Invalid price for item ${item.name}:`, item.price);
+                price = 0;
             }
-            if (!isLoggedIn && (!guestEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail))) {
-                alert("Please provide a valid email address for guest checkout.");
-                return;
-            }
-            if (isLoggedIn && !userEmail) {
-                alert("User email not found. Please log in again.");
-                return;
-            }
-
-            // Calculate total
-            let itemTotalValue = 0;
-            cartItems.forEach((item) => {
-                let price = typeof item.price === 'string' ? parseFloat(item.price.replace('£', '').trim()) : parseFloat(item.price);
-                if (isNaN(price) || price < 0) {
-                    console.error(`Invalid price for item ${item.name}:`, item.price);
-                    price = 0;
-                }
-                const quantity = parseInt(item.quantity) || 1;
-                itemTotalValue += price * quantity;
-            });
-
-            const deliveryFeeValue = cartItems.length > 0 ? 131.00 : 0;
-            const taxesValue = cartItems.length > 0 ? 2.00 : 0;
-            const discountValue = 0;
-            const totalValue = Math.max(itemTotalValue + deliveryFeeValue + taxesValue - discountValue, 0);
-
-            // Validate total
-            if (totalValue <= 0) {
-                alert("Order total must be greater than £0. Please add more items.");
-                return;
-            }
-
-            // Prepare order data
-            const orderData = {
-                cart: cartItems.map(item => ({
-                    name: item.name,
-                    price: typeof item.price === 'string' ? parseFloat(item.price.replace('£', '').trim()) : parseFloat(item.price),
-                    quantity: parseInt(item.quantity) || 1,
-                    portion: item.portion,
-                    category: item.category
-                })),
-                delivery_address: deliveryAddress,
-                order_notes: orderNotes,
-                order_type: orderType,
-                schedule_date: orderType === "schedule" ? scheduleDate : null,
-                schedule_time: orderType === "schedule" ? scheduleTime : null,
-                total_amount: totalValue,
-                tx_ref: generateTxRef(),
-                guest_email: isLoggedIn ? null : guestEmail,
-                user_email: isLoggedIn ? userEmail : null
-            };
-
-            // Debugging: Log order data
-            console.log("Order Data:", orderData);
-
-            try {
-                const response = await fetch("./initiate_payment.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(orderData),
-                });
-
-                const result = await response.json();
-
-                if (!result.success) {
-                    throw new Error(result.message || "Unknown server error");
-                }
-
-                // Initiate Flutterwave payment
-                FlutterwaveCheckout({
-                    public_key: "FLWPUBK_TEST-d5a8da37df0a15b8a096c077ff8f3e5e-X",
-                    tx_ref: result.tx_ref,
-                    amount: parseFloat(totalValue.toFixed(2)),
-                    currency: "GBP",
-                    payment_options: "card,banktransfer,applepay,googlepay,mobilemoney,qr",
-                    redirect_url: "../confirmation/index.php",
-                    meta: { order_id: result.order_id },
-                    customer: {
-                        email: isLoggedIn ? userEmail : guestEmail,
-                        name: "Golden Dish Customer",
-                        phone_number: "1234567890"
-                    },
-                    customizations: {
-                        title: "Golden Dish Payment",
-                        description: "Payment for your order at Golden Dish",
-                        logo: "../assets/images/logo2.webp",
-                    },
-                    callback: function (data) {
-                        if (data.status === "successful") {
-                            localStorage.removeItem("cart");
-                            window.location.href = `../confirmation/index.php?tx_ref=${encodeURIComponent(data.tx_ref)}&transaction_id=${data.transaction_id}`;
-                        }
-                    },
-                    onclose: function () {
-                        console.log("Payment modal closed");
-                    },
-                });
-            } catch (error) {
-                console.error("Error initiating payment:", error);
-                alert("Error initiating payment: " + error.message);
-            }
+            const quantity = parseInt(item.quantity) || 1;
+            itemTotalValue += price * quantity;
         });
 
+        const deliveryFeeValue = cartItems.length > 0 ? 131.00 : 0;
+        const taxesValue = cartItems.length > 0 ? 2.00 : 0;
+        const discountValue = 0;
+        const totalValue = Math.max(itemTotalValue + deliveryFeeValue + taxesValue - discountValue, 0);
+
+        if (totalValue <= 0) {
+            showError("Order total must be greater than £0. Please add more items.");
+            return;
+        }
+
+        // Prepare order data
+        const orderData = {
+            cart: cartItems.map(item => ({
+                name: item.name,
+                price: typeof item.price === 'string' ? parseFloat(item.price.replace('£', '').trim()) : parseFloat(item.price),
+                quantity: parseInt(item.quantity) || 1,
+                portion: item.portion,
+                category: item.category
+            })),
+            delivery_address: deliveryAddress,
+            order_notes: orderNotes,
+            order_type: orderType,
+            schedule_date: orderType === "schedule" ? scheduleDate : null,
+            schedule_time: orderType === "schedule" ? scheduleTime : null,
+            total_amount: totalValue,
+            tx_ref: generateTxRef(),
+            guest_email: isLoggedIn ? null : guestEmail,
+            guest_name: isLoggedIn ? null : guestFullName,
+            user_email: isLoggedIn ? userEmail : null,
+            user_name: isLoggedIn ? '<?php echo $fullName; ?>' : null
+        };
+
+        // Initiate payment
+        const response = await fetch("./initiate_payment.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || "Unknown server error");
+        }
+
+        // Initiate Flutterwave payment
+        FlutterwaveCheckout({
+            public_key: "FLWPUBK_TEST-d5a8da37df0a15b8a096c077ff8f3e5e-X",
+            tx_ref: result.tx_ref,
+            amount: parseFloat(totalValue.toFixed(2)),
+            currency: "GBP",
+            payment_options: "card,banktransfer,applepay,googlepay,mobilemoney,qr",
+            redirect_url: "../confirmation/index.php",
+            meta: { order_id: result.order_id },
+            customer: {
+                email: isLoggedIn ? userEmail : guestEmail,
+                name: isLoggedIn ? '<?php echo $fullName; ?>' : guestFullName,
+                phone_number: "1234567890"
+            },
+            customizations: {
+                title: "Golden Dish Payment",
+                description: "Payment for your order at Golden Dish",
+                logo: "../assets/images/logo2.webp",
+            },
+            callback: function (data) {
+                if (data.status === "successful") {
+                    localStorage.removeItem("cart");
+                    window.location.href = `../confirmation/index.php?tx_ref=${encodeURIComponent(data.tx_ref)}&transaction_id=${data.transaction_id}`;
+                } else {
+                    resetPaymentButton();
+                    showError("Payment failed. Please try again.");
+                }
+            },
+            onclose: function () {
+                resetPaymentButton();
+            },
+        });
+
+    } catch (error) {
+        console.error("Error initiating payment:", error);
+        showError("Error initiating payment: " + error.message);
+        resetPaymentButton();
+    }
+});
+
+// Helper functions
+function resetPaymentButton() {
+    proceedToPaymentBtn.disabled = false;
+    proceedToPaymentBtn.textContent = "Proceed To Payment";
+}
+
+function showError(message) {
+    // Create or show error message element
+    let errorElement = document.getElementById("paymentError");
+    if (!errorElement) {
+        errorElement = document.createElement("div");
+        errorElement.id = "paymentError";
+        errorElement.style.color = "red";
+        errorElement.style.marginTop = "10px";
+        proceedToPaymentBtn.parentNode.insertBefore(errorElement, proceedToPaymentBtn.nextSibling);
+    }
+    errorElement.textContent = message;
+    resetPaymentButton();
+}
         // Initial render
         renderCartItems();
 

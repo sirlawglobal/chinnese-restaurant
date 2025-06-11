@@ -429,6 +429,12 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
         </div>
       </div>
     </main>
+     <script>
+// Pass PHP variables to JavaScript
+const username = '<?php echo addslashes($username); ?>';
+const userRole = '<?php echo addslashes($userRole); ?>';
+const profilePicture = '<?php echo addslashes($profilePicture); ?>';
+</script>
     <script src="../scripts/components.js"></script>
     <script src="../scripts/calendar.js"></script>
   </body>

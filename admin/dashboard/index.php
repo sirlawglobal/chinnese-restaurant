@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
+    header("Location: /chinnese-restaurant/login/");
+    exit();
+}
+
+$username = $_SESSION['user']['email'] ?? '';
+$userRole = $_SESSION['user']['role'] ?? '';
+$profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos/40';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,11 +28,22 @@
     />
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
+
       $(document).ready(function () {
         $("#my-table").DataTable({
           pageLength: 5,
         });
       });
+
+      // Replace your current DataTable initialization with:
+// $(document).ready(function () {
+//     $('#orders-table').DataTable({
+//         pageLength: 5,
+//         initComplete: function(settings, json) {
+//             console.log('DataTable initialized');
+//         }
+//     });
+// });
     </script>
     <title>Overview</title>
     <link rel="stylesheet" href="../assets/styles/general.css" />
@@ -586,6 +611,13 @@
         </section>
       </div>
     </main>
+    <script>
+// Pass PHP variables to JavaScript
+const username = '<?php echo addslashes($username); ?>';
+const userRole = '<?php echo addslashes($userRole); ?>';
+const profilePicture = '<?php echo addslashes($profilePicture); ?>';
+</script>
+<script src="your-script.js"></script>
     <script src="../scripts/charts.js"></script>
     <script src="../scripts/components.js"></script>
 
@@ -596,6 +628,9 @@
 async function fetchAndDisplayOrders() {
   try {
     const response = await fetch('get_orders.php');
+//     const response = await fetch('get_orders.php', {
+  
+// });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const orders = await response.json();
     const tableBody = document.getElementById('orders-table-body');
@@ -604,10 +639,13 @@ async function fetchAndDisplayOrders() {
 
     orders.forEach(order => {
       // Calculate total quantity
+
+      console.log('Order data:', order); // Debug: Log the order data
+      // console.log('Processing order:', order); // Debug: Log the order being processed
       const totalQty = order.items.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
       
       // Format customer email
-      const customerEmail = order.user_email || order.guest_email || 'Guest';
+      const customerEmail = order.user_name || order.guest_name || 'Guest';
       
       // Determine status class
       let statusClass = '';
@@ -730,53 +768,8 @@ function showOrderItemsPopup(orderId, items) {
     console.error('Error in showOrderItemsPopup:', error);
   }
 }
-// // Function to fetch and display reviews
-// async function fetchAndDisplayReviews() {
-//   try {
-//     // Fetch reviews from your API endpoint
-//     const response = await fetch('get_reviews.php'); // Replace with your actual endpoint
-//     const reviews = await response.json();
-    
-//     // Get the reviews slider element
-//     const slider = document.getElementById('reviews-slider');
-    
-//     // Clear existing reviews
-//     slider.innerHTML = '';
-    
-//     // Add each review to the slider
-//     reviews.forEach(review => {
-//       const reviewCard = document.createElement('div');
-//       reviewCard.className = 'card';
-      
-//       // Create star rating HTML
-//       let starsHtml = '';
-//       for (let i = 0; i < 5; i++) {
-//         if (i < Math.floor(review.rating)) {
-//           starsHtml += '<svg class="icon star filled"><use href="#star"></use></svg>';
-//         } else {
-//           starsHtml += '<svg class="icon star"><use href="#star"></use></svg>';
-//         }
-//       }
-      
-//       reviewCard.innerHTML = `
-//         <h4>${review.dish_name}</h4>
-//         <p>${review.review_text}</p>
-//         <div class="flex align-baseline">
-//           <p>${review.reviewer_name}</p>
-//           <small>- ${new Date(review.review_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</small>
-//         </div>
-//         <div class="flex align-center">
-//           <div class="stars">${starsHtml}</div>
-//           <small>(${review.rating.toFixed(1)})</small>
-//         </div>
-//       `;
-      
-//       slider.appendChild(reviewCard);
-//     });
-//   } catch (error) {
-//     console.error('Error fetching reviews:', error);
-//   }
-// }
+
+
  
 async function fetchAndDisplayReviews() {
   try {
@@ -837,64 +830,6 @@ async function fetchAndDisplayReviews() {
   }
 }
 
-// function initializeSlider() {
-//   const slider = document.getElementById('reviews-slider');
-//   if (!slider) {
-//     console.error('Slider element not found');
-//     return;
-//   }
-
-//   const slides = slider.querySelectorAll('.slide');
-//   const prevButton = document.querySelector('.slider-controls .prev');
-//   const nextButton = document.querySelector('.slider-controls .next');
-//   let currentIndex = 0;
-//   const slideWidth = slides[0]?.offsetWidth || 320; // Dynamic width
-//   const slidesToShow = 3;
-//   const totalSlides = slides.length;
-
-//   console.log('Total slides:', totalSlides, 'Slide width:', slideWidth);
-
-//   if (!prevButton || !nextButton) {
-//     console.error('Slider controls not found');
-//     return;
-//   }
-
-//   if (totalSlides <= slidesToShow) {
-//     prevButton.style.display = 'none';
-//     nextButton.style.display = 'none';
-//     return;
-//   }
-
-//   function updateSlider() {
-//     const offset = -currentIndex * slideWidth;
-//     slider.style.transform = `translateX(${offset}px)`;
-//   }
-
-//   function nextSlide() {
-//     currentIndex = Math.min(currentIndex + 1, totalSlides - slidesToShow);
-//     updateSlider();
-//   }
-
-//   function prevSlide() {
-//     currentIndex = Math.max(currentIndex - 1, 0);
-//     updateSlider();
-//   }
-
-//   nextButton.addEventListener('click', nextSlide);
-//   prevButton.addEventListener('click', prevSlide);
-
-//   let autoSlideInterval = setInterval(nextSlide, 5000);
-
-//   slider.parentElement.addEventListener('mouseenter', () => {
-//     clearInterval(autoSlideInterval);
-//   });
-
-//   slider.parentElement.addEventListener('mouseleave', () => {
-//     autoSlideInterval = setInterval(nextSlide, 5000);
-//   });
-
-//   updateSlider();
-// }
 function initializeSlider() {
   const slider = document.getElementById('reviews-slider');
   if (!slider) {
@@ -975,16 +910,12 @@ function initializeSlider() {
   });
 }
 // Call the functions when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  fetchAndDisplayOrders();
-  fetchAndDisplayReviews();
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//   fetchAndDisplayOrders();
+//   fetchAndDisplayReviews();
+// });
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetchAndDisplayOrders();
-  fetchAndDisplayReviews().then(initializeSlider);
-  fetchAndDisplayStats();
-});
+
 // Your existing filterTable function
 
 </script>
@@ -1048,10 +979,17 @@ async function fetchAndDisplayStats() {
 }
 
 // Update DOMContentLoaded to include stats fetching
+// document.addEventListener('DOMContentLoaded', () => {
+//   fetchAndDisplayStats();
+//   fetchAndDisplayOrders();
+//   fetchAndDisplayReviews();
+// });
+
+
 document.addEventListener('DOMContentLoaded', () => {
-  fetchAndDisplayStats();
   fetchAndDisplayOrders();
-  fetchAndDisplayReviews();
+  fetchAndDisplayReviews().then(initializeSlider);
+  fetchAndDisplayStats();
 });
     </script>
   </body>
