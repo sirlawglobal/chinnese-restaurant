@@ -7,8 +7,7 @@ try {
     $pdo = db_connect();
     
     // Fetch orders
-    $ordersQuery = "SELECT `id`, `user_id`, `tx_ref`, `status`, `total_amount`, 
-                   `user_email`, `guest_email`, `created_at`
+    $ordersQuery = "SELECT *
                    FROM `orders` 
                    ORDER BY `created_at` DESC 
                    LIMIT 10";

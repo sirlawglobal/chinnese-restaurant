@@ -1,43 +1,58 @@
+proceedToPaymentBtn.addEventListener("click", async () => {
+    const deliveryAddress = DOMPurify.sanitize(document.getElementById("deliveryAddress").value);
+    const orderNotes = DOMPurify.sanitize(document.getElementById("orderNotes").value);
+    const scheduleDate = document.getElementById("scheduleDate").value;
+    const scheduleTime = document.getElementById("scheduleTime").value;
+    const guestEmail = DOMPurify.sanitize(document.getElementById("guestEmail")?.value || "");
+    const guestFullName = DOMPurify.sanitize(document.getElementById("guestFullName")?.value || "");
 
-category_id
-: 
-1
-description
-: 
-null
-has_options
-: 
-1
-id
-: 
-583
-image_url
-: 
-null
-name
-: 
-"Crispy Aromatic Duck"
-options
-: 
-Array(3)
-0
-: 
-{portion: '1/4 (6 pancakes)', price: '13.50'}
-1
-: 
-{portion: '1/2 (12 pancakes)', price: '21.50'}
-2
-: 
-{portion: 'Whole (24 pancakes)', price: '37.00'}
-length
-: 
-3
-[[Prototype]]
-: 
-Array(0)
-price
-: 
-0
-[[Prototype]]
-: 
-Object
+    // Validation
+    if (!deliveryAddress.trim()) {
+        alert("Please provide a delivery address.");
+        return;
+    }
+    if (orderType === "schedule" && (!scheduleDate || !scheduleTime)) {
+        alert("Please select a date and time for scheduled order.");
+        return;
+    }
+    if (!cartItems || cartItems.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+    if (!isLoggedIn) {
+        if (!guestEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
+            alert("Please provide a valid email address for guest checkout.");
+            return;
+        }
+        if (!guestFullName.trim()) {
+            alert("Please provide your full name for guest checkout.");
+            return;
+        }
+    }
+
+    // Calculate total (existing code remains the same)
+    
+    // Prepare order data
+    const orderData = {
+        cart: cartItems.map(item => ({
+            name: item.name,
+            price: typeof item.price === 'string' ? parseFloat(item.price.replace('£', '').trim()) : parseFloat(item.price),
+            quantity: parseInt(item.quantity) || 1,
+            portion: item.portion,
+            category: item.category
+        })),
+        delivery_address: deliveryAddress,
+        order_notes: orderNotes,
+        order_type: orderType,
+        schedule_date: orderType === "schedule" ? scheduleDate : null,
+        schedule_time: orderType === "schedule" ? scheduleTime : null,
+        total_amount: totalValue,
+        tx_ref: generateTxRef(),
+        guest_email: isLoggedIn ? null : guestEmail,
+        guest_name: isLoggedIn ? null : guestFullName,
+        user_email: isLoggedIn ? userEmail : null,
+        user_name: isLoggedIn ? '<?php echo $fullName; ?>' : null
+    };
+
+    // Rest of your existing payment handling code
+});

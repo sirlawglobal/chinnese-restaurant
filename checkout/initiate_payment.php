@@ -71,7 +71,8 @@ function sendMail($toEmail, $toName, $subject, $htmlBody, $plainText = '') {
         return $error;
     }
 }
-function send_order_email($recipient_email, $order_id, $order_data, $cart) {
+
+function send_order_email($recipient_email, $recipient_name, $order_id, $order_data, $cart) {
     if (!filter_var($recipient_email, FILTER_VALIDATE_EMAIL)) {
         return "Invalid recipient email address";
     }
@@ -84,7 +85,7 @@ function send_order_email($recipient_email, $order_id, $order_data, $cart) {
         $portion = htmlspecialchars($item['portion'] ?? 'N/A');
         $price = number_format(floatval($item['price'] ?? 0), 2);
         $qty = intval($item['quantity'] ?? 1);
-        $items_html .= "<li>{$item_name} ({$portion}) - ₦{$price} x {$qty}</li>";
+        $items_html .= "<li>{$item_name} ({$portion}) - £{$price} x {$qty}</li>";
     }
 
     $schedule_info = "";
@@ -93,19 +94,20 @@ function send_order_email($recipient_email, $order_id, $order_data, $cart) {
     }
 
     $body = "
-        <h2>Thank You for Your Order!</h2>
+        <h2>Dear {$recipient_name},</h2>
+        <h3>Thank You for Your Order!</h3>
         <p><strong>Order ID:</strong> {$order_id}</p>
         <p><strong>Transaction Reference:</strong> {$order_data['tx_ref']}</p>
         <p><strong>Delivery Address:</strong> {$order_data['delivery_address']}</p>
         <p><strong>Order Type:</strong> " . ucfirst($order_data['order_type']) . "</p>
         {$schedule_info}
-        <p><strong>Total Amount:</strong> ₦" . number_format($order_data['total_amount'], 2) . "</p>
+        <p><strong>Total Amount:</strong> £" . number_format($order_data['total_amount'], 2) . "</p>
         <p><strong>Items:</strong></p>
         <ul>{$items_html}</ul>
         <p>We'll notify you when your order is being processed.</p>
     ";
 
-    return sendMail($recipient_email, $recipient_email, $subject, $body);
+    return sendMail($recipient_email, $recipient_name, $subject, $body);
 }
 
 // Start session if not already started
@@ -131,6 +133,8 @@ if (!$input) {
     exit;
 }
 
+
+
 // Log input data for debugging
 error_log("Initiate Payment Input: " . print_r($input, true));
 
@@ -145,7 +149,10 @@ $total_amount = floatval($input['total_amount'] ?? 0);
 $tx_ref = trim(strip_tags($input['tx_ref'] ?? '')); 
 $guest_email = trim($input['guest_email'] ?? '');
 $user_email = trim($input['user_email'] ?? '');
+$guest_name = trim(strip_tags($input['guest_name'] ?? ''));
+$user_name = trim(strip_tags($input['user_name'] ?? ''));
 $user_id = null;
+
 
 // Validate order_type
 if (!in_array($order_type, ['now', 'schedule'])) {
@@ -177,30 +184,35 @@ try {
     $pdo->beginTransaction();
 
     // Insert into orders table (unchanged)
-    $stmt = $pdo->prepare("
-        INSERT INTO `orders` (
-            `user_id`, `tx_ref`, `delivery_address`, `order_notes`, 
-            `order_type`, `schedule_date`, `schedule_time`, 
-            `total_amount`, `status`, `transaction_id`, `guest_email`, `user_email`, `created_at`
-        ) VALUES (
-            :user_id, :tx_ref, :delivery_address, :order_notes, 
-            :order_type, :schedule_date, :schedule_time, 
-            :total_amount, 'pending', NULL, :guest_email, :user_email, NOW()
-        )
-    ");
-    $stmt->execute([
-        ':user_id' => $user_id,
-        ':tx_ref' => $tx_ref,
-        ':delivery_address' => $delivery_address,
-        ':order_notes' => $order_notes,
-        ':order_type' => $order_type,
-        ':schedule_date' => $schedule_date,
-        ':schedule_time' => $schedule_time,
-        ':total_amount' => $total_amount,
-        ':guest_email' => $guest_email,
-        ':user_email' => $user_email
-    ]);
-
+  
+// Update the orders table insertion
+$stmt = $pdo->prepare("
+    INSERT INTO `orders` (
+        `user_id`, `tx_ref`, `delivery_address`, `order_notes`, 
+        `order_type`, `schedule_date`, `schedule_time`, 
+        `total_amount`, `status`, `transaction_id`, 
+        `guest_email`, `guest_name`, `user_email`, `user_name`, `created_at`
+    ) VALUES (
+        :user_id, :tx_ref, :delivery_address, :order_notes, 
+        :order_type, :schedule_date, :schedule_time, 
+        :total_amount, 'pending', NULL, 
+        :guest_email, :guest_name, :user_email, :user_name, NOW()
+    )
+");
+$stmt->execute([
+    ':user_id' => $user_id,
+    ':tx_ref' => $tx_ref,
+    ':delivery_address' => $delivery_address,
+    ':order_notes' => $order_notes,
+    ':order_type' => $order_type,
+    ':schedule_date' => $schedule_date,
+    ':schedule_time' => $schedule_time,
+    ':total_amount' => $total_amount,
+    ':guest_email' => $guest_email,
+    ':guest_name' => $guest_name,
+    ':user_email' => $user_email,
+    ':user_name' => $user_name
+]);
     $order_id = $pdo->lastInsertId();
 
     // Insert into order_items table with category_id
@@ -243,26 +255,30 @@ try {
         'tx_ref' => $tx_ref
     ];
 
-    // Send email notification (unchanged)
-    $recipient_email = $user_email ?: $guest_email;
-    if ($recipient_email) {
-        $order_data = [
-            'tx_ref' => $tx_ref,
-            'delivery_address' => $delivery_address,
-            'order_type' => $order_type,
-            'schedule_date' => $schedule_date,
-            'schedule_time' => $schedule_time,
-            'total_amount' => $total_amount,
-        ];
+    
 
-        $mail_result = send_order_email($recipient_email, $order_id, $order_data, $cart);
-        if ($mail_result !== true) {
-            error_log("Failed to send order email to: {$recipient_email} - {$mail_result}");
-            if (ini_get('display_errors')) {
-                $response['email_warning'] = 'Confirmation email could not be sent';
-            }
+
+    // Send email notification
+$recipient_email = $user_email ?: $guest_email;
+$recipient_name = $user_name ?: $guest_name;
+if ($recipient_email) {
+    $order_data = [
+        'tx_ref' => $tx_ref,
+        'delivery_address' => $delivery_address,
+        'order_type' => $order_type,
+        'schedule_date' => $schedule_date,
+        'schedule_time' => $schedule_time,
+        'total_amount' => $total_amount,
+    ];
+
+    $mail_result = send_order_email($recipient_email, $recipient_name, $order_id, $order_data, $cart);
+    if ($mail_result !== true) {
+        error_log("Failed to send order email to: {$recipient_email} - {$mail_result}");
+        if (ini_get('display_errors')) {
+            $response['email_warning'] = 'Confirmation email could not be sent';
         }
     }
+}
 
     echo json_encode($response);
 

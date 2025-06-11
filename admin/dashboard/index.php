@@ -29,21 +29,21 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
 
-      // $(document).ready(function () {
-      //   $("#my-table").DataTable({
-      //     pageLength: 5,
-      //   });
-      // });
+      $(document).ready(function () {
+        $("#my-table").DataTable({
+          pageLength: 5,
+        });
+      });
 
       // Replace your current DataTable initialization with:
-$(document).ready(function () {
-    $('#orders-table').DataTable({
-        pageLength: 5,
-        initComplete: function(settings, json) {
-            console.log('DataTable initialized');
-        }
-    });
-});
+// $(document).ready(function () {
+//     $('#orders-table').DataTable({
+//         pageLength: 5,
+//         initComplete: function(settings, json) {
+//             console.log('DataTable initialized');
+//         }
+//     });
+// });
     </script>
     <title>Overview</title>
     <link rel="stylesheet" href="../assets/styles/general.css" />
@@ -627,25 +627,26 @@ const profilePicture = '<?php echo addslashes($profilePicture); ?>';
 
 async function fetchAndDisplayOrders() {
   try {
-    // const response = await fetch('get_orders.php');
-    const response = await fetch('get_orders.php', {
-  headers: {
-    'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache'
-  }
-});
+    const response = await fetch('get_orders.php');
+//     const response = await fetch('get_orders.php', {
+  
+// });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const orders = await response.json();
     const tableBody = document.getElementById('orders-table-body');
+
     
     tableBody.innerHTML = '';
 
     orders.forEach(order => {
       // Calculate total quantity
+
+      console.log('Order data:', order); // Debug: Log the order data
+      // console.log('Processing order:', order); // Debug: Log the order being processed
       const totalQty = order.items.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
       
       // Format customer email
-      const customerEmail = order.user_email || order.guest_email || 'Guest';
+      const customerEmail = order.user_name || order.guest_name || 'Guest';
       
       // Determine status class
       let statusClass = '';
@@ -910,16 +911,12 @@ function initializeSlider() {
   });
 }
 // Call the functions when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  fetchAndDisplayOrders();
-  fetchAndDisplayReviews();
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//   fetchAndDisplayOrders();
+//   fetchAndDisplayReviews();
+// });
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetchAndDisplayOrders();
-  fetchAndDisplayReviews().then(initializeSlider);
-  fetchAndDisplayStats();
-});
+
 // Your existing filterTable function
 
 </script>
@@ -983,10 +980,17 @@ async function fetchAndDisplayStats() {
 }
 
 // Update DOMContentLoaded to include stats fetching
+// document.addEventListener('DOMContentLoaded', () => {
+//   fetchAndDisplayStats();
+//   fetchAndDisplayOrders();
+//   fetchAndDisplayReviews();
+// });
+
+
 document.addEventListener('DOMContentLoaded', () => {
-  fetchAndDisplayStats();
   fetchAndDisplayOrders();
-  fetchAndDisplayReviews();
+  fetchAndDisplayReviews().then(initializeSlider);
+  fetchAndDisplayStats();
 });
     </script>
   </body>

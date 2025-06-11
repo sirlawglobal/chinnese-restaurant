@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
+    header("Location: /chinnese-restaurant/login/");
+    exit();
+}
+
+$username = $_SESSION['user']['email'] ?? '';
+$userRole = $_SESSION['user']['role'] ?? '';
+$profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos/40';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -368,6 +381,8 @@
 </form>
 
 
+
+
 <script>
   // JavaScript to handle dynamic form behavior
   document.getElementById('has_options').addEventListener('change', function () {
@@ -621,6 +636,12 @@ document.getElementById('add-option').addEventListener('click', function () {
         </div>
       </div>
     </main>
+     <script>
+// Pass PHP variables to JavaScript
+const username = '<?php echo addslashes($username); ?>';
+const userRole = '<?php echo addslashes($userRole); ?>';
+const profilePicture = '<?php echo addslashes($profilePicture); ?>';
+</script>
     <script src="../../scripts/components.js"></script>
     <script src="../../scripts/inventory.js"></script>
   </body>
