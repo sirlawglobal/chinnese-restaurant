@@ -1,3 +1,18 @@
+
+
+<?php
+session_start();
+
+if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
+    header("Location: /chinnese-restaurant/login/");
+    exit();
+}
+
+$username = $_SESSION['user']['email'] ?? '';
+$userRole = $_SESSION['user']['role'] ?? '';
+$profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos/40';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -294,6 +309,12 @@ htmlspecialchars($order['guest_email']);
         </div>
       </div>
     </main>
+
+      <script>
+      const username = '<?php echo addslashes($username); ?>';
+const userRole = '<?php echo addslashes($userRole); ?>';
+const profilePicture = '<?php echo addslashes($profilePicture); ?>';
+    </script>
     <script src="../scripts/components.js"></script>
     <!-- <script src="../scripts/orders.js"></script> -->
     <!-- <script>

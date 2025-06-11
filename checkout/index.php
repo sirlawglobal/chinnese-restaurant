@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 require_once __DIR__ . '/../BackEnd/config/init.php';
 
 
@@ -9,7 +9,7 @@ $role = isLoggedIn();
 
 // Debugging session data
 error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail: " . $userEmail);
-?>
+?> -->
 
 <!DOCTYPE html>
 <html lang="en">
