@@ -40,6 +40,60 @@ if (!$adminEmail) {
     exit;
 }
 
+// ✅ Check if a message exists for this email
+$checkQuery = "SELECT id FROM messages WHERE email = :email LIMIT 1";
+$checkParams = ['email' => $email];
+$existingMessage = db_query($checkQuery, $checkParams, 'assoc');
+$messageId = $existingMessage ? $existingMessage[0]['id'] : null;
+
+if (!$messageId) {
+    // ✅ INSERT INTO messages if no existing record
+    $insertMessageQuery = "INSERT INTO messages (name, email, telephone, message, status, created_at) 
+                          VALUES (:name, :email, :telephone, :message, 'pending', NOW())";
+    $messageParams = [
+        'name' => $name,
+        'email' => $email,
+        'telephone' => $telephone,
+        'message' => $message
+    ];
+    $insertedMessage = db_query($insertMessageQuery, $messageParams);
+
+    // Check for messages insert error
+    if (!$insertedMessage) {
+        error_log("Messages insert failed: " . $GLOBALS['DB_STATE']['error']);
+        echo json_encode([
+            'data_type' => 'message',
+            'message' => 'Failed to save your message. Error: ' . $GLOBALS['DB_STATE']['error']
+        ]);
+        exit;
+    }
+
+    // ✅ Get the last inserted message_id
+    $messageId = $GLOBALS['DB_STATE']['insert_id'];
+} else {
+    $insertedMessage = true; // Assume success since no insert is needed
+}
+
+// ✅ INSERT INTO chat_messages using the determined message_id
+$insertChatMessageQuery = "INSERT INTO chat_messages (message_id, text, is_admin, created_at, is_read) 
+                          VALUES (:message_id, :message, 0, :created_at, 0)";
+$chatMessageParams = [
+    'message_id' => $messageId,
+    'message' => $message,
+    'created_at' => date('Y-m-d H:i:s')
+];
+$insertedChatMessage = db_query($insertChatMessageQuery, $chatMessageParams);
+
+// Check for chat_messages insert error
+if (!$insertedChatMessage) {
+    error_log("Chat_messages insert failed: " . $GLOBALS['DB_STATE']['error']);
+    echo json_encode([
+        'data_type' => 'message',
+        'message' => 'Failed to save your message. Error: ' . $GLOBALS['DB_STATE']['error']
+    ]);
+    exit;
+}
+
 // ✅ PREPARE EMAIL CONTENT
 $subject = "New Contact Message from $name";
 $htmlMessage = "
@@ -54,29 +108,9 @@ $plainMessage = "Name: $name\nEmail: $email\nTelephone: $telephone\nMessage: $me
 // ✅ ATTEMPT TO SEND EMAIL
 $mailStatus = sendMail($adminEmail, $name, $subject, $htmlMessage, $plainMessage) ? 'sent' : 'failed';
 
-// ✅ INSERT INTO DB WITH STATUS
-$insertQuery = "INSERT INTO messages (name, email, telephone, message, status) 
-                VALUES (:name, :email, :telephone, :message, :status)";
-$params = [
-    'name' => $name,
-    'email' => $email,
-    'telephone' => $telephone,
-    'message' => $message,
-    'status' => $mailStatus
-];
-
-$inserted = db_query($insertQuery, $params);
-
-if ($inserted) {
-    echo json_encode([
-        'data_type' => 'message',
-        'message' => $mailStatus === 'sent'
-            ? 'Your message was sent and saved!'
-            : 'Message saved, but email delivery failed.'
-    ]);
-} else {
-    echo json_encode([
-        'data_type' => 'message',
-        'message' => 'Failed to save your message.'
-    ]);
-}
+echo json_encode([
+    'data_type' => 'message',
+    'message' => $mailStatus === 'sent'
+        ? 'Your message was sent and saved!'
+        : 'Message saved, but email delivery failed.'
+]);

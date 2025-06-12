@@ -1,203 +1,3 @@
-// Sample data for chats with some having profile images
-const chats = [
-  {
-    id: 1,
-    name: "John Doe",
-    initials: "JD",
-    image: "https://picsum.photos/200/200?random=1",
-    tag: "Customer",
-    lastMessage: "Hey, how are you doing?",
-    time: "10:30 AM",
-    timestamp: new Date().getTime(),
-    status: "read",
-    unread: 0,
-    online: true,
-    messages: [
-      { id: 1, text: "Hey there!", time: "10:20 AM", incoming: true },
-      {
-        id: 2,
-        text: "Hi! How are you?",
-        time: "10:22 AM",
-        incoming: false,
-      },
-      {
-        id: 3,
-        text: "I'm good, thanks for asking. How about you?",
-        time: "10:25 AM",
-        incoming: true,
-      },
-      {
-        id: 4,
-        text: "Doing well! Just working on some projects.",
-        time: "10:27 AM",
-        incoming: false,
-      },
-      {
-        id: 5,
-        text: "Hey, how are you doing?",
-        time: "10:30 AM",
-        incoming: true,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Sarah Smith",
-    initials: "SS",
-    image: "https://picsum.photos/200/200?random=2",
-    tag: "Kitchen Admin",
-    lastMessage: "The order will be ready in 15 minutes",
-    time: "9:45 AM",
-    timestamp: new Date().getTime() - 3600000,
-    status: "delivered",
-    unread: 3,
-    online: false,
-    messages: [
-      {
-        id: 1,
-        text: "Hi Sarah, what's the status of my order?",
-        time: "9:30 AM",
-        incoming: false,
-      },
-      {
-        id: 2,
-        text: "We're preparing it now",
-        time: "9:35 AM",
-        incoming: true,
-      },
-      {
-        id: 3,
-        text: "Great, how long will it take?",
-        time: "9:40 AM",
-        incoming: false,
-      },
-      {
-        id: 4,
-        text: "The order will be ready in 15 minutes",
-        time: "9:45 AM",
-        incoming: true,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Tech Support",
-    initials: "TS",
-    tag: "Support",
-    lastMessage: "Please restart your computer and try again",
-    time: "Yesterday",
-    timestamp: new Date().getTime() - 86400000,
-    status: "sent",
-    unread: 0,
-    online: false,
-    messages: [
-      {
-        id: 1,
-        text: "Hello, I'm having issues with my software",
-        time: "Yesterday, 4:30 PM",
-        incoming: false,
-      },
-      {
-        id: 2,
-        text: "Can you describe the problem?",
-        time: "Yesterday, 4:35 PM",
-        incoming: true,
-      },
-      {
-        id: 3,
-        text: "It keeps crashing when I try to save files",
-        time: "Yesterday, 4:40 PM",
-        incoming: false,
-      },
-      {
-        id: 4,
-        text: "Please restart your computer and try again",
-        time: "Yesterday, 4:45 PM",
-        incoming: true,
-      },
-    ],
-  },
-  {
-    id: 4,
-    name: "Family Group",
-    initials: "FG",
-    image: "https://picsum.photos/200/200?random=3",
-    tag: "Group",
-    lastMessage: "Mom: Don't forget about Sunday dinner!",
-    time: "Yesterday",
-    timestamp: new Date().getTime() - 90000000,
-    status: "read",
-    unread: 0,
-    online: true,
-    messages: [
-      {
-        id: 1,
-        text: "Alice: Who's coming for dinner this weekend?",
-        time: "Yesterday, 2:15 PM",
-        incoming: true,
-      },
-      {
-        id: 2,
-        text: "Bob: I'll be there!",
-        time: "Yesterday, 2:20 PM",
-        incoming: true,
-      },
-      {
-        id: 3,
-        text: "I'll be there too",
-        time: "Yesterday, 2:25 PM",
-        incoming: false,
-      },
-      {
-        id: 4,
-        text: "Mom: Don't forget about Sunday dinner!",
-        time: "Yesterday, 2:30 PM",
-        incoming: true,
-      },
-    ],
-  },
-  {
-    id: 5,
-    name: "David Wilson",
-    initials: "DW",
-    image: "https://picsum.photos/200/200?random=4",
-    tag: "Colleague",
-    lastMessage: "Let's meet tomorrow to discuss the project",
-    time: "Monday",
-    timestamp: new Date().getTime() - 172800000,
-    status: "read",
-    unread: 0,
-    online: false,
-    messages: [
-      {
-        id: 1,
-        text: "Hi David, do you have time to discuss the project?",
-        time: "Monday, 11:00 AM",
-        incoming: false,
-      },
-      {
-        id: 2,
-        text: "Sure, what time works for you?",
-        time: "Monday, 11:15 AM",
-        incoming: true,
-      },
-      {
-        id: 3,
-        text: "How about tomorrow at 2pm?",
-        time: "Monday, 11:20 AM",
-        incoming: false,
-      },
-      {
-        id: 4,
-        text: "Let's meet tomorrow to discuss the project",
-        time: "Monday, 11:25 AM",
-        incoming: true,
-      },
-    ],
-  },
-];
-
-// DOM elements
 const chatItemsContainer = document.getElementById("chatItems");
 const chatArea = document.getElementById("chatArea");
 const emptyChatView = document.getElementById("emptyChatView");
@@ -219,438 +19,317 @@ const bgContextMenu = document.getElementById("bgContextMenu");
 const selectMessagesOption = document.getElementById("selectMessagesOption");
 const closeChatOption = document.getElementById("closeChatOption");
 
-// Current active chat and context menu state
 let activeChatId = null;
 let lastClickedMessage = null;
 
-// Initialize the app
 function init() {
-  renderChatList();
-  setupEventListeners();
-  setActiveChat(1);
+    fetchChats();
+    setupEventListeners();
 }
 
-// Sort chats by most recent activity
-function sortChatsByRecent() {
-  chats.sort((a, b) => b.timestamp - a.timestamp);
-}
-
-// Render chat list
-function renderChatList(filter = "") {
-  chatItemsContainer.innerHTML = "";
-
-  const filteredChats = filter
-    ? chats.filter(
-        (chat) =>
-          chat.name.toLowerCase().includes(filter.toLowerCase()) ||
-          chat.messages.some((msg) =>
-            msg.text.toLowerCase().includes(filter.toLowerCase())
-          )
-      )
-    : chats;
-
-  sortChatsByRecent();
-
-  filteredChats.forEach((chat) => {
-    const chatItem = document.createElement("div");
-    chatItem.className = "chat-item";
-    chatItem.dataset.chatId = chat.id;
-
-    if (activeChatId === chat.id) {
-      chatItem.classList.add("active");
+async function fetchChats(filter = "") {
+    try {
+        const response = await fetch(`../messages/get_chats.php${filter ? `?search=${encodeURIComponent(filter)}` : ""}`);
+        const result = await response.json();
+        if (result.data_type === "chats") {
+            renderChatList(result.data);
+        } else {
+            console.error(result.message);
+        }
+    } catch (error) {
+        console.error("Error fetching chats:", error);
     }
+}
 
-    // Set avatar background image if exists
-    const avatarStyle = chat.image
-      ? `style="background-image: url('${chat.image}'); color: transparent;"`
-      : "";
-
-    chatItem.innerHTML = `
-                    <div class="chat-item-avatar" ${avatarStyle}>${
-      chat.initials
-    }</div>
-                    <div class="chat-item-content">
-                        <div class="chat-item-header">
-                            <div>
-                                <span class="chat-item-name">${chat.name}</span>
-                                <span class="chat-item-tag">${chat.tag}</span>
-                            </div>
-                            <div class="chat-item-time">${chat.time}</div>
-                        </div>
-                        <div class="chat-item-message">
-                            <span class="message-status ${chat.status}">
-                                ${getStatusIcon(chat.status)}
-                            </span>
-                            <span class="chat-item-message-text">${
-                              chat.lastMessage
-                            }</span>
-                            ${
-                              chat.unread > 0
-                                ? `<div class="unread-badge">${chat.unread}</div>`
-                                : ""
-                            }
-                        </div>
+function renderChatList(chats) {
+    chatItemsContainer.innerHTML = "";
+    chats.forEach((chat) => {
+        const chatItem = document.createElement("div");
+        chatItem.className = "chat-item" + (activeChatId == chat.id ? " active" : "");
+        chatItem.dataset.chatId = chat.id;
+        chatItem.innerHTML = `
+            <div class="chat-item-avatar">${chat.initials}</div>
+            <div class="chat-item-content">
+                <div class="chat-item-header">
+                    <div>
+                        <span class="chat-item-name">${chat.name}</span>
+                        <span class="chat-item-tag">Customer</span>
                     </div>
-                `;
-
-    chatItemsContainer.appendChild(chatItem);
-  });
-}
-
-// Get status icon based on message status
-function getStatusIcon(status) {
-  switch (status) {
-    case "sent":
-      return '<svg style="width: 1rem; height: 1rem";><use href="#st"></use></svg>';
-    case "delivered":
-      return '<svg style="width: 1rem; height: 1rem";><use href="#dt"></use></svg>';
-    case "read":
-      return '<svg style="color: #1684FF; width: 1rem; height: 1rem";><use href="#dt"></use></svg>';
-    default:
-      return "";
-  }
-}
-
-// Render messages for active chat
-function renderMessages(chatId) {
-  const chat = chats.find((c) => c.id === chatId);
-  if (!chat) return;
-
-  messagesContainer.innerHTML = "";
-
-  chat.messages.forEach((message) => {
-    const messageElement = document.createElement("div");
-    messageElement.className = `message ${
-      message.incoming ? "message-incoming" : "message-outgoing"
-    }`;
-    messageElement.dataset.messageId = message.id;
-
-    messageElement.innerHTML = `
-                    <div>${message.text}</div>
-                    <div class="message-time">
-                        ${message.time}
-                        ${
-                          !message.incoming
-                            ? `<span class="message-status">${getStatusIcon(
-                                "read"
-                              )}</span>`
-                            : ""
-                        }
-                    </div>
-                `;
-
-    messagesContainer.appendChild(messageElement);
-  });
-
-  // Scroll to bottom
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-// Set up active chat
-function setActiveChat(chatId) {
-  const chat = chats.find((c) => c.id === chatId);
-  if (!chat) return;
-
-  activeChatId = chatId;
-
-  // Update UI
-  activeChatName.textContent = chat.name;
-
-  // Set avatar background image if exists
-  if (chat.image) {
-    activeChatAvatar.style.backgroundImage = `url('${chat.image}')`;
-    activeChatAvatar.textContent = "";
-    activeChatAvatar.style.color = "transparent";
-  } else {
-    activeChatAvatar.style.backgroundImage = "";
-    activeChatAvatar.textContent = chat.initials;
-    activeChatAvatar.style.color = "white";
-  }
-
-  activeChatStatus.textContent = chat.online ? "online" : "last seen today";
-  activeChatStatus.className = `chat-header-status ${
-    chat.online ? "online" : ""
-  }`;
-
-  // Show active chat view
-  emptyChatView.style.display = "none";
-  activeChatView.style.display = "flex";
-
-  // Render messages
-  renderMessages(chatId);
-
-  // Update chat list highlights
-  document.querySelectorAll(".chat-item").forEach((item) => {
-    item.classList.toggle("active", parseInt(item.dataset.chatId) === chatId);
-  });
-
-  // Mark messages as read
-  if (chat.unread > 0) {
-    chat.unread = 0;
-    renderChatList(searchInput.value.trim());
-  }
-
-  // Update timestamp to now (most recent)
-  // chat.timestamp = new Date().getTime();
-  // sortChatsByRecent();
-  renderChatList(searchInput.value.trim());
-
-  // For mobile view, show chat area
-  chatArea.classList.add("active");
-}
-
-// Close active chat
-function closeActiveChat() {
-  activeChatId = null;
-  emptyChatView.style.display = "flex";
-  activeChatView.style.display = "none";
-  chatArea.classList.remove("active");
-
-  // Update chat list highlights
-  document.querySelectorAll(".chat-item").forEach((item) => {
-    item.classList.remove("active");
-  });
-}
-
-// Send a new message
-function sendMessage() {
-  const messageText = messageInput.value.trim();
-  if (!messageText || !activeChatId) return;
-
-  const chat = chats.find((c) => c.id === activeChatId);
-  if (!chat) return;
-
-  // Create new message
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2, "0");
-  const minutes = now.getMinutes().toString().padStart(2, "0");
-  const timeString = `${hours}:${minutes}`;
-
-  const newMessage = {
-    id: chat.messages.length + 1,
-    text: messageText,
-    time: timeString,
-    incoming: false,
-  };
-
-  // Add to chat
-  chat.messages.push(newMessage);
-  chat.lastMessage = messageText;
-  chat.time = timeString;
-  chat.status = "sent";
-  chat.timestamp = new Date().getTime();
-
-  // Update UI
-  renderMessages(activeChatId);
-  sortChatsByRecent();
-  renderChatList(searchInput.value.trim());
-
-  // Clear input
-  messageInput.value = "";
-  sendButton.classList.remove("active");
-
-  // Simulate reply after 1-3 seconds
-  if (Math.random() > 0.3) {
-    // 70% chance of reply
-    setTimeout(() => {
-      const replies = [
-        "Sure, sounds good!",
-        "I'll get back to you on that.",
-        "Thanks for letting me know.",
-        "Can we discuss this later?",
-        "I'm busy right now, talk later?",
-        "Got it!",
-      ];
-
-      const replyMessage = {
-        id: chat.messages.length + 1,
-        text: replies[Math.floor(Math.random() * replies.length)],
-        time: `${hours}:${(now.getMinutes() + 1).toString().padStart(2, "0")}`,
-        incoming: true,
-      };
-
-      chat.messages.push(replyMessage);
-      chat.lastMessage = replyMessage.text;
-      chat.time = replyMessage.time;
-      chat.status = "delivered";
-      chat.timestamp = new Date().getTime();
-
-      if (activeChatId === chat.id) {
-        renderMessages(activeChatId);
-      }
-
-      sortChatsByRecent();
-      renderChatList(searchInput.value.trim());
-    }, 1000 + Math.random() * 2000);
-  }
-}
-
-// Show message context menu
-function showMessageContextMenu(e, messageElement) {
-  e.preventDefault();
-  lastClickedMessage = messageElement;
-
-  // Position the context menu
-  contextMenu.style.display = "block";
-  contextMenu.style.left = `${e.clientX}px`;
-  contextMenu.style.top = `${e.clientY}px`;
-
-  // Hide menu when clicking elsewhere
-  const hideMenu = () => {
-    contextMenu.style.display = "none";
-    document.removeEventListener("click", hideMenu);
-  };
-
-  setTimeout(() => {
-    document.addEventListener("click", hideMenu);
-  }, 100);
-}
-
-// Show background context menu
-function showBackgroundContextMenu(e) {
-  e.preventDefault();
-
-  // Position the context menu
-  bgContextMenu.style.display = "block";
-  bgContextMenu.style.left = `${e.clientX}px`;
-  bgContextMenu.style.top = `${e.clientY}px`;
-
-  // Hide menu when clicking elsewhere
-  const hideMenu = () => {
-    bgContextMenu.style.display = "none";
-    document.removeEventListener("click", hideMenu);
-  };
-
-  setTimeout(() => {
-    document.addEventListener("click", hideMenu);
-  }, 100);
-}
-
-// Set up event listeners
-function setupEventListeners() {
-  // Chat item clicks
-  chatItemsContainer.addEventListener("click", (e) => {
-    const chatItem = e.target.closest(".chat-item");
-    if (chatItem) {
-      const chatId = parseInt(chatItem.dataset.chatId);
-      setActiveChat(chatId);
-    }
-  });
-
-  // Message input events
-  messageInput.addEventListener("input", () => {
-    sendButton.classList.toggle("active", messageInput.value.trim().length > 0);
-  });
-
-  messageInput.addEventListener("keypress", (e) => {
-    document.addEventListener("keydown", (e) => {
-      if (e.shiftKey && e.key === "Enter") {
-        e.preventDefault();
-      }
+                    <div class="chat-item-time">${chat.time}</div>
+                </div>
+                <div class="chat-item-message">
+                    <span class="message-status ${chat.status}">
+                        ${getStatusIcon(chat.status)}
+                    </span>
+                    <span class="chat-item-message-text">${chat.lastMessage}</span>
+                    ${chat.unread > 0 ? `<div class="unread-badge">${chat.unread}</div>` : ""}
+                </div>
+            </div>
+        `;
+        chatItem.addEventListener("click", () => setActiveChat(chat.id));
+        chatItemsContainer.appendChild(chatItem);
     });
-    if (e.key === "Enter" && messageInput.value.trim().length > 0) {
-      sendMessage();
-    }
-  });
-
-  // Send button click
-  sendButton.addEventListener("click", sendMessage);
-
-  // Close chat button (for mobile)
-  closeChatButton.addEventListener("click", closeActiveChat);
-
-  // Search input
-  searchInput.addEventListener("input", () => {
-    renderChatList(searchInput.value.trim());
-  });
-
-  // Message context menu
-  messagesContainer.addEventListener("contextmenu", (e) => {
-    const messageElement = e.target.closest(".message");
-    if (messageElement) {
-      showMessageContextMenu(e, messageElement);
-    } else {
-      showBackgroundContextMenu(e);
-    }
-  });
-
-  // Context menu options
-  replyOption.addEventListener("click", () => {
-    if (lastClickedMessage) {
-      const messageId = lastClickedMessage.dataset.messageId;
-      const chat = chats.find((c) => c.id === activeChatId);
-      if (chat) {
-        const message = chat.messages.find((m) => m.id == messageId);
-        if (message) {
-          messageInput.value = `Replying to: ${message.text}`;
-          messageInput.focus();
-        }
-      }
-    }
-    contextMenu.style.display = "none";
-  });
-
-  forwardOption.addEventListener("click", () => {
-    alert("Forward message functionality would go here");
-    contextMenu.style.display = "none";
-  });
-
-  copyOption.addEventListener("click", () => {
-    if (lastClickedMessage) {
-      const messageText =
-        lastClickedMessage.querySelector("div:first-child").textContent;
-      navigator.clipboard.writeText(messageText);
-    }
-    contextMenu.style.display = "none";
-  });
-
-  deleteOption.addEventListener("click", () => {
-    if (lastClickedMessage && activeChatId) {
-      const messageId = lastClickedMessage.dataset.messageId;
-      const chat = chats.find((c) => c.id === activeChatId);
-      if (chat) {
-        const messageIndex = chat.messages.findIndex((m) => m.id == messageId);
-        if (messageIndex > -1) {
-          chat.messages.splice(messageIndex, 1);
-          renderMessages(activeChatId);
-
-          // Update last message if needed
-          if (chat.messages.length > 0) {
-            const lastMsg = chat.messages[chat.messages.length - 1];
-            chat.lastMessage = lastMsg.text;
-            chat.time = lastMsg.time;
-          } else {
-            chat.lastMessage = "";
-            chat.time = "";
-          }
-
-          renderChatList(searchInput.value.trim());
-        }
-      }
-    }
-    contextMenu.style.display = "none";
-  });
-
-  // Background context menu options
-  selectMessagesOption.addEventListener("click", () => {
-    alert("Select messages functionality would go here");
-    bgContextMenu.style.display = "none";
-  });
-
-  closeChatOption.addEventListener("click", () => {
-    closeActiveChat();
-    bgContextMenu.style.display = "none";
-  });
-
-  // Keyboard shortcuts
-  document.addEventListener("keydown", (e) => {
-    // Ctrl+Shift+W to close chat
-    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "w") {
-      e.preventDefault();
-      closeActiveChat();
-    }
-  });
 }
 
-// Initialize the app
+function getStatusIcon(status) {
+    switch (status) {
+        case "sent":
+        case "pending":
+            return '<svg style="width: 1rem; height: 1rem"><use href="#st"></use></svg>';
+        case "replied":
+            return '<svg style="width: 1rem; height: 1rem"><use href="#dt"></use></svg>';
+        case "failed":
+        case "closed":
+            return '<svg style="color: #1684FF; width: 1rem; height: 1rem"><use href="#dt"></use></svg>';
+        default:
+            return "";
+    }
+}
+
+async function renderMessages(chatId) {
+    console.log('Rendering messages for chatId:', chatId);
+    try {
+        const response = await fetch(`../messages/get_messages.php?chatId=${chatId}`);
+        console.log('API response status:', response.status);
+        const result = await response.json();
+        console.log('API response data:', result);
+        if (result.data_type === "chat") {
+            messagesContainer.innerHTML = "";
+            // Sort messages by time
+            result.data.messages.sort((a, b) => {
+                const timeA = parseMessageTime(a.time);
+                const timeB = parseMessageTime(b.time);
+                console.log(`Sorting: ${a.time} (${timeA}) vs ${b.time} (${timeB})`);
+                return timeA - timeB;
+            }).forEach((message) => {
+                console.log('Processing message:', message.text, 'is_admin:', message.is_admin, 'Class assigned:', message.is_admin === "1" ? "message-outgoing" : "message-incoming");
+                const isAdmin = message.is_admin === "1";
+                const messageElement = document.createElement("div");
+                messageElement.className = `message ${isAdmin ? "message-outgoing" : "message-incoming"}`;
+                messageElement.dataset.messageId = message.id;
+                messageElement.innerHTML = `
+                    <div>${message.text}</div>
+                    <div class="message-time">${message.time}</div>
+                `;
+                if (!isAdmin) {
+                    const avatar = document.createElement("div");
+                    avatar.className = "chat-item-avatar";
+                    avatar.textContent = message.initials || "U";
+                    messagesContainer.appendChild(avatar);
+                }
+                messagesContainer.appendChild(messageElement);
+            });
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        } else {
+            console.error('Invalid data_type:', result.message);
+        }
+    } catch (error) {
+        console.error('Error in renderMessages:', error);
+    }
+}
+
+// Parse time string to timestamp for sorting
+function parseMessageTime(timeStr) {
+    const now = new Date();
+    const [timePart, dayPart] = timeStr.split(", ");
+    let [hours, minutes] = timePart.split(":");
+    let period = minutes ? minutes.split(" ")[1] : "AM";
+    minutes = minutes ? minutes.split(" ")[0] : "00";
+    hours = parseInt(hours, 10);
+    if (period === "PM" && hours !== 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+
+    let date = new Date(now);
+    if (dayPart === "Yesterday") {
+        date.setDate(date.getDate() - 1);
+    } else if (dayPart === "Monday" || dayPart === "Tuesday" || dayPart === "Wednesday" || dayPart === "Thursday" || dayPart === "Friday" || dayPart === "Saturday" || dayPart === "Sunday") {
+        const today = now.getDay(); // 0-6 (Sunday-Saturday)
+        const targetDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].indexOf(dayPart);
+        let diff = targetDay - today;
+        if (diff < 0) diff += 7; // If target is in the past week, adjust to last week
+        date.setDate(date.getDate() - (7 - diff));
+    }
+    date.setHours(hours, minutes, 0, 0);
+    console.log(`Parsed ${timeStr} to ${date.getTime()}`);
+    return date.getTime();
+}
+
+async function setActiveChat(chatId) {
+    try {
+        const response = await fetch(`../messages/get_chat.php?chatId=${chatId}`);
+        const result = await response.json();
+        if (result.data_type === "chat") {
+            const chat = result.data;
+            activeChatId = chatId;
+            activeChatName.textContent = chat.name;
+            activeChatAvatar.textContent = chat.initials;
+            activeChatAvatar.style.backgroundImage = "";
+            activeChatAvatar.style.color = "white";
+            activeChatStatus.textContent = chat.status === "pending" ? "Pending" : "Replied";
+            activeChatStatus.className = `chat-header-status ${chat.status === "pending" ? "" : "online"}`;
+            emptyChatView.style.display = "none";
+            activeChatView.style.display = "flex";
+            renderMessages(chatId);
+            document.querySelectorAll(".chat-item").forEach((item) => {
+                item.classList.toggle("active", parseInt(item.dataset.chatId) === chatId);
+            });
+            if (chat.unread > 0) {
+                await fetch("../messages/mark_read.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chatId })
+                });
+                fetchChats(searchInput.value.trim()); // Refresh to remove badge
+            }
+            chatArea.classList.add("active");
+        } else {
+            console.error(result.message);
+        }
+    } catch (error) {
+        console.error("Error setting active chat:", error);
+    }
+}
+
+function closeActiveChat() {
+    activeChatId = null;
+    emptyChatView.style.display = "flex";
+    activeChatView.style.display = "none";
+    chatArea.classList.remove("active");
+    document.querySelectorAll(".chat-item").forEach((item) => item.classList.remove("active"));
+}
+
+async function sendMessage() {
+    const messageText = messageInput.value.trim();
+    if (!messageText || !activeChatId) return;
+
+    try {
+        const response = await fetch("../messages/send_message.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chatId: activeChatId, message: messageText })
+        });
+        const result = await response.json();
+        if (result.data_type === "message" && result.message.includes("sent")) {
+            messageInput.value = "";
+            sendButton.classList.remove("active");
+            renderMessages(activeChatId);
+            fetchChats(searchInput.value.trim()); // Refresh to remove badge
+        } else {
+            alert("Error: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error sending message:", error);
+    }
+}
+
+function showMessageContextMenu(e, messageElement) {
+    e.preventDefault();
+    lastClickedMessage = messageElement;
+    contextMenu.style.display = "block";
+    contextMenu.style.left = `${e.clientX}px`;
+    contextMenu.style.top = `${e.clientY}px`;
+    setTimeout(() => {
+        document.addEventListener("click", () => {
+            contextMenu.style.display = "none";
+        }, { once: true });
+    }, 100);
+}
+
+function showBackgroundContextMenu(e) {
+    e.preventDefault();
+    bgContextMenu.style.display = "block";
+    bgContextMenu.style.left = `${e.clientX}px`;
+    bgContextMenu.style.top = `${e.clientY}px`;
+    setTimeout(() => {
+        document.addEventListener("click", () => {
+            bgContextMenu.style.display = "none";
+        }, { once: true });
+    }, 100);
+}
+
+function setupEventListeners() {
+    chatItemsContainer.addEventListener("click", (e) => {
+        const chatItem = e.target.closest(".chat-item");
+        if (chatItem) {
+            setActiveChat(parseInt(chatItem.dataset.chatId));
+        }
+    });
+    messageInput.addEventListener("input", () => {
+        sendButton.classList.toggle("active", messageInput.value.trim().length > 0);
+    });
+    messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && !e.shiftKey && messageInput.value.trim().length > 0) {
+            sendMessage();
+        }
+    });
+    sendButton.addEventListener("click", sendMessage);
+    closeChatButton.addEventListener("click", closeActiveChat);
+    searchInput.addEventListener("input", () => {
+        fetchChats(searchInput.value.trim());
+    });
+    messagesContainer.addEventListener("contextmenu", (e) => {
+        const messageElement = e.target.closest(".message");
+        if (messageElement) {
+            showMessageContextMenu(e, messageElement);
+        } else {
+            showBackgroundContextMenu(e);
+        }
+    });
+    replyOption.addEventListener("click", () => {
+        if (lastClickedMessage) {
+            const messageId = lastClickedMessage.dataset.messageId;
+            messageInput.value = `Replying to message ID ${messageId}: `;
+            messageInput.focus();
+        }
+        contextMenu.style.display = "none";
+    });
+    forwardOption.addEventListener("click", () => {
+        alert("Forward message functionality would go here");
+        contextMenu.style.display = "none";
+    });
+    copyOption.addEventListener("click", () => {
+        if (lastClickedMessage) {
+            const messageText = lastClickedMessage.querySelector("div:first-child").textContent;
+            navigator.clipboard.writeText(messageText);
+        }
+        contextMenu.style.display = "none";
+    });
+    deleteOption.addEventListener("click", async () => {
+        if (lastClickedMessage && activeChatId) {
+            const messageId = lastClickedMessage.dataset.messageId;
+            try {
+                const response = await fetch("../messages/delete_message.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chatId: activeChatId, messageId })
+                });
+                const result = await response.json();
+                if (result.data_type === "message" && result.message.includes("deleted")) {
+                    renderMessages(activeChatId);
+                    fetchChats(searchInput.value.trim());
+                } else {
+                    alert("Error: " + result.message);
+                }
+            } catch (error) {
+                console.error("Error deleting message:", error);
+            }
+        }
+        contextMenu.style.display = "none";
+    });
+    selectMessagesOption.addEventListener("click", () => {
+        alert("Select messages functionality would go here");
+        bgContextMenu.style.display = "none";
+    });
+    closeChatOption.addEventListener("click", () => {
+        closeActiveChat();
+        bgContextMenu.style.display = "none";
+    });
+    document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "w") {
+            e.preventDefault();
+            closeActiveChat();
+        }
+    });
+}
+
 init();
