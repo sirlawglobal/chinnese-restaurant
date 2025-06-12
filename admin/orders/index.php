@@ -489,7 +489,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
 
               <div class="row">
                 <div class="mb-3 col-md-6">
-                  <label class="form-label fw-bold">Total:</label>
+                  <label class="form-label fw-bold">Grand Total(with shipping):</label>
                     <input class="form-control" value="<?= htmlspecialchars($amount) ?>" readonly>
                 </div>
                 <div class="mb-3 col-md-6">
@@ -509,27 +509,36 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
                   <th scope="col">Item Name</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Price</th>
+                  <th scope="col">Total Price</th>
                 </tr>
               </thead>
               <tbody>
-                <?php $grandTotal = 0;?>
-                <?php foreach ($orderItems as $item): ?>
-                <?php $grandTotal += $item['price'] * $item['quantity']; ?>
-             
-                  <tr>
-                    <td><?= htmlspecialchars($item['item_name']) ?></td>
-                    <td><?= htmlspecialchars($item['quantity']) ?></td>
-                    <td>₦<?= number_format($item['price'], 2) ?></td>
-                  </tr>
-                <?php endforeach; ?>
-                <?php if (empty($orderItems)): ?>
-                  <tr>
-                    <td colspan="3" class="text-center text-muted">No items found for this order.</td>
-                  </tr>
-                <?php endif; ?>
-               
+  <?php $grandTotal = 0; ?>
+  <?php foreach ($orderItems as $item): ?>
+    <?php 
+      $total = $item['quantity'] * $item['price'];
+      $grandTotal += $total;
+    ?>
+    <tr>
+      <td><?= htmlspecialchars($item['item_name']) ?></td>
+      <td><?= htmlspecialchars($item['quantity']) ?></td>
+      <td>₦<?= number_format($item['price'], 2) ?></td>
+      <td>₦<?= number_format($total, 2) ?></td>
+    </tr>
+  <?php endforeach; ?>
 
-              </tbody>
+  <?php if (empty($orderItems)): ?>
+    <tr>
+      <td colspan="4" class="text-center text-muted">No items found for this order.</td>
+    </tr>
+  <?php else: ?>
+    <tr>
+      <td colspan="3" class="text-end fw-bold">Sub Total:</td>
+      <td><strong>₦<?= number_format($grandTotal, 2) ?></strong></td>
+    </tr>
+  <?php endif; ?>
+</tbody>
+
             </table>
           </div>
         </div>
@@ -559,7 +568,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
                 <option value="pending" <?= $order['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
                 <option value="processing" <?= $order['status'] == 'processing' ? 'selected' : '' ?>>Processing</option>
                 <option value="completed" <?= $order['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
-                <!-- <option value="cancelled" <?= $order['status'] == 'cancelled' ? 'selected' : '' ?>>Cancelled</option> -->
+                <option value="cancelled" <?= $order['status'] == 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
               </select>
             </div>
           </div>
