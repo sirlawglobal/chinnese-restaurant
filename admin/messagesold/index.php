@@ -1,5 +1,4 @@
-
-    <?php
+<?php
 session_start();
 
 if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
@@ -7,12 +6,18 @@ if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
     exit();
 }
 
-$username = $_SESSION['user']['email'] ?? '';
+
+
+$username = $_SESSION['user']['name'] ?? '';
+// var_dump($username); // Debug: Check session data 
+
+$parts = explode(" ", $username);
+$first_name = $parts[0];
+
 $userRole = $_SESSION['user']['role'] ?? '';
 $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos/40';
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -26,6 +31,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
   </head>
   <body class="flex">
     <main>
@@ -169,7 +175,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
     </main>
        <script>
 // Pass PHP variables to JavaScript
-const username = '<?php echo addslashes($username); ?>';
+const username = '<?php echo addslashes($first_name); ?>';
 const userRole = '<?php echo addslashes($userRole); ?>';
 const profilePicture = '<?php echo addslashes($profilePicture); ?>';
 </script>

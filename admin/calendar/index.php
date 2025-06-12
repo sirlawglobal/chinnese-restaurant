@@ -12,6 +12,7 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
     <title>Overview</title>
     <link rel="stylesheet" href="../assets/styles/general.css" />
     <link rel="stylesheet" href="../assets/styles/panels.css" />
@@ -22,11 +23,6 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
       <div class="content">
         <div class="container" id="container">
           <!-- Schedule Details View -->
-          <div class="schedule-details" id="scheduleDetails">
-            <div class="sidebar">
-              <h2>Schedule Details</h2>
-
-              <div class="schedule-item">
                 <div class="schedule-title">Weekly Specials Review</div>
                 <div class="menu-updates-tag">Menu Updates</div>
 
@@ -431,7 +427,7 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
     </main>
      <script>
 // Pass PHP variables to JavaScript
-const username = '<?php echo addslashes($username); ?>';
+const username = '<?php echo addslashes($first_name); ?>';
 const userRole = '<?php echo addslashes($userRole); ?>';
 const profilePicture = '<?php echo addslashes($profilePicture); ?>';
 </script>

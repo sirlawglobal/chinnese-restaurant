@@ -2,15 +2,23 @@
 session_start();
 
 if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
-  header("Location: /chinnese-restaurant/login/");
-  exit();
+    header("Location: /chinnese-restaurant/login/");
+    exit();
 }
 
-$username = $_SESSION['user']['email'] ?? '';
+
+
+$username = $_SESSION['user']['name'] ?? '';
+// var_dump($username); // Debug: Check session data 
+
+$parts = explode(" ", $username);
+$first_name = $parts[0];
+
 $userRole = $_SESSION['user']['role'] ?? '';
 $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos/40';
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +30,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
@@ -480,7 +489,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
 
               <div class="row">
                 <div class="mb-3 col-md-6">
-                  <label class="form-label fw-bold">Total:</label>
+                  <label class="form-label fw-bold">Grand Total(with shipping):</label>
                     <input class="form-control" value="<?= htmlspecialchars($amount) ?>" readonly>
                 </div>
                 <div class="mb-3 col-md-6">
@@ -500,27 +509,36 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
                   <th scope="col">Item Name</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Price</th>
+                  <th scope="col">Total Price</th>
                 </tr>
               </thead>
               <tbody>
-                <?php $grandTotal = 0;?>
-                <?php foreach ($orderItems as $item): ?>
-                <?php $grandTotal += $item['price'] * $item['quantity']; ?>
-             
-                  <tr>
-                    <td><?= htmlspecialchars($item['item_name']) ?></td>
-                    <td><?= htmlspecialchars($item['quantity']) ?></td>
-                    <td>₦<?= number_format($item['price'], 2) ?></td>
-                  </tr>
-                <?php endforeach; ?>
-                <?php if (empty($orderItems)): ?>
-                  <tr>
-                    <td colspan="3" class="text-center text-muted">No items found for this order.</td>
-                  </tr>
-                <?php endif; ?>
-               
+  <?php $grandTotal = 0; ?>
+  <?php foreach ($orderItems as $item): ?>
+    <?php 
+      $total = $item['quantity'] * $item['price'];
+      $grandTotal += $total;
+    ?>
+    <tr>
+      <td><?= htmlspecialchars($item['item_name']) ?></td>
+      <td><?= htmlspecialchars($item['quantity']) ?></td>
+      <td>₦<?= number_format($item['price'], 2) ?></td>
+      <td>₦<?= number_format($total, 2) ?></td>
+    </tr>
+  <?php endforeach; ?>
 
-              </tbody>
+  <?php if (empty($orderItems)): ?>
+    <tr>
+      <td colspan="4" class="text-center text-muted">No items found for this order.</td>
+    </tr>
+  <?php else: ?>
+    <tr>
+      <td colspan="3" class="text-end fw-bold">Sub Total:</td>
+      <td><strong>₦<?= number_format($grandTotal, 2) ?></strong></td>
+    </tr>
+  <?php endif; ?>
+</tbody>
+
             </table>
           </div>
         </div>
@@ -550,7 +568,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
                 <option value="pending" <?= $order['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
                 <option value="processing" <?= $order['status'] == 'processing' ? 'selected' : '' ?>>Processing</option>
                 <option value="completed" <?= $order['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
-                <!-- <option value="cancelled" <?= $order['status'] == 'cancelled' ? 'selected' : '' ?>>Cancelled</option> -->
+                <option value="cancelled" <?= $order['status'] == 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
               </select>
             </div>
           </div>
@@ -569,7 +587,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
 
 
   <script>
-    const username = '<?php echo addslashes($username); ?>';
+    const username = '<?php echo addslashes($first_name); ?>';
     const userRole = '<?php echo addslashes($userRole); ?>';
     const profilePicture = '<?php echo addslashes($profilePicture); ?>';
   </script>

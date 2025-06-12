@@ -4,40 +4,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once '../BackEnd/config/db.php';
-require __DIR__ . '/../vendor/autoload.php'; // Path to Pusher autoload
 
-// Pusher Configuration
-if (!defined('PUSHER_APP_ID'))     define('PUSHER_APP_ID', '2007065');
-if (!defined('PUSHER_APP_KEY'))    define('PUSHER_APP_KEY', 'c0ccafac1819f2d1f85c');
-if (!defined('PUSHER_APP_SECRET')) define('PUSHER_APP_SECRET', 'cd8261be462cd3147075');
-if (!defined('PUSHER_APP_CLUSTER')) define('PUSHER_APP_CLUSTER', 'eu');
-
-// Initialize Pusher
-use Pusher\Pusher;
-
-$options = [
-    'cluster' => PUSHER_APP_CLUSTER,
-    'useTLS' => true,
-    'debug' => true // Enable Pusher debugging
-];
-
-$pusher = new Pusher(
-    PUSHER_APP_KEY,
-    PUSHER_APP_SECRET,
-    PUSHER_APP_ID,
-    $options
-);
-
-// Test Pusher connection
-try {
-    $pusher->get('/channels'); // Simple API call to test connection
-    error_log("Pusher connection successful");
-} catch (Exception $e) {
-    error_log("Pusher connection failed: " . $e->getMessage());
-    file_put_contents(__DIR__ . '/../pusher_error.log', date('Y-m-d H:i:s') . " - Pusher connection failed: " . $e->getMessage() . "\n", FILE_APPEND);
-}
-
-// Verify mail configuration constants
+// Verify mail configuration constants are defined
 if (!defined('MAIL_HOST') || !defined('MAIL_USERNAME') || !defined('MAIL_PASSWORD') || 
     !defined('MAIL_PORT') || !defined('MAIL_ENCRYPTION') || 
     !defined('MAIL_FROM_EMAIL') || !defined('MAIL_FROM_NAME')) {
@@ -55,7 +23,11 @@ function sendMail($toEmail, $toName, $subject, $htmlBody, $plainText = '') {
     $mail = new PHPMailer(true);
 
     try {
-        // SMTP configuration
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->Debugoutput = function($str, $level) {
+            file_put_contents(__DIR__.'/../mail.log', date('Y-m-d H:i:s')." [$level] $str\n", FILE_APPEND);
+        };
+
         $mail->isSMTP();
         $mail->Host = MAIL_HOST;
         $mail->SMTPAuth = true;
@@ -86,8 +58,10 @@ function sendMail($toEmail, $toName, $subject, $htmlBody, $plainText = '') {
     } catch (Exception $e) {
         $error = "Mailer Error: " . $e->getMessage() . "\n";
         $error .= "PHPMailer ErrorInfo: " . $mail->ErrorInfo . "\n";
+        $error .= "SMTP Debug: " . print_r($mail->SMTPDebug, true) . "\n";
+        
         error_log($error);
-        file_put_contents(__DIR__ . '/../mail.log', $error, FILE_APPEND);
+        file_put_contents(__DIR__.'/../mail.log', $error, FILE_APPEND);
         return $error;
     }
 }
@@ -130,6 +104,40 @@ function send_order_email($recipient_email, $recipient_name, $order_id, $order_d
     return sendMail($recipient_email, $recipient_name, $subject, $body);
 }
 
+function send_notification($order_id, $order_data, $cart) {
+    $notification_data = [
+        'type' => 'new_order',
+        'order_id' => $order_id,
+        'total_amount' => number_format($order_data['total_amount'], 2),
+        'order_type' => ucfirst($order_data['order_type']),
+        'timestamp' => date('Y-m-d H:i:s')
+    ];
+
+    $ch = curl_init('http://localhost:8080/notify');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($notification_data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5); // Add timeout to prevent hanging
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Follow redirects if any
+    
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curl_error = curl_error($ch);
+    
+    if ($response === false || $http_code !== 200) {
+        $error_msg = "Failed to send notification: HTTP $http_code, Error: $curl_error, Response: " . ($response ?: 'No response');
+        error_log($error_msg);
+        error_log("Notification data sent: " . json_encode($notification_data));
+        file_put_contents(__DIR__.'/../notification.log', date('Y-m-d H:i:s') . " - $error_msg\n", FILE_APPEND);
+    } else {
+        error_log("Notification sent successfully: HTTP $http_code, Response: $response");
+        file_put_contents(__DIR__.'/../notification.log', date('Y-m-d H:i:s') . " - Notification sent successfully: HTTP $http_code\n", FILE_APPEND);
+    }
+    
+    curl_close($ch);
+}
+
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -141,22 +149,19 @@ error_log("Initiate Payment Session Data: " . print_r($_SESSION, true));
 try {
     $pdo = db_connect();
 } catch (PDOException $e) {
-    die(json_encode(['success' => false, 'message' => 'Database connection failed: ' . $e->getMessage()]));
+    die(json_encode(['success' => false, 'message' => 'Database connection failed']));
 }
 
 header('Content-Type: application/json');
 
-// Get POST data
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input) {
     echo json_encode(['success' => false, 'message' => 'Invalid input']);
     exit;
 }
 
-// Log input data for debugging
 error_log("Initiate Payment Input: " . print_r($input, true));
 
-// Sanitize and validate input
 $cart = $input['cart'] ?? [];
 $delivery_address = trim(strip_tags($input['delivery_address'] ?? '')); 
 $order_notes = trim(strip_tags($input['order_notes'] ?? '')); 
@@ -168,19 +173,31 @@ $tx_ref = trim(strip_tags($input['tx_ref'] ?? ''));
 $guest_email = trim($input['guest_email'] ?? '');
 $guest_phone = trim($input['guest_phone'] ?? '');
 $user_email = trim($input['user_email'] ?? '');
+
 $user_name = trim(strip_tags($input['user_name'] ?? ''));
 $user_phone = trim(strip_tags($input['user_phone'] ?? ''));
-$user_id = trim(strip_tags($input['user_id'] ?? ''));
 
-$guest_name = $user_id ? '' : 'Guest User';
+// Handle user_id: Set to NULL if not provided or invalid
+$user_id = !empty($input['user_id']) ? trim(strip_tags($input['user_id'])) : null;
 
-// Validate order_type
+
+if(!$user_id){
+$guest_name = 'Guest User';
+}
+
+if ($user_id !== null) {
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE id = :user_id");
+    $stmt->execute([':user_id' => $user_id]);
+    if (!$stmt->fetch()) {
+        $user_id = null; // Set to NULL if user_id doesn't exist
+    }
+}
+
 if (!in_array($order_type, ['now', 'schedule'])) {
     echo json_encode(['success' => false, 'message' => 'Invalid order type']);
     exit;
 }
 
-// Validate input
 if (empty($cart) || $total_amount <= 0 || empty($delivery_address) || empty($tx_ref)) {
     echo json_encode(['success' => false, 'message' => 'Invalid order data']);
     exit;
@@ -190,11 +207,9 @@ if ($order_type === 'schedule' && (empty($schedule_date) || empty($schedule_time
     exit;
 }
 
-// Begin transaction
 try {
     $pdo->beginTransaction();
 
-    // Insert into orders table
     $stmt = $pdo->prepare("
         INSERT INTO `orders` (
             `user_id`, `tx_ref`, `delivery_address`, `order_notes`, 
@@ -212,7 +227,7 @@ try {
     ");
 
     $stmt->execute([
-        ':user_id' => $user_id ?: null,
+        ':user_id' => $user_id,
         ':tx_ref' => $tx_ref,
         ':delivery_address' => $delivery_address,
         ':order_notes' => $order_notes,
@@ -230,7 +245,6 @@ try {
 
     $order_id = $pdo->lastInsertId();
 
-    // Insert into order_items table with category_id
     $stmt = $pdo->prepare("
         INSERT INTO `order_items` (
             `order_id`, `item_name`, `portion`, `category_id`, `price`, `quantity`
@@ -262,38 +276,12 @@ try {
 
     $pdo->commit();
 
-    // Prepare response
     $response = [
-        'success' => true,
-        'order_id' => $order_id,
-        'tx_ref' => $tx_ref,
-        'pusher_debug' => ['status' => 'pending']
+        'success' => true, 
+        'order_id' => $order_id, 
+        'tx_ref' => $tx_ref
     ];
 
-    // Send Pusher notification
-    $data = [
-        'type' => 'new_order',
-        'order_id' => $order_id,
-        'total_amount' => number_format($total_amount, 2),
-        'order_type' => $order_type,
-        'timestamp' => date('Y-m-d H:i:s')
-    ];
-
-    try {
-        $pusher_response = $pusher->trigger('orders-channel', 'new-order-event', $data);
-        $response['pusher_debug']['status'] = 'success';
-        $response['pusher_debug']['data'] = $data;
-        error_log("Pusher notification sent successfully for order ID: {$order_id}, Data: " . json_encode($data));
-        file_put_contents(__DIR__ . '/../pusher_error.log', date('Y-m-d H:i:s') . " - Pusher notification sent: " . json_encode($data) . "\n", FILE_APPEND);
-    } catch (Exception $e) {
-        $response['pusher_debug']['status'] = 'failed';
-        $response['pusher_debug']['error'] = $e->getMessage();
-        error_log("Pusher error: " . $e->getMessage());
-        file_put_contents(__DIR__ . '/../pusher_error.log', date('Y-m-d H:i:s') . " - Pusher error: " . $e->getMessage() . "\n", FILE_APPEND);
-        $response['notification_warning'] = 'Could not send real-time notification';
-    }
-
-    // Send email notification
     $recipient_email = $user_email ?: $guest_email;
     $recipient_name = $user_name ?: $guest_name;
     if ($recipient_email) {
@@ -308,19 +296,24 @@ try {
 
         $mail_result = send_order_email($recipient_email, $recipient_name, $order_id, $order_data, $cart);
         if ($mail_result !== true) {
-            error_log("Failed to send order email to: {$recipient_email} - {$mail_result}");
+            error_log("Failed to send order email to: {$recipient_email}: {$mail_result}");
             if (ini_get('display_errors')) {
                 $response['email_warning'] = 'Confirmation email could not be sent';
             }
         }
     }
 
+    // Send WebSocket notification
+    send_notification($order_id, [
+        'total_amount' => $total_amount,
+        'order_type' => $order_type
+    ], $cart);
+
     echo json_encode($response);
 
 } catch (Exception $e) {
     $pdo->rollBack();
-    $errorMessage = "Order processing error: " . $e->getMessage();
-    error_log($errorMessage);
-    echo json_encode(['success' => false, 'message' => $errorMessage]);
+    error_log("Order processing error: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Error processing order: ' . $e->getMessage()]);
 }
 ?>
