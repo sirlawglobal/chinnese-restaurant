@@ -384,7 +384,26 @@ $categories = getCategories(); // returns array of associative arrays by default
     <button type="submit" class="primary-button">Add Menu Item</button>
   </div>
 </form>
-
+<!-- Action Modal -->
+<div class="modal" id="action-modal">
+  <div class="modal-content">
+    <button id="modal-close-button" class="modal-close-button">×</button>
+    <h2 class="modal-title"></h2>
+    <form id="modal-form" class="modal-form">
+      <div class="modal-form-group">
+        <label for="modal-item-name" class="modal-form-label">Item Name</label>
+        <input type="text" id="modal-item-name" class="modal-form-input" readonly>
+      </div>
+      <div class="modal-form-group">
+        <label for="modal-new-stock" class="modal-form-label">New Stock Quantity</label>
+        <input type="number" id="modal-new-stock" class="modal-form-input" min="0" required>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="modal-action-button">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 
 

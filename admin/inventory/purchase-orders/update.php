@@ -11,14 +11,14 @@ $response = [
 try {
     $orderId = isset($_POST['order_id']) ? (int)str_replace('PO', '', $_POST['order_id']) : null;
     $newStatus = trim($_POST['status'] ?? '');
-
+//var_dump($newStatus);die;
     if (!$orderId || !$newStatus) {
         $response['message'] = "Missing or invalid 'order_id' or 'status'.";
         echo json_encode($response);
         exit;
     }
 
-    $sql = "UPDATE orders SET status = :status WHERE id = :id";
+    $sql = "UPDATE inves_orders SET status = :status WHERE id = :id";
     $success = db_query($sql, [
         'status' => $newStatus,
         'id'     => $orderId
