@@ -8,7 +8,7 @@ $rawInput = file_get_contents('php://input');
 error_log("Raw input for update: " . $rawInput);
 $input = json_decode($rawInput, true);
 error_log("Decoded input for update: " . print_r($input, true));
-
+//var_dump($input);die;
 // Validate input
 if (!isset($input['order_id']) || !isset($input['items']) || empty($input['items'])) {
     error_log("Invalid input: order_id or items missing/empty");
