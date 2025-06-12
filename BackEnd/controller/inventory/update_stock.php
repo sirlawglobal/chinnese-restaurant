@@ -1,4 +1,6 @@
 <?php
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/error.log');
 require_once __DIR__ . '/../../config/init.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
