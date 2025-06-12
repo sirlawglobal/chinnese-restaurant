@@ -13,20 +13,27 @@ if (!$chatId) {
     exit;
 }
 
-$query = "SELECT m.name, m.email, m.status, COALESCE(COUNT(cm.id), 0) AS unread
-          FROM messages m
-          LEFT JOIN chat_messages cm ON cm.message_id = m.id AND cm.is_admin = 0 AND cm.is_read = 0
-          WHERE m.id = :chatId
-          GROUP BY m.id";
+$query = "SELECT cm.id, cm.text, cm.is_admin, DATE_FORMAT(cm.created_at, '%h:%i %p') AS time
+          FROM chat_messages cm
+          WHERE cm.message_id = :chatId
+          ORDER BY cm.created_at";
 $params = ['chatId' => $chatId];
+$messages = db_query($query, $params, 'assoc');
+
+$query = "SELECT m.name, m.email, m.status
+          FROM messages m
+          WHERE m.id = :chatId";
 $chat = db_query($query, $params, 'assoc');
 
 if ($chat) {
-    $chat = $chat[0];
-    $chat['initials'] = strtoupper(substr($chat['name'], 0, 1) . (strpos($chat['name'], ' ') !== false ? substr($chat['name'], strpos($chat['name'], ' ') + 1, 1) : ""));
     echo json_encode([
         'data_type' => 'chat',
-        'data' => $chat
+        'data' => [
+            'messages' => $messages,
+            'name' => $chat[0]['name'],
+            'email' => $chat[0]['email'],
+            'status' => $chat[0]['status']
+        ]
     ]);
 } else {
     echo json_encode([
@@ -34,4 +41,3 @@ if ($chat) {
         'message' => 'Chat not found.'
     ]);
 }
-?>
