@@ -1,3 +1,7 @@
+
+
+
+
 const notifications = {
   count: 0,
   items: [],
@@ -536,3 +540,5 @@ function renderComponents() {
 document.addEventListener("DOMContentLoaded", renderComponents);
 
 // Removed the original (unmodified) WebSocket-based notification object
+
+//  <script src="https://js.pusher.com/8.2/pusher.min.js"></script>

@@ -30,6 +30,8 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
       type="text/css"
       href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"
     />
+
+     <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
     <script
       type="text/javascript"
       charset="utf8"
