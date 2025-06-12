@@ -2,15 +2,23 @@
 session_start();
 
 if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
-  header("Location: /chinnese-restaurant/login/");
-  exit();
+    header("Location: /chinnese-restaurant/login/");
+    exit();
 }
 
-$username = $_SESSION['user']['email'] ?? '';
+
+
+$username = $_SESSION['user']['name'] ?? '';
+// var_dump($username); // Debug: Check session data 
+
+$parts = explode(" ", $username);
+$first_name = $parts[0];
+
 $userRole = $_SESSION['user']['role'] ?? '';
 $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos/40';
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +30,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
@@ -569,7 +578,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
 
 
   <script>
-    const username = '<?php echo addslashes($username); ?>';
+    const username = '<?php echo addslashes($first_name); ?>';
     const userRole = '<?php echo addslashes($userRole); ?>';
     const profilePicture = '<?php echo addslashes($profilePicture); ?>';
   </script>

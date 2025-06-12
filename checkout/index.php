@@ -3,10 +3,17 @@
 <?php
 require_once __DIR__ . '/../BackEnd/config/init.php';
 
+//    $_SESSION['user'] = $user;
+
+
 // Fetch user data if logged in
 $userEmail = isLoggedIn() && isset($_SESSION['user']['email']) ? $_SESSION['user']['email'] : '';
 $fullName = isLoggedIn() && isset($_SESSION['user']['name']) ? $_SESSION['user']['name'] : '';
+$user_phone = isLoggedIn() && isset($_SESSION['user']['phone']) ? $_SESSION['user']['phone'] : '';
+$user_id = isLoggedIn() && isset($_SESSION['user']['id']) ? $_SESSION['user']['id'] : '';
 $role = isLoggedIn();
+
+//    var_dump($_SESSION['user']['phone']);
 
 // Debugging session data
 error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail: " . $userEmail . ", fullName: " . $fullName);
@@ -166,17 +173,18 @@ error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail:
 
                        <?php if (!$role): ?>
             <div class="guest-info" id="guestInfoContainer">
-                <!-- <div class="form-group">
-                    <label for="guestFullName" class="form-label">Full Name</label>
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone </label>
                     <input
+                    name="phone"
                         type="text"
-                        id="guestFullName"
+                        id="guestPhone"
                         class="form-input"
-                        placeholder="Surname first e.g. John Doe"
+                        placeholder="phone number"
                         aria-label="Guest full name"
                         required
                     />
-                </div> -->
+                </div>
                 <div class="form-group">
                     <label for="guestEmail" class="form-label">Email</label>
                     <input
@@ -324,7 +332,9 @@ error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail:
         // Debugging: Log initial state
         const isLoggedIn = <?php echo json_encode($role); ?>;
         const userEmail = <?php echo json_encode($userEmail); ?>;
-        console.log("Checkout - isLoggedIn:", isLoggedIn, "userEmail:", userEmail);
+        const user_phone = <?php echo json_encode($user_phone); ?>;
+        const user_id= <?php echo json_encode($user_id); ?>;
+        // console.log("Checkout - isLoggedIn:", isLoggedIn, "userEmail:", userEmail);
 
         // Toggle order type buttons
         orderNowBtn.addEventListener("click", () => {
@@ -487,6 +497,7 @@ error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail:
         const scheduleDate = document.getElementById("scheduleDate").value;
         const scheduleTime = document.getElementById("scheduleTime").value;
         const guestEmail = DOMPurify.sanitize(document.getElementById("guestEmail")?.value || "");
+        const guestPhone = DOMPurify.sanitize(document.getElementById("guestPhone")?.value || "");
         const guestFullName ='Guest';
 
         // Validation
@@ -553,9 +564,14 @@ error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail:
             tx_ref: generateTxRef(),
             guest_email: isLoggedIn ? null : guestEmail,
             guest_name: isLoggedIn ? null : guestFullName,
+            guest_phone: isLoggedIn ? null : guestPhone,
             user_email: isLoggedIn ? userEmail : null,
+            user_phone: isLoggedIn ? user_phone : null,
+            user_id: isLoggedIn ? user_id : null,
             user_name: isLoggedIn ? '<?php echo $fullName; ?>' : null
         };
+
+        console.log("Checkout - isLoggedIn:", orderData);
 
         // Initiate payment
         const response = await fetch("./initiate_payment.php", {

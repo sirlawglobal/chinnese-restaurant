@@ -6,7 +6,14 @@ if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
     exit();
 }
 
-$username = $_SESSION['user']['email'] ?? '';
+
+
+$username = $_SESSION['user']['name'] ?? '';
+// var_dump($username); // Debug: Check session data 
+
+$parts = explode(" ", $username);
+$first_name = $parts[0];
+
 $userRole = $_SESSION['user']['role'] ?? '';
 $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos/40';
 
@@ -142,7 +149,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
     </main>
     <script>
 // Pass PHP variables to JavaScript
-const username = '<?php echo addslashes($username); ?>';
+const username = '<?php echo addslashes($first_name); ?>';
 const userRole = '<?php echo addslashes($userRole); ?>';
 const profilePicture = '<?php echo addslashes($profilePicture); ?>';
 </script>
@@ -180,12 +187,12 @@ const profilePicture = '<?php echo addslashes($profilePicture); ?>';
           try {
             // const response = await fetch(`${API_BASE}/BackEnd/controller/reviews/get_reviews.php`);
             const response = await fetch('../../BackEnd/controller/reviews/get_reviews.php');
-            console.log("Fetch response status:", response.status, response.url);
+            // console.log("Fetch response status:", response.status, response.url);
             if (!response.ok) {
               throw new Error(`HTTP error: ${response.status} for URL ${response.url}`);
             }
             const data = await response.json();
-            console.log("Fetch response data:", data);
+            // console.log("Fetch response data:", data);
             if (data.success) {
               allReviews = data.data.reviews;
               filteredReviews = allReviews;

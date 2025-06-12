@@ -6,7 +6,14 @@ if (!isset($_SESSION['user']['id']) || !isset($_SESSION['user']['role'])) {
     exit();
 }
 
-$username = $_SESSION['user']['email'] ?? '';
+
+
+$username = $_SESSION['user']['name'] ?? '';
+// var_dump($username); // Debug: Check session data 
+
+$parts = explode(" ", $username);
+$first_name = $parts[0];
+
 $userRole = $_SESSION['user']['role'] ?? '';
 $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos/40';
 
@@ -27,6 +34,8 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
       href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"
     />
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
     <script type="text/javascript">
 
       $(document).ready(function () {
@@ -35,15 +44,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
         });
       });
 
-      // Replace your current DataTable initialization with:
-// $(document).ready(function () {
-//     $('#orders-table').DataTable({
-//         pageLength: 5,
-//         initComplete: function(settings, json) {
-//             console.log('DataTable initialized');
-//         }
-//     });
-// });
+ 
     </script>
     <title>Overview</title>
     <link rel="stylesheet" href="../assets/styles/general.css" />
@@ -208,6 +209,104 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
   height: 20px;
   stroke: #333;
 }
+
+.notifications-container {
+  position: absolute;
+  top: 60px; /* Adjust based on your header height */
+  right: 20px;
+  width: 300px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none;
+}
+
+.notifications-container.visible {
+  display: block;
+}
+
+.notifications-dropdown {
+  padding: 10px;
+}
+
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.notifications-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.notifications-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.notification-item.unread {
+  background: #f8f9fa;
+  font-weight: bold;
+}
+
+.notification-item.read {
+  background: #fff;
+}
+
+.notification-item p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.notification-item small {
+  color: #6c757d;
+  font-size: 0.8rem;
+}
+
+.notification-bell {
+  position: relative;
+}
+
+.notification-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #dc3545;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+}
+
+.pulse {
+  animation: pulse 1s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+
 
     </style>
   </head>
@@ -613,11 +712,11 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
     </main>
     <script>
 // Pass PHP variables to JavaScript
-const username = '<?php echo addslashes($username); ?>';
+const username = '<?php echo addslashes($first_name); ?>';
 const userRole = '<?php echo addslashes($userRole); ?>';
 const profilePicture = '<?php echo addslashes($profilePicture); ?>';
 </script>
-<script src="your-script.js"></script>
+<!-- <script src="your-script.js"></script> -->
     <script src="../scripts/charts.js"></script>
     <script src="../scripts/components.js"></script>
 
@@ -641,7 +740,7 @@ async function fetchAndDisplayOrders() {
     orders.forEach(order => {
       // Calculate total quantity
 
-      console.log('Order data:', order); // Debug: Log the order data
+      // console.log('Order data:', order); // Debug: Log the order data
       // console.log('Processing order:', order); // Debug: Log the order being processed
       const totalQty = order.items.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
       
@@ -694,7 +793,7 @@ async function fetchAndDisplayOrders() {
 
 function showOrderItemsPopup(orderId, items) {
   try {
-    console.log('Items received:', items); // Debug: Log the items array
+    // console.log('Items received:', items); // Debug: Log the items array
 
     let popup = document.getElementById('order-items-popup');
     if (!popup) {
@@ -702,7 +801,7 @@ function showOrderItemsPopup(orderId, items) {
       popup.id = 'order-items-popup';
       popup.className = 'orderDetailsPopup';
       document.body.appendChild(popup);
-      console.log('Created new popup element');
+      // console.log('Created new popup element');
     }
 
     // Handle empty or invalid items array
@@ -713,7 +812,7 @@ function showOrderItemsPopup(orderId, items) {
           const quantity = parseInt(item.quantity, 10) || 0;
           const itemName = item.item_name || 'Unknown Item';
 
-          console.log('Processing item:', { itemName, price, quantity }); // Debug: Log each item
+          // console.log('Processing item:', { itemName, price, quantity }); // Debug: Log each item
 
           return `
             <tr>
@@ -747,14 +846,14 @@ function showOrderItemsPopup(orderId, items) {
     `;
 
     popup.style.display = 'flex'; // Use flex to center content
-    console.log('Popup displayed for order:', orderId);
+    // console.log('Popup displayed for order:', orderId);
 
     // Close button event listener
     const closeButton = popup.querySelector('.close');
     if (closeButton) {
       closeButton.addEventListener('click', () => {
         popup.style.display = 'none';
-        console.log('Popup closed');
+        // console.log('Popup closed');
       });
     }
 
@@ -852,11 +951,11 @@ function initializeSlider() {
   const slidesToShow = Math.min(3, slides.length); // Show up to 3 slides
   const totalSlides = slides.length;
 
-  console.log('Slider initialized', { 
-    slideWidth, 
-    totalSlides,
-    slidesToShow 
-  });
+  // console.log('Slider initialized', { 
+  //   slideWidth, 
+  //   totalSlides,
+  //   slidesToShow 
+  // });
 
   // Always show controls if there are slides
   if (prevButton) prevButton.style.display = 'flex';
@@ -869,11 +968,11 @@ function initializeSlider() {
     const offset = -currentIndex * slideWidth;
     slider.style.transform = `translateX(${offset}px)`;
     
-    console.log('Slider position:', {
-      currentIndex,
-      offset,
-      maxIndex
-    });
+  //   console.log('Slider position:', {
+  //     currentIndex,
+  //     offset,
+  //     maxIndex
+  //   });
   }
 
   function nextSlide() {
