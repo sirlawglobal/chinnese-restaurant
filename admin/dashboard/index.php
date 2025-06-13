@@ -130,53 +130,27 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
   position: relative;
   overflow: hidden;
   width: 100%;
+  max-width: 396px;
 }
+
 .slider {
   display: flex;
   flex-wrap: nowrap;
-  transition: transform 0.5s ease;
+  transition: transform 0.3s ease;
+  width: max-content;
 }
+
 .slide {
-  flex: 0 0 300px;
+  flex: 0 0 376px;
+  min-width: 376px;
   margin-right: 20px;
   box-sizing: border-box;
-}
-.slider-controls {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-.slider-controls button {
   background: #fff;
   border: 1px solid #ddd;
-  padding: 5px;
-  cursor: pointer;
-}
-.slider-controls button svg {
-  width: 24px;
-  height: 24px;
-}
-.star.filled {
-  fill: #f39c12;
-}
-.star {
-  fill: #ddd;
-  width: 16px;
-  height: 16px;
-}
-
-
-.slide {
-  flex: 0 0 300px;
-  margin-right: 20px;
-  box-sizing: border-box;
-  min-width: 300px; /* Ensure consistent width */
-}
-
-.slider {
-  display: flex;
-  transition: transform 0.3s ease;
-  width: max-content; /* Allow the slider to expand beyond container */
+  padding: 15px;
+  border-radius: 8px;
+  display: block;
+  opacity: 1;
 }
 
 .slider-controls {
@@ -210,103 +184,26 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
   stroke: #333;
 }
 
-.notifications-container {
-  position: absolute;
-  top: 60px; /* Adjust based on your header height */
-  right: 20px;
-  width: 300px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  display: none;
+.star.filled {
+  fill: #f39c12;
 }
 
-.notifications-container.visible {
+.star {
+  fill: #ddd;
+  width: 16px;
+  height: 16px;
+}
+
+.card.slide {
   display: block;
+  width: 376px;
+  box-sizing: border-box;
 }
 
-.notifications-dropdown {
-  padding: 10px;
+.slide h4, .slide p, .slide small {
+  color: #333;
+  margin: 5px 0;
 }
-
-.notifications-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
-
-.notifications-header h4 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.notifications-list {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.notification-item {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-}
-
-.notification-item.unread {
-  background: #f8f9fa;
-  font-weight: bold;
-}
-
-.notification-item.read {
-  background: #fff;
-}
-
-.notification-item p {
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-.notification-item small {
-  color: #6c757d;
-  font-size: 0.8rem;
-}
-
-.notification-bell {
-  position: relative;
-}
-
-.notification-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #dc3545;
-  color: #fff;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.75rem;
-}
-
-.pulse {
-  animation: pulse 1s ease-in-out;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-
 
     </style>
   </head>
@@ -710,6 +607,15 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
         </section>
       </div>
     </main>
+<svg style="display: none;">
+  <symbol id="star" viewBox="0 0 24 24">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+  </symbol>
+</svg>
+ <script>
+
+
+ </script>
     <script>
 // Pass PHP variables to JavaScript
 const username = '<?php echo addslashes($first_name); ?>';
@@ -763,7 +669,7 @@ async function fetchAndDisplayOrders() {
           </button>
         </td>
         <td>${totalQty}</td>
-        <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
+        <td>£${parseFloat(order.total_amount).toFixed(2)}</td>
         <td>${customerEmail}</td>
         <td><span class="status ${statusClass}">${order.status}</span></td>
       `;
@@ -870,12 +776,24 @@ function showOrderItemsPopup(orderId, items) {
 }
 
 
- 
+let isReviewsFetched = false;
+
 async function fetchAndDisplayReviews() {
+  console.trace('fetchAndDisplayReviews called');
+  if (isReviewsFetched) {
+    console.log('Reviews already fetched, skipping');
+    return;
+  }
+  isReviewsFetched = true;
+
   try {
     const response = await fetch('get_reviews.php');
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     const reviews = await response.json();
+
+    console.log('Reviews fetched:', reviews);
 
     const slider = document.getElementById('reviews-slider');
     if (!slider) {
@@ -888,48 +806,71 @@ async function fetchAndDisplayReviews() {
     if (!Array.isArray(reviews) || reviews.length === 0) {
       slider.innerHTML = '<div class="card slide"><p>No reviews available</p></div>';
       console.warn('No reviews found or invalid response');
+      initializeSlider();
       return;
     }
 
-    reviews.forEach(review => {
-      const reviewCard = document.createElement('div');
-      reviewCard.className = 'card slide';
+    reviews.forEach((review, index) => {
+      try {
+        const reviewCard = document.createElement('div');
+        reviewCard.className = 'card slide';
 
-      let starsHtml = '';
-      for (let i = 0; i < 5; i++) {
-        if (i < Math.floor(review.rating || 0)) {
-          starsHtml += '<svg class="icon star filled"><use href="#star"></use></svg>';
-        } else {
-          starsHtml += '<svg class="icon star"><use href="#star"></use></svg>';
+        let starsHtml = '';
+        const rating = parseFloat(review.rating) || 0;
+        for (let i = 0; i < 5; i++) {
+          if (i < Math.floor(rating)) {
+            starsHtml += '<svg class="icon star filled" aria-label="Filled star"><use href="#star" onerror="this.outerHTML=\'<span style=\\"color: #f39c12;\\">★</span>\'"></use></svg>';
+          } else {
+            starsHtml += '<svg class="icon star" aria-label="Empty star"><use href="#star" onerror="this.outerHTML=\'<span style=\\"color: #ddd;\\">★</span>\'"></use></svg>';
+          }
         }
+
+        const dishName = review.dish_name || 'Unknown Dish';
+        const reviewText = review.review_text || 'No comment';
+        const reviewerName = review.reviewer_name || 'Anonymous';
+        const reviewDate = review.review_date
+          ? new Date(review.review_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          : 'Unknown Date';
+
+        reviewCard.innerHTML = `
+          <h4>${dishName}</h4>
+          <p>${reviewText}</p>
+          <div class="flex align-baseline">
+            <p>${reviewerName}</p>
+            <small>- ${reviewDate}</small>
+          </div>
+          <div class="flex align-center">
+            <div class="stars">${starsHtml}</div>
+            <small>(${rating.toFixed(1)})</small>
+          </div>
+        `;
+
+        slider.appendChild(reviewCard);
+      } catch (error) {
+        console.error(`Error processing review at index ${index}:`, error, review);
       }
-
-      reviewCard.innerHTML = `
-        <h4>${review.dish_name || 'Dish'}</h4>
-        <p>${review.review_text || 'No comment'}</p>
-        <div class="flex align-baseline">
-          <p>${review.reviewer_name || 'Anonymous'}</p>
-          <small>- ${new Date(review.review_date || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</small>
-        </div>
-        <div class="flex align-center">
-          <div class="stars">${starsHtml}</div>
-          <small>(${parseFloat(review.rating || 0).toFixed(1)})</small>
-        </div>
-      `;
-
-      slider.appendChild(reviewCard);
     });
 
+    const slides = slider.querySelectorAll('.slide');
+    console.log('Slides created:', slides.length);
     initializeSlider();
   } catch (error) {
     console.error('Error fetching reviews:', error);
     const slider = document.getElementById('reviews-slider');
     if (slider) {
       slider.innerHTML = '<div class="card slide"><p>Reviews unavailable</p></div>';
+      console.log('Fallback slide created');
+      initializeSlider();
     }
   }
 }
 
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchAndDisplayOrders();
+  fetchAndDisplayReviews();
+  fetchAndDisplayStats();
+});
 function initializeSlider() {
   const slider = document.getElementById('reviews-slider');
   if (!slider) {
@@ -940,24 +881,27 @@ function initializeSlider() {
   const slides = slider.querySelectorAll('.slide');
   const prevButton = document.querySelector('.slider-controls .prev');
   const nextButton = document.querySelector('.slider-controls .next');
-  
+
   if (!slides.length) {
-    console.warn('No slides found');
+    console.warn('No slides found in the slider');
+    slider.innerHTML = '<div class="card slide"><p>No reviews available</p></div>';
+    if (prevButton) prevButton.style.display = 'none';
+    if (nextButton) nextButton.style.display = 'none';
     return;
   }
 
   let currentIndex = 0;
   const slideWidth = slides[0].offsetWidth + 20; // Include margin
-  const slidesToShow = Math.min(3, slides.length); // Show up to 3 slides
+  const slidesToShow = 1; // Show 1 slide at a time
   const totalSlides = slides.length;
 
-  // console.log('Slider initialized', { 
-  //   slideWidth, 
-  //   totalSlides,
-  //   slidesToShow 
-  // });
+  console.log('Slider initialized', { 
+    slideWidth, 
+    totalSlides, 
+    slidesToShow,
+    firstSlideVisible: slides[0].offsetWidth > 0
+  });
 
-  // Always show controls if there are slides
   if (prevButton) prevButton.style.display = 'flex';
   if (nextButton) nextButton.style.display = 'flex';
 
@@ -968,52 +912,53 @@ function initializeSlider() {
     const offset = -currentIndex * slideWidth;
     slider.style.transform = `translateX(${offset}px)`;
     
-  //   console.log('Slider position:', {
-  //     currentIndex,
-  //     offset,
-  //     maxIndex
-  //   });
+    console.log('Slider updated', { currentIndex, offset, maxIndex });
   }
 
   function nextSlide() {
-    currentIndex = Math.min(currentIndex + 1, totalSlides - slidesToShow);
-    updateSlider();
+    if (currentIndex < totalSlides - slidesToShow) {
+      currentIndex++;
+      updateSlider();
+    }
   }
 
   function prevSlide() {
-    currentIndex = Math.max(currentIndex - 1, 0);
-    updateSlider();
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlider();
+    }
   }
 
-  // Clear existing listeners
-  const newPrev = prevButton.cloneNode(true);
-  prevButton.parentNode.replaceChild(newPrev, prevButton);
-  const newNext = nextButton.cloneNode(true);
-  nextButton.parentNode.replaceChild(newNext, nextButton);
+  if (prevButton) {
+    prevButton.removeEventListener('click', prevSlide);
+    prevButton.addEventListener('click', prevSlide);
+  }
+  if (nextButton) {
+    nextButton.removeEventListener('click', nextSlide);
+    nextButton.addEventListener('click', nextSlide);
+  }
 
-  // Add new listeners
-  document.querySelector('.slider-controls .prev').addEventListener('click', prevSlide);
-  document.querySelector('.slider-controls .next').addEventListener('click', nextSlide);
+  let autoSlideInterval = null;
+  function startAutoSlide() {
+    if (autoSlideInterval) clearInterval(autoSlideInterval);
+    autoSlideInterval = setInterval(nextSlide, 5000);
+    console.log('Auto-slide started');
+  }
 
-  // Initialize
   updateSlider();
-
-  // Auto-slide
-  let autoSlideInterval = setInterval(nextSlide, 5000);
+  startAutoSlide();
 
   slider.parentElement.addEventListener('mouseenter', () => {
     clearInterval(autoSlideInterval);
+    console.log('Auto-slide paused');
   });
 
   slider.parentElement.addEventListener('mouseleave', () => {
-    autoSlideInterval = setInterval(nextSlide, 5000);
+    startAutoSlide();
+    console.log('Auto-slide resumed');
   });
 }
-// Call the functions when the page loads
-// document.addEventListener('DOMContentLoaded', () => {
-//   fetchAndDisplayOrders();
-//   fetchAndDisplayReviews();
-// });
+
 
 
 // Your existing filterTable function
@@ -1078,19 +1023,9 @@ async function fetchAndDisplayStats() {
   }
 }
 
-// Update DOMContentLoaded to include stats fetching
-// document.addEventListener('DOMContentLoaded', () => {
-//   fetchAndDisplayStats();
-//   fetchAndDisplayOrders();
-//   fetchAndDisplayReviews();
-// });
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetchAndDisplayOrders();
-  fetchAndDisplayReviews().then(initializeSlider);
-  fetchAndDisplayStats();
-});
+
     </script>
   </body>
 </html>

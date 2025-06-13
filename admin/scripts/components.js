@@ -14,7 +14,7 @@ const notifications = {
       return;
     }
 
-    console.log('Initializing notifications...');
+    // console.log('Initializing notifications...');
     this.loadFromStorage();
 
     // The container should ideally be appended to a specific element,
@@ -24,7 +24,7 @@ const notifications = {
     this.container = document.createElement("div");
     this.container.className = "notifications-container";
     document.body.appendChild(this.container);
-    console.log('Notifications container appended to body:', this.container);
+    // console.log('Notifications container appended to body:', this.container);
 
     this.update();
     this.connectPusher(); // Only connect to Pusher
@@ -46,7 +46,7 @@ const notifications = {
       if (stored) {
         this.items = JSON.parse(stored);
         this.count = this.items.filter(item => !item.read).length;
-        console.log('Loaded notifications from storage:', this.items);
+        // console.log('Loaded notifications from storage:', this.items);
       }
     } catch (error) {
       console.error('Error loading notifications from storage:', error);
@@ -56,7 +56,7 @@ const notifications = {
   saveToStorage: function () {
     try {
       localStorage.setItem('notifications', JSON.stringify(this.items));
-      console.log('Saved notifications to storage:', this.items);
+      // console.log('Saved notifications to storage:', this.items);
     } catch (error) {
       console.error('Error saving notifications to storage:', error);
     }
@@ -66,7 +66,7 @@ const notifications = {
   connectPusher: function () {
     if (this.pusher) return; // Prevent re-initializing if already connected
 
-    console.log('Initializing Pusher connection...');
+    // console.log('Initializing Pusher connection...');
     try {
       // Ensure Pusher is loaded in your HTML before this script runs
       this.pusher = new Pusher('c0ccafac1819f2d1f85c', {
@@ -76,19 +76,20 @@ const notifications = {
 
       const channel = this.pusher.subscribe('orders-channel');
       channel.bind('new-order-event', (data) => {
-        console.log('Pusher event received:', data);
+        // console.log('Pusher event received:', data);
         if (data.type === 'new_order') {
           this.addNotification({
             id: Date.now(), // Use Date.now() for a unique ID
             text: `New ${data.order_type} order #${data.order_id} for £${data.total_amount}`,
-            time: this.formatTime(data.timestamp),
+            // time: this.formatTime(data.timestamp),
+            timestamp: data.timestamp,
             read: false
           });
         }
       });
 
       this.pusher.connection.bind('connected', () => {
-        console.log('Pusher connected');
+        // console.log('Pusher connected');
       });
 
       this.pusher.connection.bind('error', (err) => {
@@ -108,7 +109,7 @@ const notifications = {
     this.saveToStorage(); // Save to local storage
     this.update(); // Update the UI of the dropdown
     updateNotificationBadge(); // Update the bell badge
-    console.log('Added notification:', notification);
+    // console.log('Added notification:', notification);
   },
 
   formatTime: function (timestamp) {
@@ -134,7 +135,7 @@ const notifications = {
   },
 
   render: function () {
-    console.log('Rendering notifications:', this.items);
+    // console.log('Rendering notifications:', this.items);
     return `
       <div class="notifications-dropdown">
         <div class="notifications-header">
@@ -145,7 +146,7 @@ const notifications = {
           ${this.items.length > 0 ? this.items.map(item => `
             <div class="notification-item ${item.read ? 'read' : 'unread'}" data-id="${item.id}">
               <p>${item.text}</p>
-              <small>${item.time}</small>
+              <small>${this.formatTime(item.timestamp)}</small>
             </div>
           `).join('') : '<p class="text-muted">No notifications</p>'}
         </div>
@@ -154,7 +155,7 @@ const notifications = {
   },
 
   toggle: function () {
-    console.log('Toggling notifications dropdown');
+    // console.log('Toggling notifications dropdown');
     // Calling init here ensures the container exists, though it's primarily
     // initialized on DOMContentLoaded. Redundant but harmless.
     this.init();
@@ -163,14 +164,14 @@ const notifications = {
       this.init();
     }
     this.container.classList.toggle("visible");
-    console.log('Notifications container visibility:', this.container.classList.contains("visible"));
+    // console.log('Notifications container visibility:', this.container.classList.contains("visible"));
     this.update(); // Always update content when toggling visibility
   },
 
   hide: function () {
     if (this.container) {
       this.container.classList.remove("visible");
-      console.log('Notifications dropdown hidden');
+      // console.log('Notifications dropdown hidden');
     }
   },
 
@@ -179,16 +180,16 @@ const notifications = {
       console.error('Notifications container not found');
       return;
     }
-    console.log('Updating notifications UI');
+    // console.log('Updating notifications UI');
     this.container.innerHTML = this.render(); // Re-render the entire content
 
     // Attach event listeners to newly rendered items
     const items = this.container.querySelectorAll(".notification-item");
-    console.log('Found notification items:', items.length);
+    // console.log('Found notification items:', items.length);
     items.forEach((item) => {
       item.addEventListener("click", (e) => {
         const id = parseInt(item.dataset.id);
-        console.log('Marking notification as read:', id);
+        // console.log('Marking notification as read:', id);
         this.markRead(id);
       });
     });
@@ -197,7 +198,7 @@ const notifications = {
     if (markAllButton) {
       markAllButton.addEventListener("click", (e) => {
         e.stopPropagation(); // Prevent dropdown from closing if clicked
-        console.log('Marking all notifications as read');
+        // console.log('Marking all notifications as read');
         this.markAllRead();
       });
     }
@@ -211,7 +212,7 @@ const notifications = {
       this.saveToStorage();
       this.update(); // Update dropdown UI
       updateNotificationBadge(); // Update bell badge
-      console.log('Notification marked as read:', id);
+      // console.log('Notification marked as read:', id);
     }
   },
 
@@ -228,7 +229,7 @@ const notifications = {
       this.saveToStorage();
       this.update(); // Update dropdown UI
       updateNotificationBadge(); // Update bell badge
-      console.log('All notifications marked as read');
+      // console.log('All notifications marked as read');
     }
   }
 };
