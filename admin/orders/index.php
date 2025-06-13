@@ -398,7 +398,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
         $phone = !empty($order['user_phone']) ? $order['user_phone'] : ($order['guest_phone'] ?? '-');
         $address = htmlspecialchars($order['delivery_address']);
         $status = ucfirst($order['status']);
-        $amount = '₦' . number_format($order['total_amount'], 2);
+        $amount = '£' . number_format($order['total_amount'], 2);
         $date = date('Y-m-d', strtotime($order['created_at']));
         $time = date('h:i A', strtotime($order['created_at']));
         ?>
@@ -447,7 +447,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
   $phone = !empty($order['user_phone']) ? $order['user_phone'] : ($order['guest_phone'] ?? '-');
   $address = htmlspecialchars($order['delivery_address']);
   $status = ucfirst($order['status']);
-  $amount = '₦' . number_format($order['total_amount'], 2);
+  $amount = '£' . number_format($order['total_amount'], 2);
   ?>
   
   <!-- View Modal -->
@@ -465,42 +465,43 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
         <div class="modal-body">
           <form>
 
-          <div class="row">
-            <div class="mb-3 col-md-6">
-            <label class="form-label fw-bold">Name:</label>
-            <input class="form-control" value="<?= htmlspecialchars($fullName) ?>" readonly>
-            </div>
-            <div class="mb-3 col-md-6">
-            <label class="form-label fw-bold">Email:</label>
-            <input class="form-control" value="<?= htmlspecialchars($email) ?>" readonly>
-            </div>
-            </div>
+  <div class="row">
+    <div class="mb-3 col-md-4">
+      <label class="form-label fw-bold">Name:</label>
+      <input class="form-control" value="<?= htmlspecialchars($fullName) ?>" readonly>
+    </div>
+    <div class="mb-3 col-md-4">
+      <label class="form-label fw-bold">Email:</label>
+      <input class="form-control" value="<?= htmlspecialchars($email) ?>" readonly>
+    </div>
+    <div class="mb-3 col-md-4">
+      <label class="form-label fw-bold">Phone:</label>
+      <input class="form-control" value="<?= htmlspecialchars($phone) ?>" readonly>
+    </div>
+  </div>
 
-            <div class="row">
-                <div class="mb-3 col-md-6">
-                <label class="form-label fw-bold">Phone:</label>
-                <input class="form-control" value="<?= htmlspecialchars($phone) ?>" readonly>
-                </div>
-                <div class="mb-3 col-md-6">
-                <label class="form-label fw-bold">Address:</label>
-                <input class="form-control" value="<?= htmlspecialchars($address) ?>" readonly>
-                </div>
-            </div>
+  <div class="row">
+    <div class="mb-3 col-md-6">
+      <label class="form-label fw-bold">Address:</label>
+      <input class="form-control" value="<?= htmlspecialchars($address) ?>" readonly>
+    </div>
 
-              <div class="row">
-                <div class="mb-3 col-md-6">
-                  <label class="form-label fw-bold">Grand Total(with shipping):</label>
-                    <input class="form-control" value="<?= htmlspecialchars($amount) ?>" readonly>
-                </div>
-                <div class="mb-3 col-md-6">
-                  <label class="form-label fw-bold">Status:</label>
-                    <input class="form-control" value="<?= htmlspecialchars($status) ?>" readonly>
-                </div>
-              </div>
-              
-      
+    <div class="mb-3 col-md-6">
+      <label class="form-label fw-bold">Status:</label>
+      <input class="form-control" value="<?= htmlspecialchars($status) ?>" readonly>
+    </div>
+    
+  </div>
 
-          </form>
+  <div class="row">
+    <div class="mb-3 col-md-12">
+      <label class="form-label fw-bold">Grand Total (with shipping):</label>
+      <input class="form-control" value="<?= htmlspecialchars($amount) ?>" readonly>
+    </div>
+  </div>
+
+</form>
+
           <h6 class="mt-4 fw-bold">Order Items</h6>
           <div class="table-responsive">
             <table class="table table-hover table-bordered align-middle">
@@ -522,8 +523,8 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
     <tr>
       <td><?= htmlspecialchars($item['item_name']) ?></td>
       <td><?= htmlspecialchars($item['quantity']) ?></td>
-      <td>₦<?= number_format($item['price'], 2) ?></td>
-      <td>₦<?= number_format($total, 2) ?></td>
+      <td>£<?= number_format($item['price'], 2) ?></td>
+      <td>£<?= number_format($total, 2) ?></td>
     </tr>
   <?php endforeach; ?>
 
@@ -534,7 +535,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
   <?php else: ?>
     <tr>
       <td colspan="3" class="text-end fw-bold">Sub Total:</td>
-      <td><strong>₦<?= number_format($grandTotal, 2) ?></strong></td>
+      <td><strong>£<?= number_format($grandTotal, 2) ?></strong></td>
     </tr>
   <?php endif; ?>
 </tbody>
