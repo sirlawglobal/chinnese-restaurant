@@ -293,6 +293,21 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
               <canvas id="ordersChart" width="400" height="200"></canvas>
             </div>
             <div class="grid-item">
+  <div class="flex justify-between align-center">
+    <h6>Orders Types</h6>
+    <div class="filter">
+      <strong class="flex align-center justify-content-xxl-between">
+        This Week
+        <svg class="icon caret"><use href="#caret-down"></use></svg>
+      </strong>
+      <div class="dropdown"></div>
+    </div>
+  </div>
+  <div class="orders flex column" id="orderTypesContainer">
+    <!-- Orders will be loaded here -->
+  </div>
+</div>
+            <!-- <div class="grid-item">
               <div class="flex justify-between align-center">
                 <h6>Orders Types</h6>
                 <div class="filter">
@@ -350,7 +365,7 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="table card">
   <div class="flex justify-between align-center">
@@ -613,9 +628,48 @@ $profilePicture = $_SESSION['user']['profile_picture'] ?? 'https://picsum.photos
   </symbol>
 </svg>
  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("fetch_order_types.php")
+    .then(res => res.json())
+    .then(data => {
 
+      console.log("Order Types Data:", data); // Debug: Log the fetched data
+      const container = document.getElementById("orderTypesContainer");
 
- </script>
+      data.forEach(item => {
+        const iconRef = {
+          'dine-in': '#dine',
+          'takeaway': '#fork',
+          'order': '#moped'
+        };
+
+        const lowerType = item.type.toLowerCase();
+        const icon = iconRef[lowerType] || '#moped';
+
+        container.innerHTML += `
+          <div class="order-type">
+            <div class="image">
+              <svg class="icon"><use href="${icon}"></use></svg>
+            </div>
+            <div class="details">
+              <div class="label">
+                <span>${item.type}</span>
+                <span>${item.percentage}%</span>
+                <span>${item.count}</span>
+              </div>
+              <div class="bar">
+                <div class="fill" style="width: ${item.percentage}%"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    })
+    .catch(err => {
+      console.error("Error loading order types:", err);
+    });
+});
+</script>
     <script>
 // Pass PHP variables to JavaScript
 const username = '<?php echo addslashes($first_name); ?>';

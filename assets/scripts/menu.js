@@ -304,6 +304,8 @@
             dishesGrid.innerHTML = "";
 
             category.items.forEach((item) => {
+
+              cosn
               const dishCard = document.createElement("article");
               dishCard.className = "dish";
 
@@ -364,36 +366,46 @@
                 ? backendUploadsUrl + item.image_url
                 : "/chinnese-restaurant/avarterdefault.jpg";
 
-              dishCard.innerHTML = `
-                <div class="dish__image">
-                  <img src="${imageSrc}" alt="${item.name}" />
-                </div>
-                <div class="dish__details">
-                  <h3 class="dish__name">${item.name}</h3>
-                  ${descriptionHTML}
-                  <div class="dish__info">
-                    ${optionsHTML || `
-                      <span class="dish__price">
-                        <svg class="icon"><use href="#tag"></use></svg>
-                        £${itemPrice.toFixed(2)}
-                      </span>`}
-                  </div>
-                </div>
-                <div class="dish__button">
-                  <button class="dish__add" data-item='${JSON.stringify({
-                    id: item.id,
-                    name: item.name,
-                    price: itemPrice,
-                    portion: itemPortion,
-                    categoryId: item.category_id,
-                  })}'>+</button>
-                  <button class="dish__review" data-item='${JSON.stringify({
-                    id: item.id,
-                    name: item.name,
-                    categoryName: category.name
-                  })}'>Add Review</button>
-                </div>
-              `;
+             dishCard.innerHTML = `
+  <div class="dish__image">
+    <img src="${imageSrc}" alt="${item.name}" />
+  </div>
+
+  <div class="dish__details"  style='border-bottom: 1px solid #ddd;margin-bottom: 9px; padding-bottom: 9px;'>
+    <h3 class="dish__name">${item.name}</h3>
+    ${descriptionHTML}
+  </div>
+
+  <div style="display: flex; gap: 0.5rem; align-items: end">
+    <div class="dish__info">
+      ${optionsHTML || `
+        <span class="dish__price">
+          <svg class="icon"><use href="#tag"></use></svg>
+          £${itemPrice.toFixed(2)}
+        </span>
+      `}
+    </div>
+
+    <div class="dish__button">
+      <button 
+        class="dish__add"
+        data-id="${item.id}"
+        data-name="${item.name}"
+        data-price="${itemPrice}"
+        data-portion="${itemPortion}"
+        data-category-id="${item.category_id}"
+      >+</button>
+
+      <button 
+        class="dish__review"
+        data-id="${item.id}"
+        data-name="${item.name}"
+        data-category-name="${category.name}"
+      >Add Review</button>
+    </div>
+  </div>
+`;
+
 
               dishesGrid.appendChild(dishCard);
             });
@@ -424,6 +436,9 @@
       cartButton.appendChild(cartBadge);
 
       let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+      console.log("Initial cart items:", cartItems);
 
       function updateCartBadge() {
         const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);

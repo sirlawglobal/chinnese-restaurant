@@ -15,8 +15,9 @@ $full_name = filter_input(INPUT_POST, 'full_name', FILTER_SANITIZE_STRING);
 $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
 $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
-$order_type = filter_input(INPUT_POST, 'order_type', FILTER_SANITIZE_STRING);
+// $order_type = filter_input(INPUT_POST, 'order_type', FILTER_SANITIZE_STRING);
 $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_STRING);
+ $order_type = filter_input(INPUT_POST, 'order_type', FILTER_SANITIZE_STRING);
 $items = $_POST['items'] ?? [];
 
 if (!$full_name || !$email || !$address || !$order_type || !$status || empty($items)) {
@@ -29,12 +30,12 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit();
 }
 
-$valid_order_types = ['delivery', 'pickup', 'dinein'];
-$valid_statuses = ['pending', 'processing', 'completed', 'cancelled'];
-if (!in_array($order_type, $valid_order_types) || !in_array($status, $valid_statuses)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid order type or status.']);
-    exit();
-}
+// $valid_order_types = ['Online', 'Telephone', 'Walk-in'];
+// $valid_statuses = ['pending', 'processing', 'completed', 'cancelled'];
+// if (!in_array($order_type, $valid_order_types) || !in_array($status, $valid_statuses)) {
+//     echo json_encode(['success' => false, 'message' => 'Invalid order type or status.']);
+//     exit();
+// }
 
 $total_amount = 0;
 $validated_items = [];
@@ -48,6 +49,7 @@ try {
         $price = filter_var($item['price'], FILTER_VALIDATE_FLOAT);
         $quantity = filter_var($item['quantity'], FILTER_VALIDATE_INT);
         $total = filter_var($item['total'], FILTER_VALIDATE_FLOAT);
+       
 
 
 
@@ -87,16 +89,32 @@ $tx_ref = 'ADM_ :TRF_'. strtoupper(substr(uniqid('', true), -7));
 
     $db->beginTransaction();
 
-    $sql = "INSERT INTO orders (
-        user_id, tx_ref, delivery_address, order_notes, order_type, schedule_date, schedule_time,
-        total_amount, status, transaction_id, guest_email, guest_name, guest_phone, created_at,
-        user_email, user_name, user_phone
-    ) VALUES (
-        NULL, ?, ?, '', ?, NULL, NULL, ?, ?, NULL, ?, ?, ?, NOW(), NULL, NULL, NULL
-    )";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$tx_ref, $address, $order_type, $total_amount, $status, $email, $full_name, $phone]);
-    $order_id = $db->lastInsertId();
+    // $sql = "INSERT INTO orders (
+    //     user_id, tx_ref, delivery_address, order_notes, order_type, schedule_date, schedule_time,
+    //     total_amount, status, transaction_id, guest_email, guest_name, guest_phone, created_at,
+    //     user_email, user_name, user_phone
+    // ) VALUES (
+    //     NULL, ?, ?, '', ?, NULL, NULL, ?, ?, NULL, ?, ?, ?, NOW(), NULL, NULL, NULL
+    // )";
+    // $stmt = $db->prepare($sql);
+    // $stmt->execute([$tx_ref, $address, $order_type, $total_amount, $status, $email, $full_name, $phone]);
+    // $order_id = $db->lastInsertId();
+
+
+
+ $sql = "INSERT INTO orders (
+    user_id, tx_ref, delivery_address, order_notes, order_type, schedule_date, schedule_time,
+    total_amount, status, transaction_id, guest_email, guest_name, guest_phone, created_at,
+    user_email, user_name, user_phone, order_type2
+) VALUES (
+    NULL, ?, ?, '', 'now', NULL, NULL, ?, ?, NULL, ?, ?, ?, NOW(), NULL, NULL, NULL, ?
+)";
+
+$stmt = $db->prepare($sql);
+$stmt->execute([$tx_ref, $address, $total_amount, $status, $email, $full_name, $phone, $order_type]);
+
+
+  $order_id = $db->lastInsertId();
 
     // $sql = "INSERT INTO order_items (order_id, item_name,'portion', category_id, price, quantity) VALUES (?, ?, '', ?, ?, ?)";
     // $stmt = $db->prepare($sql);

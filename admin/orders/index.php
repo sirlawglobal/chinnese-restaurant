@@ -781,7 +781,7 @@ fetch('add_order.php', {
             alert(data.message);
             form.reset();
             bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
-            location.reload();
+            // location.reload();
         } else {
             alert(data.message);
         }

@@ -212,7 +212,7 @@
             const cartItem = document.createElement("div");
             cartItem.className = "cart__item";
             cartItem.innerHTML = `
-              <p class="dish__origin">from <span>${DOMPurify.sanitize(categoryName)}</span></p>
+              <p class="dish__origin">Category: <span>${DOMPurify.sanitize(categoryName)}</span></p>
               <div class="flex justify-between align-center">
                 <div class="item__details">
                   <h4 class="item__title">${DOMPurify.sanitize(item.name)} (${DOMPurify.sanitize(item.portion)})</h4>
