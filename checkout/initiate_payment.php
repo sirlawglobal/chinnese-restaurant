@@ -120,6 +120,7 @@ function send_order_email($recipient_email, $recipient_name, $order_id, $order_d
         <p><strong>Transaction Reference:</strong> {$order_data['tx_ref']}</p>
         <p><strong>Delivery Address:</strong> {$order_data['delivery_address']}</p>
         <p><strong>Order Type:</strong> " . ucfirst($order_data['order_type']) . "</p>
+        <p><strong>Delivery Method:</strong> " . ucfirst($order_data['delivery_method']) . "</p>
         {$schedule_info}
         <p><strong>Total Amount:</strong> £" . number_format($order_data['total_amount'], 2) . "</p>
         <p><strong>Items:</strong></p>
@@ -171,8 +172,10 @@ $user_email = trim($input['user_email'] ?? '');
 $user_name = trim(strip_tags($input['user_name'] ?? ''));
 $user_phone = trim(strip_tags($input['user_phone'] ?? ''));
 $user_id = trim(strip_tags($input['user_id'] ?? ''));
+$delivery_method = trim(strip_tags($input['delivery_method'] ?? 'delivery'));
 
 $guest_name = $user_id ? '' : 'Guest User';
+$order_type2 = 'online';
 
 // Validate order_type
 if (!in_array($order_type, ['now', 'schedule'])) {
@@ -181,7 +184,7 @@ if (!in_array($order_type, ['now', 'schedule'])) {
 }
 
 // Validate input
-if (empty($cart) || $total_amount <= 0 || empty($delivery_address) || empty($tx_ref)) {
+if (empty($cart) || $total_amount <= 0 || ($delivery_method === 'delivery' && empty($delivery_address))) {
     echo json_encode(['success' => false, 'message' => 'Invalid order data']);
     exit;
 }
@@ -201,13 +204,13 @@ try {
             `order_type`, `schedule_date`, `schedule_time`, 
             `total_amount`, `status`, `transaction_id`, 
             `guest_email`, `guest_name`, `guest_phone`, 
-            `user_email`, `user_name`, `user_phone`, `created_at`
+            `user_email`, `user_name`, `user_phone`, `created_at`, `order_type2`
         ) VALUES (
             :user_id, :tx_ref, :delivery_address, :order_notes, 
             :order_type, :schedule_date, :schedule_time, 
             :total_amount, 'pending', NULL, 
             :guest_email, :guest_name, :guest_phone, 
-            :user_email, :user_name, :user_phone, NOW()
+            :user_email, :user_name, :user_phone, NOW(), :order_type2
         )
     ");
 
@@ -225,7 +228,8 @@ try {
         ':guest_phone' => $guest_phone,
         ':user_email' => $user_email,
         ':user_name' => $user_name,
-        ':user_phone' => $user_phone
+        ':user_phone' => $user_phone,
+        ':order_type2' => $order_type2
     ]);
 
     $order_id = $pdo->lastInsertId();
@@ -276,6 +280,7 @@ try {
         'order_id' => $order_id,
         'total_amount' => number_format($total_amount, 2),
         'order_type' => $order_type,
+        'order_type2' => $order_type2,
         'timestamp' => date('Y-m-d H:i:s')
     ];
 
@@ -304,6 +309,7 @@ try {
             'schedule_date' => $schedule_date,
             'schedule_time' => $schedule_time,
             'total_amount' => $total_amount,
+            'delivery_method' => $delivery_method
         ];
 
         $mail_result = send_order_email($recipient_email, $recipient_name, $order_id, $order_data, $cart);

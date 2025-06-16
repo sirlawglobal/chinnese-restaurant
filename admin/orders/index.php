@@ -656,9 +656,9 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
                   <div class="mb-3 col-md-6">
                     <label class="form-label fw-bold">Order Type:</label>
                     <select name="order_type" class="form-control" required>
-                      <option value="delivery">Delivery</option>
-                      <option value="pickup">Pickup</option>
-                      <option value="dinein">Dine-in</option>
+                      <option value="Online">Online</option>
+                      <option value="Telephone">Telephone </option>
+                      <option value="Walk-in">Walk-in</option>
                     </select>
                   </div>
                   <div class="mb-3 col-md-6">
@@ -781,7 +781,7 @@ fetch('add_order.php', {
             alert(data.message);
             form.reset();
             bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
-            location.reload();
+            // location.reload();
         } else {
             alert(data.message);
         }

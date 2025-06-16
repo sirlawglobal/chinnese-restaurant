@@ -201,18 +201,20 @@
           // Helper function to get category name by id
           function getCategoryNameById(id) {
             const category = categories.find(cat => cat.id === id);
-            return category ? category.name : "Unknown";
+            return category ? category.name : "Set Menu";
+            // return category ? category.name : "Unknown";
           }
 
           // Render items in cart
           cartItems.forEach((item, index) => {
+            console.log("Rendering item111:", item);
             const categoryName = getCategoryNameById(item.category);
 
             // Render in cart
             const cartItem = document.createElement("div");
             cartItem.className = "cart__item";
             cartItem.innerHTML = `
-              <p class="dish__origin">from <span>${DOMPurify.sanitize(categoryName)}</span></p>
+              <p class="dish__origin">Category: <span>${DOMPurify.sanitize(categoryName)}</span></p>
               <div class="flex justify-between align-center">
                 <div class="item__details">
                   <h4 class="item__title">${DOMPurify.sanitize(item.name)} (${DOMPurify.sanitize(item.portion)})</h4>
