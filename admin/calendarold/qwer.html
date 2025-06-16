@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Scheduler</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        overflow-x: hidden;
+      }
+
+      .container {
+        display: flex;
+        width: 200vw;
+        height: 100vh;
+        transition: transform 0.5s ease;
+      }
+
+      .schedule-details,
+      .new-schedule {
+        width: 100vw;
+        height: 100vh;
+        overflow-y: auto;
+        background-color: white;
+        position: relative;
+      }
+
+      /* Schedule Details Styles */
+      .sidebar {
+        width: 20%;
+        height: 100vh;
+        background-color: white;
+        border-right: 1px solid #eee;
+        padding: 20px;
+        position: fixed;
+        overflow-y: auto;
+      }
+
+      .content {
+        margin-left: 20%;
+        padding: 20px;
+      }
+
+      .schedule-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 0 20px;
+      }
+
+      h2 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .schedule-item {
+        margin-bottom: 40px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+      }
+
+      .schedule-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .menu-updates-tag {
+        background-color: #ffe8d6;
+        color: #9e6a35;
+        border-radius: 15px;
+        padding: 6px 12px;
+        font-size: 12px;
+        display: inline-block;
+        margin-bottom: 15px;
+      }
+
+      .schedule-details-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #555;
+      }
+
+      .schedule-details-row svg {
+        margin-right: 8px;
+        color: #888;
+      }
+
+      .team-section {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      .team-title {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 10px;
+      }
+
+      .team-members {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .team-member {
+        display: flex;
+        align-items: center;
+        background-color: #f5f5f5;
+        border-radius: 20px;
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        margin-right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: white;
+        background-color: #555;
+      }
+
+      .menu-team {
+        display: flex;
+        align-items: center;
+        background-color: #f5f5f5;
+        border-radius: 20px;
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .team-count {
+        background-color: #ddd;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        margin-left: 8px;
+      }
+
+      .notes-section {
+        margin-top: 20px;
+      }
+
+      .notes-title {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 10px;
+      }
+
+      .notes-content {
+        font-size: 13px;
+        color: #333;
+        line-height: 1.4;
+      }
+
+      .options-btn {
+        background: transparent;
+        border: none;
+        font-size: 18px;
+        color: #555;
+        cursor: pointer;
+      }
+
+      /* Calendar Styles */
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10px;
+        margin-bottom: 20px;
+      }
+
+      .calendar-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .calendar-nav {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .calendar-nav-btn {
+        background: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #555;
+      }
+
+      .calendar-title {
+        font-weight: 600;
+        min-width: 180px;
+        text-align: center;
+      }
+
+      .view-selector {
+        display: flex;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .view-option {
+        padding: 6px 12px;
+        background: white;
+        border: none;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .view-option.active {
+        background: #fb651e;
+        color: white;
+      }
+
+      .calendar-filter {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+
+      .filter-tag {
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+      }
+
+      .filter-tag.meetings {
+        background-color: #ffeee5;
+        color: #fb651e;
+      }
+
+      .filter-tag.menu {
+        background-color: #fff2e5;
+        color: #fb951e;
+      }
+
+      .filter-tag.inventory {
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      .filter-tag.events {
+        background-color: #e5e5e5;
+        color: #666;
+      }
+
+      .filter-count {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        margin-left: 8px;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 15px;
+      }
+
+      .calendar-day-header {
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        padding-bottom: 10px;
+      }
+
+      .calendar-day {
+        min-height: 120px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 10px;
+        position: relative;
+      }
+
+      .day-number {
+        font-size: 16px;
+        color: #888;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .day-number.today {
+        background-color: #fb651e;
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .event {
+        border-radius: 8px;
+        padding: 8px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: white;
+      }
+
+      .event-time {
+        font-size: 10px;
+        margin-top: 5px;
+        opacity: 0.8;
+      }
+
+      .event.new-dish {
+        background-color: #fb651e;
+      }
+
+      .event.team-check {
+        background-color: #ffb980;
+      }
+
+      .event.inventory {
+        background-color: #1e1e1e;
+      }
+
+      .event-people {
+        display: flex;
+        margin-top: 8px;
+      }
+
+      .event-people .avatar {
+        width: 18px;
+        height: 18px;
+        font-size: 8px;
+        margin-right: -5px;
+        border: 1px solid white;
+      }
+
+      /* Week View Styles */
+      .week-view {
+        display: grid;
+        grid-template-columns: 60px repeat(7, 1fr);
+        gap: 10px;
+      }
+
+      .week-time-column {
+        display: grid;
+        grid-template-rows: repeat(24, 60px);
+      }
+
+      .week-time-slot {
+        font-size: 12px;
+        color: #888;
+        text-align: right;
+        padding-right: 5px;
+        position: relative;
+        top: -10px;
+      }
+
+      .week-day-column {
+        display: grid;
+        grid-template-rows: 30px repeat(24, 60px);
+      }
+
+      .week-day-header {
+        text-align: center;
+        font-weight: 500;
+        padding: 5px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .week-day-cell {
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+      }
+
+      .week-event {
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        border-radius: 4px;
+        padding: 4px;
+        font-size: 11px;
+        color: white;
+        overflow: hidden;
+      }
+
+      /* Day View Styles */
+      .day-view {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        gap: 10px;
+      }
+
+      .day-time-column {
+        display: grid;
+        grid-template-rows: repeat(24, 60px);
+      }
+
+      .day-main-column {
+        display: grid;
+        grid-template-rows: 30px repeat(24, 60px);
+      }
+
+      .day-header {
+        text-align: center;
+        font-weight: 500;
+        padding: 5px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .day-time-slot {
+        font-size: 12px;
+        color: #888;
+        text-align: right;
+        padding-right: 5px;
+        position: relative;
+        top: -10px;
+      }
+
+      .day-cell {
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+      }
+
+      .day-event {
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        border-radius: 4px;
+        padding: 4px;
+        font-size: 11px;
+        color: white;
+        overflow: hidden;
+      }
+
+      /* Year View Styles */
+      .year-view {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+      }
+
+      .year-month {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .year-month-title {
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+
+      .year-month-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+      }
+
+      .year-day-header {
+        font-size: 10px;
+        text-align: center;
+        color: #888;
+      }
+
+      .year-day {
+        font-size: 10px;
+        text-align: center;
+        padding: 3px;
+      }
+
+      .year-day.today {
+        background-color: #fb651e;
+        color: white;
+        border-radius: 50%;
+      }
+
+      .year-day.has-events::after {
+        content: '';
+        display: block;
+        width: 4px;
+        height: 4px;
+        background-color: #fb651e;
+        border-radius: 50%;
+        margin: 2px auto 0;
+      }
+
+      /* Month selector */
+      .month-selector {
+        position: absolute;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        z-index: 100;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        width: 250px;
+      }
+
+      .month-option {
+        padding: 5px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+
+      .month-option:hover {
+        background-color: #f5f5f5;
+      }
+
+      .month-option.active {
+        background-color: #fb651e;
+        color: white;
+      }
+
+      /* New Schedule Styles */
+      .new-schedule {
+        padding: 20px;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .form-title {
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .close-btn {
+        background: transparent;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-size: 14px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+      }
+
+      .date-picker {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        background-color: white;
+        cursor: pointer;
+      }
+
+      .date-picker svg {
+        margin-right: 8px;
+        color: #888;
+      }
+
+      .time-picker {
+        display: flex;
+        align-items: center;
+      }
+
+      .time-input {
+        flex-grow: 1;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px 0 0 8px;
+        font-size: 16px;
+      }
+
+      .time-ampm {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-left: none;
+        border-radius: 0 8px 8px 0;
+        background-color: white;
+        display: flex;
+        align-items: center;
+      }
+
+      .time-ampm svg {
+        margin-left: 8px;
+        color: #888;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 15px;
+        background-color: #fb651e;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      /* Helper for the sliding animation */
+      .slide-left {
+        transform: translateX(-100vw);
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 100%;
+          position: relative;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid #eee;
+        }
+
+        .content {
+          margin-left: 0;
+        }
+
+        .calendar-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .calendar-controls {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .calendar-filter {
+          width: 100%;
+          margin-top: 10px;
+        }
+
+        .week-view, .day-view {
+          grid-template-columns: 40px repeat(7, 1fr);
+        }
+
+        .week-time-slot, .day-time-slot {
+          font-size: 10px;
+        }
+
+        .year-view {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .year-view {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <!-- Schedule Details View -->
+      <div class="schedule-details" id="scheduleDetails">
+        <div class="sidebar">
+          <h2>Schedule Details</h2>
+
+          <div class="schedule-item">
+            <div class="schedule-title">Weekly Specials Review</div>
+            <div class="menu-updates-tag">Menu Updates</div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2V5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M16 2V5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M3.5 9.09H20.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span id="current-date-display">Apr 7, 2025</span>
+            </div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 8V13"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 22C7.17 22 3.25 18.08 3.25 13.25C3.25 8.42 7.17 4.5 12 4.5C16.83 4.5 20.75 8.42 20.75 13.25"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 2H15"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              3:00 PM - 4:00 PM
+            </div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 12V15"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7.5 10.5H16.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 18V7.8C7 6.11984 7 5.27976 7.32698 4.63803C7.6146 4.07354 8.07354 3.6146 8.63803 3.32698C9.27976 3 10.1198 3 11.8 3H16.2C17.8802 3 18.7202 3 19.362 3.32698C19.9265 3.6146 20.3854 4.07354 20.673 4.63803C21 5.27976 21 6.11984 21 7.8V12.2C21 13.8802 21 14.7202 20.673 15.362C20.3854 15.9265 19.9265 16.3854 19.362 16.673C18.7202 17 17.8802 17 16.2 17H7Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 17V19.5C7 20.6046 6.10457 21.5 5 21.5V21.5C3.89543 21.5 3 20.6046 3 19.5V17H7Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Kitchen
+            </div>
+
+            <div class="team-section">
+              <div class="team-title">Team</div>
+              <div class="team-members">
+                <div class="team-member">
+                  <div class="avatar">HC</div>
+                  Head Chef
+                </div>
+                <div class="team-member">
+                  <div class="avatar">SC</div>
+                  Sous Chef
+                </div>
+              </div>
+              <div class="menu-team">
+                <div class="avatar">MD</div>
+                Menu Development Team
+                <div class="team-count">+3</div>
+              </div>
+            </div>
+
+            <div class="notes-section">
+              <div class="notes-title">Notes</div>
+              <div class="notes-content">
+                Finalize weekly specials and update menu options for coming
+                weeks.
+              </div>
+            </div>
+          </div>
+
+          <div class="schedule-item">
+            <div class="schedule-title">Weekly Specials Review</div>
+            <div class="menu-updates-tag">Menu Updates</div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2V5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M16 2V5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M3.5 9.09H20.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Apr 7, 2025
+            </div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 8V13"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 22C7.17 22 3.25 18.08 3.25 13.25C3.25 8.42 7.17 4.5 12 4.5C16.83 4.5 20.75 8.42 20.75 13.25"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 2H15"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              3:00 PM - 4:00 PM
+            </div>
+
+            <div class="schedule-details-row">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 12V15"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7.5 10.5H16.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 18V7.8C7 6.11984 7 5.27976 7.32698 4.63803C7.6146 4.07354 8.07354 3.6146 8.63803 3.32698C9.27976 3 10.1198 3 11.8 3H16.2C17.8802 3 18.7202 3 19.362 3.32698C19.9265 3.6146 20.3854 4.07354 20.673 4.63803C21 5.27976 21 6.11984 21 7.8V12.2C21 13.8802 21 14.7202 20.673 15.362C20.3854 15.9265 19.9265 16.3854 19.362 16.673C18.7202 17 17.8802 17 16.2 17H7Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 17V19.5C7 20.6046 6.10457 21.5 5 21.5V21.5C3.89543 21.5 3 20.6046 3 19.5V17H7Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Kitchen
+            </div>
+          </div>
+        </div>
+
+        <div class="content">
+          <div class="calendar-header">
+            <div class="calendar-controls">
+              <div class="calendar-nav">
+                <button class="calendar-nav-btn" id="prev-period">&lt;</button>
+                <div class="calendar-title" id="calendar-title">May 2025</div>
+                <button class="calendar-nav-btn" id="next-period">&gt;</button>
+                <button class="calendar-nav-btn" id="today-btn">Today</button>
+              </div>
+              <div class="view-selector">
+                <button class="view-option" data-view="day">Day</button>
+                <button class="view-option" data-view="week">Week</button>
+                <button class="view-option active" data-view="month">Month</button>
+                <button class="view-option" data-view="year">Year</button>
+              </div>
+            </div>
+            <div class="calendar-filter">
+              <div class="filter-tag meetings">
+                <span>Meetings</span>
+                <span class="filter-count">6</span>
+              </div>
+              <div class="filter-tag menu">
+                <span>Menu Updates</span>
+                <span class="filter-count">4</span>
+              </div>
+              <div class="filter-tag inventory">
+                <span>Inventory Checks</span>
+                <span class="filter-count">5</span>
+              </div>
+              <div class="filter-tag events">
+                <span>Events</span>
+                <span class="filter-count">5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Month View -->
+          <div id="month-view">
+            <div class="calendar-grid" id="calendar-grid">
+              <!-- Dynamically generated -->
+            </div>
+          </div>
+
+          <!-- Week View -->
+          <div id="week-view" class="hidden">
+            <div class="week-view" id="week-view-grid">
+              <!-- Dynamically generated -->
+            </div>
+          </div>
+
+          <!-- Day View -->
+          <div id="day-view" class="hidden">
+            <div class="day-view" id="day-view-grid">
+              <!-- Dynamically generated -->
+            </div>
+          </div>
+
+          <!-- Year View -->
+          <div id="year-view" class="hidden">
+            <div class="year-view" id="year-view-grid">
+              <!-- Dynamically generated -->
+            </div>
+          </div>
+
+          <button id="addScheduleBtn" class="submit-btn">
+            Add New Schedule
+          </button>
+        </div>
+      </div>
+
+      <!-- New Schedule Form -->
+      <div class="new-schedule" id="newSchedule">
+        <div class="form-header">
+          <h2 class="form-title">New Schedule</h2>
+          <button class="close-btn" id="closeNewSchedule">&times;</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input type="text" class="form-control" id="scheduleTitle" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <input type="text" class="form-control" id="scheduleCategory" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <div class="date-picker" id="scheduleDatePicker">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 2V5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M16 2V5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M3.5 9.09H20.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span>Select date</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Time</label>
+          <div class="time-picker">
+            <input
+              type="text"
+              class="time-input"
+              id="scheduleTime"
+              value="12:32"
+            />
+            <div class="time-ampm">
+              <span>PM</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 9L12 15L18 9"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Team</label>
+          <input type="text" class="form-control" id="scheduleTeam" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Venue</label>
+          <input type="text" class="form-control" id="scheduleVenue" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <textarea class="form-control" id="scheduleNotes" rows="3"></textarea>
+        </div>
+
+        <button class="submit-btn" id="createScheduleBtn">Create</button>
+      </div>
+    </div>
+
+    <script>
+      // DOM Elements
+      const container = document.getElementById("container");
+      const scheduleDetails = document.getElementById("scheduleDetails");
+      const newSchedule = document.getElementById("newSchedule");
+      const addScheduleBtn = document.getElementById("addScheduleBtn");
+      const closeNewScheduleBtn = document.getElementById("closeNewSchedule");
+      const createScheduleBtn = document.getElementById("createScheduleBtn");
+      const currentDateDisplay = document.getElementById("current-date-display");
+      
+      // Calendar controls
+      const prevPeriodBtn = document.getElementById("prev-period");
+      const nextPeriodBtn = document.getElementById("next-period");
+      const todayBtn = document.getElementById("today-btn");
+      const calendarTitle = document.getElementById("calendar-title");
+     

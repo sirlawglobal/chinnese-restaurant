@@ -1,0 +1,42 @@
+.action-trigger {
+  cursor: pointer;
+  font-size: 18px;
+  color: #007bff;
+}
+
+.action-block {
+  display: none; /* Initially hidden */
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  z-index: 2000; /* Increased to be above modals */
+  flex-direction: row;
+  gap: 5px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+  background-color: #f0f0f0;
+}
+
+/* Ensure table cells allow absolute positioning */
+#inventory-table td {
+  position: relative;
+}
+
+/* Prevent wrapper from hiding the block */
+#inventory-table_wrapper {
+  position: relative;
+  overflow: visible;
+}

@@ -13,10 +13,10 @@ if (!$chatId) {
     exit;
 }
 
-$query = "SELECT cm.id, cm.text, cm.is_admin, DATE_FORMAT(cm.created_at, '%h:%i %p') AS time
+$query = "SELECT cm.id, cm.text, cm.is_admin, DATE_FORMAT(cm.created_at, '%Y-%m-%d %h:%i %p') AS time
           FROM chat_messages cm
           WHERE cm.message_id = :chatId
-          ORDER BY cm.created_at";
+          ORDER BY cm.created_at ASC";
 $params = ['chatId' => $chatId];
 $messages = db_query($query, $params, 'assoc');
 

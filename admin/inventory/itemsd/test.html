@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Table with Dynamic Modal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            padding: 20px;
+            position: relative; /* Needed for absolute positioning of the modal */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status.available {
+            background-color: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status.low {
+            background-color: #fee2e2;
+            color: #ef4444;
+        }
+
+        .progress-bar-container {
+            background-color: #f3f4f6;
+            border-radius: 0.375rem;
+            height: 0.5rem;
+            overflow: hidden;
+            margin-bottom: 0.3rem;
+        }
+
+        .progress-bar {
+            background-color: #3b82f6;
+            height: 100%;
+            border-radius: 0.375rem;
+        }
+
+        .progress-bar.low {
+            background-color: #ef4444;
+        }
+
+        .action button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s ease-in-out;
+            margin-right: 0.5rem;
+        }
+
+        .action button:last-child {
+            margin-right: 0;
+        }
+
+        .reorder-button {
+            background-color: #f97316;
+            color: #fff;
+        }
+
+        .reorder-button:hover {
+            background-color: #ea580c;
+        }
+
+        .update-stock-button {
+            background-color: #22c55e;
+            color: #fff;
+        }
+
+        .update-stock-button:hover {
+            background-color: #16a34a;
+        }
+
+        #action-modal {
+            position: absolute; /* Positioned relative to the body */
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            width: 300px; /* Adjust width as needed */
+            z-index: 10; /* Ensure it's above other elements */
+            display: none; /* Hidden by default */
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+        }
+
+        .modal-close-button {
+            color: #6b7280;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .modal-close-button:hover {
+            color: #374151;
+        }
+
+        .modal-form-group {
+            margin-bottom: 1rem;
+        }
+
+        .modal-form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+            color: #374151;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            outline: none;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .modal-form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .modal-action-button {
+            background-color: #3b82f6;
+            color: #fff;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .modal-action-button:hover {
+            background-color: #2563eb;
+        }
+
+        .modal-action-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <table id="inventory-table" class="display">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Item</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Qty in Stock</th>
+                <th>Qty in Reorder</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>Fresh Salmon</td>
+                <td>Food Ingredients</td>
+                <td><span class="status available">Available</span></td>
+                <td class="stock-level" data-stock="45" data-reorder="20">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 69.23%"></div>
+                    </div>
+                    45
+                </td>
+                <td>20</td>
+                <td class="action">
+                    <button class="reorder-button">Reorder</button>
+                    <button class="update-stock-button">Update Stock</button>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>Fresh Salmon</td>
+                <td>Food Ingredients</td>
+                <td><span class="status low">Low</span></td>
+                <td class="stock-level" data-stock="10" data-reorder="50">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar low" style="width: 16.67%"></div>
+                    </div>
+                    10
+                </td>
+                <td>50</td>
+                <td class="action">
+                    <button class="reorder-button">Reorder</button>
+                    <button class="update-stock-button">Update Stock</button>
+                </td>
+            </tr>
+            </tbody>
+    </table>
+
+    <div id="action-modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Update Item</h2>
+            <button id="modal-close-button" class="modal-close-button">&times;</button>
+        </div>
+        <form id="modal-form" class="modal-form">
+            <div class="modal-form-group">
+                <label for="modal-item-name" class="modal-form-label">Item Name</label>
+                <input type="text" id="modal-item-name" class="modal-form-input" readonly>
+            </div>
+            <div class="modal-form-group">
+                <label for="modal-new-stock" class="modal-form-label">New Stock Quantity</label>
+                <input type="number" id="modal-new-stock" class="modal-form-input">
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="modal-action-button">Update</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const actionButtons = document.querySelectorAll('.action button');
+        const modal = document.getElementById('action-modal');
+        const modalTitle = modal.querySelector('.modal-title');
+        const modalItemName = modal.querySelector('#modal-item-name');
+        const modalForm = modal.querySelector('#modal-form');
+        const modalCloseButton = document.getElementById('modal-close-button');
+
+        let currentRow; // To keep track of the row being updated
+
+        actionButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                currentRow = button.closest('tr');
+                const itemName = currentRow.querySelector('td:nth-child(2)').textContent;
+                const actionType = button.textContent;
+
+                modalTitle.textContent = `${actionType} for ${itemName}`;
+                modalItemName.value = itemName;
+
+                // Position the modal below the button
+                const buttonRect = button.getBoundingClientRect();
+                const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                modal.style.top = (buttonRect.bottom + scrollTop + 5) + 'px';
+                modal.style.left = buttonRect.left + 'px';
+                modal.style.display = 'block';
+            });
+        });
+
+        modalCloseButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (currentRow) {
+                const itemName = currentRow.querySelector('td:nth-child(2)').textContent;
+                const newStock = modal.querySelector('#modal-new-stock').value;
+                alert(`Row for "${itemName}" updated with stock: ${newStock}`);
+                modal.style.display = 'none';
+                // In a real application, you would update the table data here
+            }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (modal.style.display === 'block' && !modal.contains(event.target) && !Array.from(actionButtons).includes(event.target)) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>

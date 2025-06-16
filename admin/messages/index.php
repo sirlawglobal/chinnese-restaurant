@@ -1,3 +1,14 @@
+
+    <?php
+require_once __DIR__ . '/../../BackEnd/config/init.php';
+UserSession::requireLogin(); // Restrict page access
+UserSession::requireRole(['staff', 'admin', 'super_admin']);
+$first_name = UserSession::getFirstName(); // Get user's first name
+$userRole = UserSession::get('role');
+$profilePicture = UserSession::getProfilePicture();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,6 +24,65 @@
     />
   </head>
   <body class="flex">
+
+<style>
+    /* Existing styles remain unchanged */
+    .chat-date-header {
+        text-align: center;
+        margin: 15px 0;
+        font-style: italic;
+        color: #666;
+        font-size: 0.9em;
+    }
+
+    .message-incoming {
+        text-align: left;
+      
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 10px;
+        display: inline-block;
+        max-width: 70%;
+        position: relative;
+    }
+
+    .message-outgoing {
+        text-align: right;
+        
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 10px;
+        display: inline-block;
+        max-width: 70%;
+        position: relative;
+    }
+
+    .message-content {
+        display: block;
+        word-wrap: break-word;
+        margin-bottom: 5px;
+    }
+
+    .message-time {
+        font-size: 0.7em;
+        color: #888;
+        text-align: right;
+        display: block;
+    }
+
+    .chat-item-avatar {
+        width: 24px;
+        height: 24px;
+        background: #ff9800;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 24px;
+        margin-right: 10px;
+        display: inline-block;
+        vertical-align: top;
+    }
+</style>
     <main>
       <div class="content flex">
         <div class="inner-content flex">
@@ -31,7 +101,7 @@
                 </div>
               </div>
               <div class="chat-list__header-actions">
-                <button class="chat-list__header-actions__button">
+                <!-- <button class="chat-list__header-actions__button">
                   <svg class="icon" title="Filter chats">
                     <use href="#fader"></use>
                   </svg>
@@ -40,7 +110,7 @@
                   <svg class="icon" title="Add new chat">
                     <use href="#add"></use>
                   </svg>
-                </button>
+                </button> -->
               </div>
             </div>
             <div class="chat-items" id="chatItems">
@@ -68,24 +138,7 @@
                   </div>
                 </div>
                 <div class="chat-header-actions">
-                  <button class="chat-header-actions_button">
-                    <svg class="icon" title="Voice call">
-                      <use href="#phone"></use>
-                    </svg>
-                  </button>
-                  <button class="chat-header-actions_button">
-                    <svg class="icon" title="Video call">
-                      <use href="#video"></use>
-                    </svg>
-                  </button>
-                  <button class="chat-header-actions_button">
-                    <svg class="icon" title="Sidebar Menu">
-                      <use href="#sidebar-menu"></use>
-                    </svg>
-                  </button>
-                  <svg class="icon" title="Menu">
-                    <use href="#dots"></use>
-                  </svg>
+                  
                 </div>
               </div>
 
@@ -152,6 +205,12 @@
         </div>
       </div>
     </main>
+ <script>
+
+const username = '<?php echo addslashes($first_name); ?>';
+const userRole = '<?php echo addslashes($userRole); ?>';
+const profilePicture = '<?php echo addslashes($profilePicture); ?>';
+</script>
     <script src="../scripts/components.js"></script>
     <script src="../scripts/messages.js"></script>
   </body>

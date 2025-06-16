@@ -6,6 +6,15 @@ define('DB_NAME', 'chinesse_restaurant');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('ROOT', 'http://localhost/chinnese-restaurant/');
+
+
+// define('DB_HOST', 'localhost');
+// define('DB_NAME', 'dgn128_chinese');
+// define('DB_USER', 'dgn128_SirlawDev');
+// define('DB_PASS', '~N#8[OaHegr)');
+// define('ROOT', 'http://dgn128.pro/chinnese-restaurant/');
+
+
 // Global DB state for query diagnostics
 $GLOBALS['DB_STATE'] = [
     'affected_rows'   => 0,
@@ -93,7 +102,12 @@ function db_query(string $query, array $data = [], string $data_type = 'object')
 function getCategories($asObjects = false) {
     $dataType = $asObjects ? 'object' : 'assoc';
     // Use your db_query helper to get categories from the table `categories`
-    return db_query("SELECT * FROM categories ORDER BY name ASC", [], $dataType);
+    return db_query("SELECT * FROM inves_categories ORDER BY name ASC", [], $dataType);
+}
+function getstock($asObjects = false) {
+    $dataType = $asObjects ? 'object' : 'assoc';
+    // Use your db_query helper to get categories from the table `categories`
+    return db_query("SELECT id, name FROM 	stock ORDER BY name ASC", [], $dataType);
 }
 
 // Utility function to handle file upload
@@ -115,6 +129,15 @@ function uploadImage($file) {
 }
 
 // Mail Settings
+// if (!defined('MAIL_HOST'))         define('MAIL_HOST', 'smtp.gmail.com');
+// if (!defined('MAIL_PORT'))         define('MAIL_PORT', 587);
+// if (!defined('MAIL_USERNAME'))     define('MAIL_USERNAME', 'charlesebuka1@gmail.com');
+// if (!defined('MAIL_PASSWORD'))     define('MAIL_PASSWORD', 'vKKomvnytrbzfmlr');
+// if (!defined('MAIL_ENCRYPTION'))   define('MAIL_ENCRYPTION', 'tls');
+// if (!defined('MAIL_FROM_EMAIL'))   define('MAIL_FROM_EMAIL', 'charlesebuka1@gmail.com');
+// if (!defined('MAIL_FROM_NAME'))    define('MAIL_FROM_NAME', 'Cedigitalweb');
+
+// Mail Settings Configuration
 if (!defined('MAIL_HOST'))         define('MAIL_HOST', 'smtp.gmail.com');
 if (!defined('MAIL_PORT'))         define('MAIL_PORT', 587);
 if (!defined('MAIL_USERNAME'))     define('MAIL_USERNAME', 'chinneserestaurant@gmail.com');

@@ -1,3 +1,6 @@
+
+
+
 // Page to section mapping with relative paths
 const pageMap = {
   "/dashboard/": {
@@ -18,6 +21,10 @@ const pageMap = {
   },
   "/menu/": {
     page: "Menu",
+    icon: "menu",
+  },
+  "/menu2/": {
+    page: "Menu02",
     icon: "menu",
   },
   "/inventory/": {
@@ -258,13 +265,68 @@ document.addEventListener("DOMContentLoaded", () => {
 // }
 
 // Components
+// const header = `
+//       <header class="flex justify-between align-center">
+//           <div class="title">
+//             <h3>${currentPageInfo.page}</h3>
+//             ${
+//               currentPageInfo.page === "Dashboard"
+//                 ? "<p>Hello Joshua, welcome back!</p>"
+//                 : ""
+//             }
+//             ${
+//               currentPageInfo.page != "Dashboard"
+//                 ? `<div class="breadcrumb">
+//                <a>Dashboard</a> / 
+//                 <a href="/admin${currentPath}">${
+//                     currentPageInfo.page != "Orders"
+//                       ? currentPageInfo.page
+//                       : "Customer Orders"
+//                   }</a>
+//               </div>`
+//                 : ""
+//             }
+//           </div>
+//           <div class="header-actions">
+//               <div class="search">
+//                   <button>
+//                     <svg class="icon"><use href="#search"></use></svg>
+//                   </button>
+//                   <input type="text" placeholder="Search anything">
+//               </div>
+//               <div class="icons-container">
+//                   <button onclick="toggleNotification()" class="notification-btn">
+//                     <svg class="icon"><use href="#notification"></use></svg>
+//                     ${
+//                       notifications.count > 0
+//                         ? `<span class="badge"></span>`
+//                         : ""
+//                     }
+//                   </button>
+//                   <button>
+//                     <svg class="icon"><use href="#settings"></use></svg>
+//                   </button>
+//               </div>
+//               <div class="user-profile flex align-center">
+//                 <div class="user-profile-details">
+//                   <p class="username">Joshua Beck</p>
+//                   <small class="role">Admin</small>
+//                 </div>
+//                 <div class="user-profile-picture flex align-center justify-center">
+//                   <img src="https://picsum.photos/40" alt="Profile Picture">
+//                 </div>
+//               </div>
+//           </div>
+//       </header>
+//   `;
+
 const header = `
       <header class="flex justify-between align-center">
           <div class="title">
             <h3>${currentPageInfo.page}</h3>
             ${
               currentPageInfo.page === "Dashboard"
-                ? "<p>Hello Joshua, welcome back!</p>"
+                ? `<p>Hello ${username}, welcome back!</p>`
                 : ""
             }
             ${
@@ -302,11 +364,11 @@ const header = `
               </div>
               <div class="user-profile flex align-center">
                 <div class="user-profile-details">
-                  <p class="username">Joshua Beck</p>
-                  <small class="role">Admin</small>
+                  <p class="username">${username}</p>
+                  <small class="role">${userRole}</small>
                 </div>
                 <div class="user-profile-picture flex align-center justify-center">
-                  <img src="https://picsum.photos/40" alt="Profile Picture">
+                  <img src="${profilePicture}" alt="Profile Picture">
                 </div>
               </div>
           </div>
@@ -380,26 +442,42 @@ const sidebar = `
                       }
                     })
                     .join("")}
-                  <a href="${getRelativePath("../")}" 
+                    
+                  <a href="${getRelativePath("/BackEnd/controller/auth/logout.php")}" 
                      class="${currentPath === "/" ? "active" : ""}">
                       <svg class="icon"><use href="#logout"></use></svg>
                       Logout
                   </a>
+                  
               </div>
           </nav>
       </aside>
   `;
-const notification = ``;
+// const notification = ``;
+
+const notification = `
+
+
+  <div class="notification-bell">
+    <button onclick="notifications.toggle()" class="notification-btn">
+      <svg class="icon"><use href="#notification"></use></svg>
+      ${notifications.count > 0 ? `<span class="badge">${notifications.count}</span>` : ''}
+    </button>
+  </div>
+`;
 
 function renderComponents() {
+  // Load SVG sprite
   fetch(getRelativePath(`./admin/assets/img/icons-sprite.svg`))
     .then((response) => response.text())
-    .then((svg) => document.body.insertAdjacentHTML("afterbegin", svg));
-  document.body.insertAdjacentHTML("afterbegin", sidebar);
+    .then((svg) => document.body.insertAdjacentHTML("afterbegin", svg))
+    .catch(error => console.error('Error loading SVG:', error));
 
+  // Insert sidebar and header
+  document.body.insertAdjacentHTML("afterbegin", sidebar);
   document.querySelector("main").insertAdjacentHTML("afterbegin", header);
 
-  // Highlight active section in sidebar
+  // Highlight active section
   const activeSection = document.querySelector(
     `.sidebar-section[data-section="${currentPageInfo.section}"]`
   );
@@ -408,18 +486,65 @@ function renderComponents() {
   }
 
   // Set document title
-  // document.title = `${currentPageInfo.page} | Golden Dish`;
   if (currentPageInfo.page) {
     if (currentPageInfo.isSubItem && currentPageInfo.parentPage) {
       document.title = `${currentPageInfo.page} | ${currentPageInfo.parentPage} | Golden Dish`;
     } else {
       document.title = `${currentPageInfo.page} | Golden Dish`;
-      console.log("====================================");
-      console.log(currentPageInfo);
-      console.log("====================================");
+    }
+  }
+
+  // Initialize notifications system
+  notifications.init();
+  
+  // Add notification badge update to header
+  updateNotificationBadge();
+}
+
+
+function updateNotificationBadge() {
+  const badge = document.querySelector(".notification-btn .badge");
+  if (badge) {
+    badge.textContent = notifications.count > 0 ? notifications.count : "";
+    badge.style.display = notifications.count > 0 ? "flex" : "none";
+    
+    // Add animation for new notifications
+    if (notifications.count > 0) {
+      badge.classList.add("pulse");
+      setTimeout(() => badge.classList.remove("pulse"), 1000);
     }
   }
 }
+
+// function renderComponents() {
+//   fetch(getRelativePath(`./admin/assets/img/icons-sprite.svg`))
+//     .then((response) => response.text())
+//     .then((svg) => document.body.insertAdjacentHTML("afterbegin", svg));
+//   document.body.insertAdjacentHTML("afterbegin", sidebar);
+
+//   document.querySelector("main").insertAdjacentHTML("afterbegin", header);
+
+//   // Highlight active section in sidebar
+//   const activeSection = document.querySelector(
+//     `.sidebar-section[data-section="${currentPageInfo.section}"]`
+//   );
+//   if (activeSection) {
+//     activeSection.classList.add("active-section");
+//   }
+
+//   // Set document title
+//   // document.title = `${currentPageInfo.page} | Golden Dish`;
+//   if (currentPageInfo.page) {
+//     if (currentPageInfo.isSubItem && currentPageInfo.parentPage) {
+//       document.title = `${currentPageInfo.page} | ${currentPageInfo.parentPage} | Golden Dish`;
+//     } else {
+//       document.title = `${currentPageInfo.page} | Golden Dish`;
+//       console.log("====================================");
+//       console.log(currentPageInfo);
+//       console.log("====================================");
+//     }
+//   }
+// }
 
 // Call this when the DOM is loaded
 document.addEventListener("DOMContentLoaded", renderComponents);

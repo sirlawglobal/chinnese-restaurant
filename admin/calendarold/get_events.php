@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../../BackEnd/config/init.php';
 
 header('Content-Type: application/json');
+//session_start();
+$_SESSION['user_id'] = 1;
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode([

@@ -1,11 +1,10 @@
-<?php
-
-
-require_once __DIR__ . '/../../BackEnd/config/init.php';
-// if (!isset($_SESSION['user_id'])) {
-//     header('Location: login_page.php');
-//     exit;
-//}
+<?php 
+require_once '../../BackEnd/config/init.php';
+UserSession::requireLogin();
+UserSession::requireRole(['admin','staff','super_admin']);
+$first_name = UserSession::getFirstName();
+$userRole = UserSession::get('role');
+$profilePicture = UserSession::getProfilePicture();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,287 +17,34 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
     <link rel="stylesheet" href="../assets/styles/calendar.css" />
   </head>
   <body class="flex">
-    <main>
+    
+  <style>
+    .menu {
+  background-color: #f5a623;
+  color: #fff;
+}
+.inventory {
+  background-color:rgb(141, 52, 168);
+ color: #fff; 
+}
+.meetings {
+  background-color: #4285f4;
+  color: #fff;
+}
+.events {
+  background-color: #fbbc05;
+  color: #fff;
+}
+
+  </style>
+  <main>
       <div class="content">
         <div class="container" id="container">
           <!-- Schedule Details View -->
           <div class="schedule-details" id="scheduleDetails">
-            <div class="sidebar">
-              <h2>Schedule Details</h2>
-
-              <div class="schedule-item">
-                <div class="schedule-title">Weekly Specials Review</div>
-                <div class="menu-updates-tag">Menu Updates</div>
-
-                <div class="schedule-details-row">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 2V5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M16 2V5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M3.5 9.09H20.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  Apr 7, 2025
-                </div>
-
-                <div class="schedule-details-row">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 8V13"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M12 22C7.17 22 3.25 18.08 3.25 13.25C3.25 8.42 7.17 4.5 12 4.5C16.83 4.5 20.75 8.42 20.75 13.25"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M9 2H15"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  3:00 PM - 4:00 PM
-                </div>
-
-                <div class="schedule-details-row">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 12V15"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M7.5 10.5H16.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M7 18V7.8C7 6.11984 7 5.27976 7.32698 4.63803C7.6146 4.07354 8.07354 3.6146 8.63803 3.32698C9.27976 3 10.1198 3 11.8 3H16.2C17.8802 3 18.7202 3 19.362 3.32698C19.9265 3.6146 20.3854 4.07354 20.673 4.63803C21 5.27976 21 6.11984 21 7.8V12.2C21 13.8802 21 14.7202 20.673 15.362C20.3854 15.9265 19.9265 16.3854 19.362 16.673C18.7202 17 17.8802 17 16.2 17H7Z"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M7 17V19.5C7 20.6046 6.10457 21.5 5 21.5V21.5C3.89543 21.5 3 20.6046 3 19.5V17H7Z"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  Kitchen
-                </div>
-
-                <div class="team-section">
-                  <div class="team-title">Team</div>
-                  <div class="team-members">
-                    <div class="team-member">
-                      <div class="avatar">HC</div>
-                      Head Chef
-                    </div>
-                    <div class="team-member">
-                      <div class="avatar">SC</div>
-                      Sous Chef
-                    </div>
-                  </div>
-                  <div class="menu-team">
-                    <div class="avatar">MD</div>
-                    Menu Development Team
-                    <div class="team-count">+3</div>
-                  </div>
-                </div>
-
-                <div class="notes-section">
-                  <div class="notes-title">Notes</div>
-                  <div class="notes-content">
-                    Finalize weekly specials and update menu options for coming
-                    weeks.
-                  </div>
-                </div>
-              </div>
-
-              <div class="schedule-item">
-                <div class="schedule-title">Weekly Specials Review</div>
-                <div class="menu-updates-tag">Menu Updates</div>
-
-                <div class="schedule-details-row">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 2V5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M16 2V5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M3.5 9.09H20.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  Apr 7, 2025
-                </div>
-
-                <div class="schedule-details-row">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 8V13"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M12 22C7.17 22 3.25 18.08 3.25 13.25C3.25 8.42 7.17 4.5 12 4.5C16.83 4.5 20.75 8.42 20.75 13.25"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M9 2H15"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  3:00 PM - 4:00 PM
-                </div>
-
-                <div class="schedule-details-row">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 12V15"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M7.5 10.5H16.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M7 18V7.8C7 6.11984 7 5.27976 7.32698 4.63803C7.6146 4.07354 8.07354 3.6146 8.63803 3.32698C9.27976 3 10.1198 3 11.8 3H16.2C17.8802 3 18.7202 3 19.362 3.32698C19.9265 3.6146 20.3854 4.07354 20.673 4.63803C21 5.27976 21 6.11984 21 7.8V12.2C21 13.8802 21 14.7202 20.673 15.362C20.3854 15.9265 19.9265 16.3854 19.362 16.673C18.7202 17 17.8802 17 16.2 17H7Z"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M7 17V19.5C7 20.6046 6.10457 21.5 5 21.5V21.5C3.89543 21.5 3 20.6046 3 19.5V17H7Z"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  Kitchen
-                </div>
-              </div>
-            </div>
+        <div class="sidebar">
+  <h2>Schedule Details</h2>
+</div>
             <div class="inner-content card">
               <div class="calendar-header">
                 <div class="calendar-controls">
@@ -332,24 +78,25 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
                     + Add Schedule
                   </button>
                 </div>
-                <div class="calendar-filter">
-                  <div class="filter-tag meetings">
-                    <span>Meetings</span>
-                    <span class="filter-count">6</span>
-                  </div>
-                  <div class="filter-tag menu">
-                    <span>Menu Updates</span>
-                    <span class="filter-count">4</span>
-                  </div>
-                  <div class="filter-tag inventory">
-                    <span>Inventory Checks</span>
-                    <span class="filter-count">5</span>
-                  </div>
-                  <div class="filter-tag events">
-                    <span>Events</span>
-                    <span class="filter-count">5</span>
-                  </div>
-                </div>
+               <div class="calendar-filter">
+                <div class="filter-tag all active" data-category="all">
+  <span>All</span>
+</div>
+
+  <div class="filter-tag meetings" data-category="meetings">
+    <span>Meetings</span><span class="filter-count">6</span>
+  </div>
+  <div class="filter-tag menu" data-category="menu">
+    <span>Menu Updates</span><span class="filter-count">4</span>
+  </div>
+  <div class="filter-tag inventory" data-category="inventory">
+    <span>Inventory Checks</span><span class="filter-count">5</span>
+  </div>
+  <div class="filter-tag events" data-category="events">
+    <span>Events</span><span class="filter-count">5</span>
+  </div>
+</div>
+
               </div>
 
               <div
@@ -369,6 +116,7 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
 
           <!-- New Schedule Form -->
           <div class="new-schedule card" id="newSchedule">
+            <input type="hidden" id="scheduleId">
             <div class="form-header">
               <h2 class="form-title">New Schedule</h2>
               <button class="close-btn" id="closeNewSchedule">&times;</button>
@@ -381,7 +129,13 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
 
             <div class="form-group">
               <label class="form-label">Category</label>
-              <input type="text" class="form-control" id="scheduleCategory" />
+<select id="scheduleCategory" class="form-control" require>
+  <option value="">Select Category</option>
+  <option value="1">Meetings</option>
+  <option value="2">Menu Updates</option>
+  <option value="3">Inventory Checks</option>
+  <option value="4">Events</option>
+</select>
             </div>
 
             <div class="form-group">
@@ -423,12 +177,19 @@ require_once __DIR__ . '/../../BackEnd/config/init.php';
                 rows="3"
               ></textarea>
             </div>
-
-            <button class="submit-btn" id="createScheduleBtn">Create</button>
+<button type="button" class="submit-btn" id="createScheduleBtn">Create</button>
+<!-- 
+            <button class="submit-btn" id="createScheduleBtn">Create</button> -->
           </div>
         </div>
       </div>
     </main>
+
+    <script>
+       const username = '<?php echo addslashes($first_name); ?>';
+      const userRole = '<?php echo addslashes($userRole); ?>';
+      const profilePicture = '<?php echo addslashes($profilePicture); ?>';
+    </script>
     <script src="../scripts/components.js"></script>
     <script src="../scripts/calendar.js"></script>
   </body>

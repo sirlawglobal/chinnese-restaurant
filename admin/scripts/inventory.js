@@ -1,158 +1,204 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // === SUPPLY LINE CHART ===
   const supplyCtx = document.getElementById("supplyChart").getContext("2d");
+  const weeklyTotalElement = document.getElementById("weeklyTotal");
+  const dateRangeLabel = document.getElementById("dateRangeLabel");
 
-  const supplyData = {
-    labels: ["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
-    datasets: [
-      {
-        label: "Products",
-        data: [180, 210, 190, 160, 270, 200, 240, 220], // Example data - replace with your actual data
-        fill: false,
-        borderColor: "#FF8A65",
-        tension: 0.4, // Adjust for curve smoothness
-        pointRadius: 5,
-        pointBackgroundColor: "#FFFFFF",
-        pointBorderColor: "#FF8A65",
-        pointBorderWidth: 2,
-        pointHoverRadius: 7,
-        pointHoverBackgroundColor: "#FFFFFF",
-        pointHoverBorderColor: "#FF8A65",
-        pointHoverBorderWidth: 2,
-      },
-    ],
-  };
+  // Utility: Get current week range string
+  function getCurrentWeekRange() {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 (Sun) - 6 (Sat)
+    const start = new Date(today);
+    start.setDate(today.getDate() - dayOfWeek);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
 
-  const supplyChart = new Chart(supplyCtx, {
-    type: "line",
-    data: supplyData,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 320, // Based on the image
-          ticks: {
-            stepSize: 80, // Based on the image
-            color: "#757575", // Light gray color for ticks
+    const options = { month: 'short', day: 'numeric' };
+    return `${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}`;
+  }
+
+  // Set the "This Week" label dynamically
+  if (dateRangeLabel) {
+    dateRangeLabel.childNodes[0].nodeValue = getCurrentWeekRange();
+  }
+
+  // Load supply line chart
+  fetch("../../../BackEnd/controller/inventory/fetch_inventory.php?chart=supply")
+    .then(response => response.json())
+    .then(result => {
+      console.log("Supply chart data loaded:", result);
+
+      const totalProductsThisWeek = result.data.reduce((sum, val) => sum + val, 0);
+      if (weeklyTotalElement) {
+        weeklyTotalElement.textContent = totalProductsThisWeek.toLocaleString();
+      }
+
+      const supplyData = {
+        labels: result.labels,
+        datasets: [
+          {
+            label: "Products",
+            data: result.data,
+            fill: false,
+            borderColor: "#FF8A65",
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: "#FFFFFF",
+            pointBorderColor: "#FF8A65",
+            pointBorderWidth: 2,
+            pointHoverRadius: 7,
+            pointHoverBackgroundColor: "#FFFFFF",
+            pointHoverBorderColor: "#FF8A65",
+            pointHoverBorderWidth: 2,
           },
-          grid: {
-            drawBorder: false,
-            color: "#EEEEEE", // Very light gray grid lines
-          },
-        },
-        x: {
-          ticks: {
-            color: "#757575", // Light gray color for ticks
-          },
-          grid: {
-            display: false, // No vertical grid lines in the image
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          display: false, // No legend in the image
-        },
-        tooltip: {
-          backgroundColor: "rgba(0, 0, 0, 0.8)",
-          titleColor: "#FFFFFF",
-          bodyColor: "#FFFFFF",
-          borderColor: "#FF8A65",
-          borderWidth: 1,
-          callbacks: {
-            label: function (context) {
-              return `${context.dataset.label}: ${context.formattedValue} Products`;
+        ],
+      };
+
+      new Chart(supplyCtx, {
+        type: "line",
+        data: supplyData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 80,
+                color: "#757575",
+              },
+              grid: {
+                drawBorder: false,
+                color: "#EEEEEE",
+              },
+            },
+            x: {
+              ticks: {
+                color: "#757575",
+              },
+              grid: {
+                display: false,
+              },
             },
           },
-          intersect: false,
-          position: "nearest",
-          caretPadding: 5,
-          xAlign: "center",
-          yAlign: "bottom",
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              titleColor: "#FFFFFF",
+              bodyColor: "#FFFFFF",
+              borderColor: "#FF8A65",
+              borderWidth: 1,
+              callbacks: {
+                label: context => `${context.dataset.label}: ${context.formattedValue} Products`,
+              },
+              intersect: false,
+              position: "nearest",
+              caretPadding: 5,
+              xAlign: "center",
+              yAlign: "bottom",
+            },
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            intersect: false,
+            mode: "nearest",
+          },
         },
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: "nearest",
-      },
-    },
-  });
-});
-document.addEventListener("DOMContentLoaded", function () {
+      });
+    })
+    .catch(error => {
+      console.error("Error loading supply chart data:", error);
+    });
+
+  // === STOCK BAR CHART ===
   const stockCtx = document.getElementById("stockChart").getContext("2d");
   const totalProductsElement = document.getElementById("totalProducts");
   const inStock1Element = document.getElementById("inStock1");
   const inStock2Element = document.getElementById("inStock2");
   const inStock3Element = document.getElementById("inStock3");
 
-  const totalProducts = 205;
-  const inStock1Count = 120;
-  const inStock2Count = 55;
-  const inStock3Count = 30;
-  const numberOfBars = 30;
+  fetch("../../../BackEnd/controller/inventory/fetch_inventory.php?chart=stock")
+    .then(response => response.json())
+    .then(data => {
+      console.log("Stock chart data loaded:", data);
 
-  const percentage1 = inStock1Count / totalProducts;
-  const percentage2 = inStock2Count / totalProducts;
-  const percentage3 = inStock3Count / totalProducts;
+      const inStock1Count = data.available;
+      const inStock2Count = data.low;
+      const inStock3Count = data.out;
+      const totalProducts = inStock1Count + inStock2Count + inStock3Count;
 
-  const bars1 = Math.round(percentage1 * numberOfBars);
-  const bars2 = Math.round(percentage2 * numberOfBars);
-  const bars3 = numberOfBars - bars1 - bars2; // Ensure we have exactly 30 bars
+      const numberOfBars = 30;
+      const percentage1 = totalProducts > 0 ? inStock1Count / totalProducts : 0;
+      const percentage2 = totalProducts > 0 ? inStock2Count / totalProducts : 0;
 
-  const stockData = {
-    labels: Array.from({ length: numberOfBars }, (_, i) => `Bar ${i + 1}`),
-    datasets: [
-      {
-        label: "Stock Status",
-        data: Array(numberOfBars).fill(1),
-        backgroundColor: [
-          ...Array(bars1).fill("#FF8A65"),
-          ...Array(bars2).fill("#FFD5C2"),
-          ...Array(bars3).fill("#212121"),
+      let bars1 = Math.round(percentage1 * numberOfBars);
+      let bars2 = Math.round(percentage2 * numberOfBars);
+
+      if (bars1 + bars2 > numberOfBars) {
+        const scale = numberOfBars / (bars1 + bars2);
+        bars1 = Math.floor(bars1 * scale);
+        bars2 = Math.floor(bars2 * scale);
+      }
+
+      const bars3 = numberOfBars - bars1 - bars2;
+
+      console.log({ bars1, bars2, bars3, totalProducts });
+
+      const stockData = {
+        labels: Array.from({ length: numberOfBars }, (_, i) => `Bar ${i + 1}`),
+        datasets: [
+          {
+            label: "Stock Status",
+            data: Array(numberOfBars).fill(1),
+            backgroundColor: [
+              ...Array(bars1).fill("#FF8A65"),
+              ...Array(bars2).fill("#FFD5C2"),
+              ...Array(bars3).fill("#212121"),
+            ],
+            borderWidth: 0,
+            barThickness: 15,
+            borderRadius: 10,
+            categoryPercentage: 1,
+            barPercentage: 1,
+          },
         ],
-        borderWidth: 0,
-        barThickness: 15, // Adjust thickness as needed
-        borderRadius: 10, // Add rounded corners
-        categoryPercentage: 1,
-        barPercentage: 1,
-      },
-    ],
-  };
+      };
 
-  const stockChart = new Chart(stockCtx, {
-    type: "bar",
-    data: stockData,
-    options: {
-      indexAxis: "x",
-      scales: {
-        x: {
-          display: false,
-          stacked: true,
+      new Chart(stockCtx, {
+        type: "bar",
+        data: stockData,
+        options: {
+          indexAxis: "x",
+          scales: {
+            x: {
+              display: false,
+              stacked: true,
+            },
+            y: {
+              display: false,
+              stacked: true,
+            },
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false },
+          },
+          responsive: true,
+          maintainAspectRatio: false,
         },
-        y: {
-          display: false,
-          stacked: true,
-        },
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          enabled: false,
-        },
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-    },
-  });
+      });
 
-  totalProductsElement.textContent = totalProducts;
-  inStock1Element.textContent = inStock1Count;
-  inStock2Element.textContent = inStock2Count;
-  inStock3Element.textContent = inStock3Count;
+      totalProductsElement.textContent = totalProducts.toLocaleString();
+      inStock1Element.textContent = inStock1Count.toLocaleString();
+      inStock2Element.textContent = inStock2Count.toLocaleString();
+      inStock3Element.textContent = inStock3Count.toLocaleString();
+    })
+    .catch(error => {
+      console.error("Error loading stock chart data:", error);
+    });
 });
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const addProductBtn = document.getElementById("addProduct");

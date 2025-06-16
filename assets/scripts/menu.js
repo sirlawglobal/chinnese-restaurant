@@ -1,11 +1,233 @@
-    // Helper to decode HTML entities
+// Helper to decode HTML entities
     function decodeHTML(html) {
       const txt = document.createElement("textarea");
       txt.innerHTML = html;
       return txt.value;
     }
 
+    // Helper to format current date as YYYY-MM-DD HH:MM:SS
+    function getCurrentDateTime() {
+      const now = new Date();
+      return now.getFullYear() + '-' +
+             String(now.getMonth() + 1).padStart(2, '0') + '-' +
+             String(now.getDate()).padStart(2, '0') + ' ' +
+             String(now.getHours()).padStart(2, '0') + ':' +
+             String(now.getMinutes()).padStart(2, '0') + ':' +
+             String(now.getSeconds()).padStart(2, '0');
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
+      // Create and style the review modal
+      const modal = document.createElement("div");
+      modal.className = "review-modal";
+      modal.style.display = "none";
+      modal.style.position = "fixed";
+      modal.style.top = "50%";
+      modal.style.left = "50%";
+      modal.style.transform = "translate(-50%, -50%)";
+      modal.style.background = "#ffffff";
+      modal.style.padding = "2rem";
+      modal.style.borderRadius = "12px";
+      modal.style.boxShadow = "0 8px 16px rgba(0,0,0,0.15)";
+      modal.style.zIndex = "1000";
+      modal.style.maxWidth = "450px";
+      modal.style.width = "90%";
+      modal.style.fontFamily = "'Inter', Arial, sans-serif";
+      modal.innerHTML = `
+        <style>
+          .review-modal h3 {
+            margin: 0 0 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+          }
+          .review-modal p {
+            margin: 0 0 1.5rem;
+            font-size: 1rem;
+            color: #4a4a4a;
+          }
+          .review-modal label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #333;
+          }
+          .review-modal input, .review-modal select, .review-modal textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+          }
+          .review-modal input:focus, .review-modal select:focus, .review-modal textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+          }
+          .review-modal select option[value="1"] { color: #dc3545; }
+          .review-modal select option[value="2"] { color: #fd7e14; }
+          .review-modal select option[value="3"] { color: #ffc107; }
+          .review-modal select option[value="4"] { color: #28a745; }
+          .review-modal select option[value="5"] { color: #17a2b8; }
+          .review-modal textarea {
+            resize: vertical;
+            min-height: 100px;
+          }
+          .review-modal .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+          }
+          .review-modal button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+          }
+          .review-modal button[type="submit"] {
+            background: #28a745;
+            color: white;
+          }
+          .review-modal button[type="submit"]:hover {
+            background: #218838;
+          }
+          .review-modal button.close-modal {
+            background: #dc3545;
+            color: white;
+          }
+          .review-modal button.close-modal:hover {
+            background: #c82333;
+          }
+        </style>
+        <h3>Add Review for <span id="modal-dish-name"></span></h3>
+        <p>Category: <span id="modal-dish-category"></span></p>
+        <form id="review-form">
+          <label for="reviewer-name">Your Name:</label>
+          <input type="text" id="reviewer-name" name="reviewer-name" placeholder="Enter your name" required>
+          <label for="rating">Rating:</label>
+          <select id="rating" name="rating" required>
+            <option value="" disabled selected>Select rating (1-5)</option>
+            <option value="1">1 - Poor</option>
+            <option value="2">2 - Fair</option>
+            <option value="3">3 - Good</option>
+            <option value="4">4 - Very Good</option>
+            <option value="5">5 - Excellent</option>
+          </select>
+          <label for="review-text">Review:</label>
+          <textarea id="review-text" name="review-text" rows="4" placeholder="Share your thoughts about this dish..." required></textarea>
+          <div class="button-group">
+            <button type="submit">Submit Review</button>
+            <button type="button" class="close-modal">Cancel</button>
+          </div>
+        </form>
+      `;
+      document.body.appendChild(modal);
+
+      // Create overlay
+      const overlay = document.createElement("div");
+      overlay.className = "modal-overlay";
+      overlay.style.display = "none";
+      overlay.style.position = "fixed";
+      overlay.style.top = "0";
+      overlay.style.left = "0";
+      overlay.style.width = "100%";
+      overlay.style.height = "100%";
+      overlay.style.background = "rgba(0,0,0,0.5)";
+      overlay.style.zIndex = "999";
+      document.body.appendChild(overlay);
+
+      // Modal handling
+      function openModal(item, categoryName) {
+        modal.dataset.itemId = item.id;
+        modal.dataset.itemName = item.name;
+        modal.dataset.categoryName = categoryName;
+        document.getElementById("modal-dish-name").textContent = item.name;
+        document.getElementById("modal-dish-category").textContent = categoryName;
+        modal.style.display = "block";
+        overlay.style.display = "block";
+      }
+
+      function closeModal() {
+        modal.style.display = "none";
+        overlay.style.display = "none";
+        document.getElementById("review-form").reset();
+      }
+
+      // Handle clicks on overlay or close button
+      overlay.addEventListener("click", closeModal);
+      modal.querySelector(".close-modal").addEventListener("click", closeModal);
+
+      // Handle review submission
+    // ... (Previous code up to modal creation remains unchanged)
+
+    // Handle review submission
+    document.getElementById("review-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const rating = document.getElementById("rating").value;
+      const reviewText = document.getElementById("review-text").value;
+      const reviewerName = document.getElementById("reviewer-name").value;
+      const itemId = modal.dataset.itemId;
+      const itemName = modal.dataset.itemName;
+      const categoryName = modal.dataset.categoryName;
+      const reviewDate = getCurrentDateTime();
+
+      // Validate inputs
+      if (!itemId || !itemName || !categoryName || !reviewerName || !rating || !reviewText || !reviewDate) {
+        console.error("Missing required fields:", {
+          itemId, itemName, categoryName, reviewerName, rating, reviewText, reviewDate
+        });
+        alert("Please fill in all fields correctly.");
+        return;
+      }
+
+      const payload = {
+        itemId,
+        itemName,
+        categoryName,
+        reviewerName,
+        rating,
+        reviewText,
+        reviewDate
+      };
+      console.log("Submitting review payload:", payload);
+
+      fetch("/chinnese-restaurant/BackEnd/controller/reviews/submit_review.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(response => {
+        console.log("Response status:", response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Review submission response:", data);
+        if (data.success) {
+          alert("Review submitted successfully!");
+          closeModal();
+        } else {
+          console.error("Backend error:", data.message);
+          alert("Error submitting review: " + data.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error submitting review:", error.message);
+        alert("Failed to submit review: " + error.message + ". Please try again.");
+      });
+    });
+
+    // ... (Rest of the code remains unchanged)
+
       fetch("/chinnese-restaurant/BackEnd/controller/inventory/get_menu.php")
         .then((response) => {
           if (!response.ok) {
@@ -14,30 +236,24 @@
           return response.json();
         })
         .then((data) => {
-          // console.log("Menu data loaded successfully:", data);
-          // console.log("Categoriesbf4:", data.data.categories);
           data = data.data;
 
-
-// Save categories to localStorage in the format: [{ id, name }]
-const simplifiedCategories = data.categories.map((category) => ({
-id: category.id,
-name: category.name,
-}));
-localStorage.setItem("menu_categories", JSON.stringify(simplifiedCategories));
-
+          // Save categories to localStorage in the format: [{ id, name }]
+          const simplifiedCategories = data.categories.map((category) => ({
+            id: category.id,
+            name: category.name,
+          }));
+          localStorage.setItem("menu_categories", JSON.stringify(simplifiedCategories));
 
           const navList = document.querySelector(".nav__list");
           const dishesSection = document.querySelector(".dishes");
           const dishesTitle = document.querySelector(".dishes__title");
           const dishesGrid = document.querySelector(".dishes__grid");
           navList.innerHTML = "";
-
-data.categories = data.categories.filter(category => category.name !== "SET MENU");
+          data.categories = data.categories.filter(category => category.name !== "SET MENU");
 
           // Create navigation items
           data.categories.forEach((category, index) => {
-            // console.log("Category111:", category);
             const navItem = document.createElement("li");
             navItem.className = "nav__item";
             navItem.textContent = category.name.toLowerCase();
@@ -65,11 +281,8 @@ data.categories = data.categories.filter(category => category.name !== "SET MENU
             renderDishes(data.categories[0]);
           }
 
-
-
           function renderDishes(category) {
             dishesTitle.textContent = category.name.toLowerCase();
-         
 
             const existingSubtitle = dishesTitle.nextElementSibling;
             if (
@@ -90,126 +303,116 @@ data.categories = data.categories.filter(category => category.name !== "SET MENU
 
             dishesGrid.innerHTML = "";
 
-          category.items.forEach((item) => {
-  // console.log("Rendering item:", item);
+            category.items.forEach((item) => {
+              const dishCard = document.createElement("article");
+              dishCard.className = "dish";
 
-  const dishCard = document.createElement("article");
-  dishCard.className = "dish";
+              // Build options HTML if available
+              let optionsHTML = "";
+              if (Array.isArray(item.options) && item.options.length > 0) {
+                optionsHTML = `
+                  <div class="dish__options">
+                    ${item.options
+                      .map(
+                        (option) => `
+                          <div class="dish__option flex align-center justify-between">
+                            <span class="dish__option-name">${option.portion}</span>
+                            <span class="dish__price justify-start">
+                              <svg class="icon"><use href="#tag"></use></svg>
+                              £${parseFloat(option.price).toFixed(2)}
+                            </span>
+                          </div>
+                        `
+                      )
+                      .join("")}
+                  </div>
+                `;
+              }
 
-  // Build options HTML if available
-  let optionsHTML = "";
-  if (Array.isArray(item.options) && item.options.length > 0) {
-    optionsHTML = `
-      <div class="dish__options">
-        ${item.options
-          .map(
-            (option) => `
-              <div class="dish__option flex align-center justify-between">
-                <span class="dish__option-name">${option.portion}</span>
-                <span class="dish__price justify-start">
-                  <svg class="icon"><use href="#tag"></use></svg>
-                  £${parseFloat(option.price).toFixed(2)}
-                </span>
-              </div>
-            `
-          )
-          .join("")}
-      </div>
-    `;
-  }
+              // Decode and display description
+              let descriptionHTML = "";
+              if (item.description) {
+                const decodedDesc = decodeHTML(item.description);
+                const match = decodedDesc.match(/\[(.*)\]/);
+                if (match) {
+                  let arrayStr = match[0].replace(/""/g, '"');
+                  try {
+                    const parsedArray = JSON.parse(arrayStr);
+                    descriptionHTML =
+                      `<ul class="dish__desc-list">` +
+                      parsedArray.map((item) => `<li>${item}</li>`).join("") +
+                      `</ul>`;
+                  } catch (e) {
+                    console.error("Error parsing cleaned array string:", e);
+                    descriptionHTML = `<p class="dish__vendor">${decodedDesc}</p>`;
+                  }
+                } else {
+                  descriptionHTML = `<p class="dish__vendor">${decodedDesc}</p>`;
+                }
+              }
 
-  // Decode and display description (handles JSON array or string)
-  let descriptionHTML = "";
-if (item.description) {
-  const decodedDesc = decodeHTML(item.description);
-  // console.log("Decoded description:", decodedDesc);
+              // Safe price & portion extraction
+              const hasOptions = Array.isArray(item.options) && item.options.length > 0;
+              const firstOption = hasOptions ? item.options[0] : null;
+              const itemPrice = hasOptions
+                ? parseFloat(firstOption.price)
+                : parseFloat(item.price || 0);
+              const itemPortion = hasOptions ? firstOption.portion : "standard";
 
-  // Try to extract the array part inside brackets
-  const match = decodedDesc.match(/\[(.*)\]/);
-  if (match) {
-    // Extracted content inside brackets, e.g.:
-    // ""Crispy Seaweed"",""Sesame Prawn on Toast"",""Kung Po Chicken"", ...
-    let arrayStr = match[0]; // includes brackets
+              const backendUploadsUrl = "/chinnese-restaurant/BackEnd";
+              const imageSrc = item.image_url
+                ? backendUploadsUrl + item.image_url
+                : "/chinnese-restaurant/avarterdefault.jpg";
 
-    // Fix doubled double-quotes by replacing "" with "
-    arrayStr = arrayStr.replace(/""/g, '"');
+              dishCard.innerHTML = `
+                <div class="dish__image">
+                  <img src="${imageSrc}" alt="${item.name}" />
+                </div>
+                <div class="dish__details">
+                  <h3 class="dish__name">${item.name}</h3>
+                  ${descriptionHTML}
+                  <div class="dish__info">
+                    ${optionsHTML || `
+                      <span class="dish__price">
+                        <svg class="icon"><use href="#tag"></use></svg>
+                        £${itemPrice.toFixed(2)}
+                      </span>`}
+                  </div>
+                </div>
+                <div class="dish__button">
+                  <button class="dish__add" data-item='${JSON.stringify({
+                    id: item.id,
+                    name: item.name,
+                    price: itemPrice,
+                    portion: itemPortion,
+                    categoryId: item.category_id,
+                  })}'>+</button>
+                  <button class="dish__review" data-item='${JSON.stringify({
+                    id: item.id,
+                    name: item.name,
+                    categoryName: category.name
+                  })}'>Add Review</button>
+                </div>
+              `;
 
-    try {
-      const parsedArray = JSON.parse(arrayStr);
-      // Render as list
-      descriptionHTML =
-        `<ul class="dish__desc-list">` +
-        parsedArray.map((item) => `<li>${item}</li>`).join("") +
-        `</ul>`;
-    } catch (e) {
-      console.error("Error parsing cleaned array string:", e);
-      descriptionHTML = `<p class="dish__vendor">${decodedDesc}</p>`;
-    }
-  } else {
-    // No array found, just display as is
-    descriptionHTML = `<p class="dish__vendor">${decodedDesc}</p>`;
-  }
-}
+              dishesGrid.appendChild(dishCard);
+            });
 
-
-  // Safe price & portion extraction
-  const hasOptions = Array.isArray(item.options) && item.options.length > 0;
-  const firstOption = hasOptions ? item.options[0] : null;
-
-  const itemPrice = hasOptions
-    ? parseFloat(firstOption.price)
-    : parseFloat(item.price || 0);
-
-  const itemPortion = hasOptions ? firstOption.portion : "standard";
-
-
- const backendUploadsUrl = "/chinnese-restaurant/BackEnd"; // adjust if needed
-
-const imageSrc = item.image_url
-  ? backendUploadsUrl + item.image_url
-  : "/chinnese-restaurant/avarterdefault.jpg";
-
-
-dishCard.innerHTML = `
-  <div class="dish__image">
-     <img src="${imageSrc}" alt="${item.name}" />
-  </div>
-  <div class="dish__details">
-    <h3 class="dish__name">${item.name}</h3>
-    ${descriptionHTML}
-    <div class="dish__info">
-      ${optionsHTML || `
-        <span class="dish__price">
-          <svg class="icon"><use href="#tag"></use></svg>
-          £${itemPrice.toFixed(2)}
-        </span>`}
-    </div>
-  </div>
-  <div class="dish__button">
-    <button class="dish__add" data-item='${JSON.stringify({
-      id: item.id,
-      name: item.name,
-      price: itemPrice,
-      portion: itemPortion,
-        categoryId: item.category_id,
-    })}'>+</button>
-  </div>
-`;
-
-
-  dishesGrid.appendChild(dishCard);
-});
-
-        }
+            // Add event listeners for review buttons
+            document.querySelectorAll(".dish__review").forEach((button) => {
+              button.addEventListener("click", () => {
+                const itemData = JSON.parse(button.getAttribute("data-item"));
+                openModal(itemData, itemData.categoryName);
+              });
+            });
+          }
         })
         .catch((error) => {
           console.error("Error loading menu data:", error);
-          // Fallback to static data
           fetch("../assets/data/menu.json")
             .then((response) => response.json())
             .then((data) => {
-              // console.log("Using fallback static data");
-              // You can call renderDishes here as well if needed
+              console.log("Using fallback static data");
             });
         });
 
@@ -223,8 +426,6 @@ dishCard.innerHTML = `
       let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
       function updateCartBadge() {
-
-        // console.log('cartItems', cartItems);
         const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
         cartBadge.textContent = totalItems;
         cartBadge.style.display = totalItems > 0 ? "flex" : "none";
@@ -234,7 +435,6 @@ dishCard.innerHTML = `
       document.addEventListener("click", function (e) {
         if (e.target.classList.contains("dish__add")) {
           const itemData = JSON.parse(e.target.getAttribute("data-item"));
-
           const existingItem = cartItems.find(
             (item) =>
               item.id === itemData.id && item.portion === itemData.portion
@@ -249,7 +449,7 @@ dishCard.innerHTML = `
               price: itemData.price,
               portion: itemData.portion,
               quantity: 1,
-                category: itemData.categoryId,
+              category: itemData.categoryId,
             });
           }
 
@@ -257,7 +457,7 @@ dishCard.innerHTML = `
           cartBadge.classList.add("bump");
           setTimeout(() => cartBadge.classList.remove("bump"), 300);
         }
-      })
+      });
 
       updateCartBadge();
     });

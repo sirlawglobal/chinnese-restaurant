@@ -6,10 +6,15 @@ function redirect($url)
 }
 
 
-function isLoggedIn()
-{
-    return isset($_SESSION['user']);
+// function isLoggedIn()
+// {
+//     return isset($_SESSION['user']);
+// }
+
+function isLoggedIn() {
+    return isset($_SESSION['user']) && !empty($_SESSION['user']);
 }
+
 
 
 function requireLogin($redirectTo = "login")

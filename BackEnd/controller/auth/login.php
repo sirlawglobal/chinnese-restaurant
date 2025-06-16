@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../config/init.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: " . ROOT . "sign-in.php");
+    header("Location: " . ROOT . "login");
     exit;
 }
 
@@ -11,7 +11,7 @@ $password = $_POST['password'] ?? '';
 
 if (!$email || !$password) {
     $_SESSION['fail'] = "Email and password are required.";
-    header("Location: " . ROOT . "sign-in.php");
+    header("Location: " . ROOT . "login");
     exit;
 }
 
@@ -41,5 +41,5 @@ if ($user && count($user) > 0) {
     $_SESSION['fail'] = "User not found.";
 }
 
-header("Location: " . ROOT . "sign-in.php");
+header("Location: " . ROOT . "login");
 exit;

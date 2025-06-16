@@ -95,21 +95,41 @@ async function renderMessages(chatId) {
         console.log('API response data:', result);
         if (result.data_type === "chat") {
             messagesContainer.innerHTML = "";
-            // Sort messages by time
-            result.data.messages.sort((a, b) => {
-                const timeA = parseMessageTime(a.time);
-                const timeB = parseMessageTime(b.time);
-                console.log(`Sorting: ${a.time} (${timeA}) vs ${b.time} (${timeB})`);
-                return timeA - timeB;
-            }).forEach((message) => {
-                console.log('Processing message:', message.text, 'is_admin:', message.is_admin, 'Class assigned:', message.is_admin === "1" ? "message-outgoing" : "message-incoming");
+            // Sort messages by full timestamp
+            result.data.messages.sort((a, b) => new Date(a.time) - new Date(b.time));
+            let lastDate = null;
+            result.data.messages.forEach((message) => {
+                console.log('Processing message:', message.text, 'Time:', message.time, 'is_admin:', message.is_admin);
                 const isAdmin = message.is_admin === "1";
+                const messageDate = new Date(message.time).toDateString();
+                const currentDate = new Date().toDateString();
+                const yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1)).toDateString();
+
+                // Add date header only if it's a new date
+                if (lastDate !== messageDate) {
+                    const dateHeader = document.createElement("div");
+                    dateHeader.className = "chat-date-header";
+                    dateHeader.textContent = messageDate === currentDate ? "Today" :
+                        messageDate === yesterdayDate ? "Yesterday" :
+                        new Date(message.time).toLocaleDateString('en-US', { weekday: 'long' });
+                    messagesContainer.appendChild(dateHeader);
+                    lastDate = messageDate;
+                }
+
                 const messageElement = document.createElement("div");
                 messageElement.className = `message ${isAdmin ? "message-outgoing" : "message-incoming"}`;
                 messageElement.dataset.messageId = message.id;
+                // Parse time and handle invalid date
+                let displayTime = "Invalid Date";
+                const dateObj = new Date(message.time);
+                if (!isNaN(dateObj.getTime())) {
+                    displayTime = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
+                } else {
+                    console.error('Invalid date for message:', message.time);
+                }
                 messageElement.innerHTML = `
-                    <div>${message.text}</div>
-                    <div class="message-time">${message.time}</div>
+                    <div class="message-content">${message.text}</div>
+                    <div class="message-time">${displayTime}</div>
                 `;
                 if (!isAdmin) {
                     const avatar = document.createElement("div");
@@ -126,32 +146,6 @@ async function renderMessages(chatId) {
     } catch (error) {
         console.error('Error in renderMessages:', error);
     }
-}
-
-// Parse time string to timestamp for sorting
-function parseMessageTime(timeStr) {
-    const now = new Date();
-    const [timePart, dayPart] = timeStr.split(", ");
-    let [hours, minutes] = timePart.split(":");
-    let period = minutes ? minutes.split(" ")[1] : "AM";
-    minutes = minutes ? minutes.split(" ")[0] : "00";
-    hours = parseInt(hours, 10);
-    if (period === "PM" && hours !== 12) hours += 12;
-    if (period === "AM" && hours === 12) hours = 0;
-
-    let date = new Date(now);
-    if (dayPart === "Yesterday") {
-        date.setDate(date.getDate() - 1);
-    } else if (dayPart === "Monday" || dayPart === "Tuesday" || dayPart === "Wednesday" || dayPart === "Thursday" || dayPart === "Friday" || dayPart === "Saturday" || dayPart === "Sunday") {
-        const today = now.getDay(); // 0-6 (Sunday-Saturday)
-        const targetDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].indexOf(dayPart);
-        let diff = targetDay - today;
-        if (diff < 0) diff += 7; // If target is in the past week, adjust to last week
-        date.setDate(date.getDate() - (7 - diff));
-    }
-    date.setHours(hours, minutes, 0, 0);
-    console.log(`Parsed ${timeStr} to ${date.getTime()}`);
-    return date.getTime();
 }
 
 async function setActiveChat(chatId) {

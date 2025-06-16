@@ -47,7 +47,7 @@
         <div class="custom-alert error"><?= $_SESSION["fail"]; unset($_SESSION["fail"]); ?></div>
       <?php endif; ?>
     </div>
-    <form id="login-form" method="POST" action="<?= ROOT ?>/backEnd/controller/auth/login.php" onsubmit="disableSubmit()">
+    <form id="login-form" method="POST" action="<?= ROOT ?>/BackEnd/controller/auth/login.php" onsubmit="disableSubmit()">
       <fieldset>
         <legend>Email</legend>
         <input type="email" name="email" id="email" required />
@@ -63,9 +63,19 @@
         </div>
         <a href="../forgot-password/">Forgot Password</a>
       </div>
-      <div class="flex align-center justify-center">
+      <!-- <div class="flex align-center justify-center">
         <button type="submit" id="submitBtn">Sign In</button>
-      </div>
+      </div> -->
+
+      <div class="flex align-center justify-center">
+           <button type="submit" id="submitBtn">Sign In</button>
+          </div>
+
+            <div class="flex align-center justify-center">
+              <p>No acccount yet?</p>
+
+               <a  href="../signUp/">Sign up</a>
+          </div>
     </form>
   </section>
   <section class="image">

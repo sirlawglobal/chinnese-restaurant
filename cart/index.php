@@ -1,11 +1,13 @@
+<?php require_once __DIR__ . '/../BackEnd/config/init.php';  ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Golden Dish | Checkout</title>
+    <title>Golden Dish | Cart</title>
     <link rel="stylesheet" href="../assets/styles/main.css" />
-    <link rel="stylesheet" href="../assets/styles/checkout.css" />
+    <link rel="stylesheet" href="../assets/styles/cart.css" />
     <!-- Include DOMPurify for sanitization -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.6/dist/purify.min.js"></script>
   </head>
@@ -34,120 +36,105 @@
             <button
               class="button--cart flex align-center justify-center"
               aria-label="View cart"
-              id="cartButton"
             >
               <svg class="icon"><use href="#bag"></use></svg>
               <span class="cart-badge">0</span>
             </button>
-            <button class="button button--signin">Sign in</button>
+            <div class="buttons">
+            <?php  if(isLoggedIn()): ?> 
+         <a class="button button-primary" href="../BackEnd/controller/auth/logout.php">Logout</a>
+           <?php  else: ?> 
+            <a class="button button-primary" href="../login/">Log in</a>
+              <?php  endif; ?> 
+
+              </div>
+            <!-- <button class="button button--signin">Sign in</button> -->
           </div>
         </div>
       </header>
-
-      <script>
-  document.getElementById('cartButton').addEventListener('click', function () {
-    window.location.href = '../cart/';
-  });
-</script>
-      <main class="main">
-        <h3 class="main__title">Secure Checkout</h3>
-        <section class="content flex justify-between">
-          <div class="delivery__details">
-            <div class="inner">
-              <h3 class="flex align-center delivery__address">
-                <svg class="icon">
-                  <use href="#location"></use>
-                </svg>
-                Delivery Address
-              </h3>
-              <div class="address__box">
-                <svg class="icon">
-                  <use href="#location"></use>
-                </svg>
-                <p class="address">
-                  Dno. 12-34-12, XYC Apartments, DOOR Colony, Hyderabad,
-                  Telangana
-                </p>
-              </div>
-              <h3 class="flex align-center order__type">
-                <svg class="icon">
-                  <use href="#location"></use>
-                </svg>
-                Type of Order
-              </h3>
-              <div class="flex justify-center align-center order__actions">
-                <button class="button--action">
-                  <svg class="icon">
-                    <use href="#schedule"></use>
-                  </svg>
-                  Order Now
-                </button>
-                <button class="button--action">
-                  <svg class="icon">
-                    <use href="#schedule"></use>
-                  </svg>
-                  Schedule Order
-                </button>
-              </div>
-              <div class="order__note">
-                <h4>Any Note for us?</h4>
-                <textarea
-                  class="textarea"
-                  placeholder="Type your note here"
-                  aria-label="Order notes"
-                ></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="receipt">
-            <div class="cart">
-              <div class="flex justify-between align-center cart__header">
-                <h3 class="cart__title">Cart</h3>
-                <p class="cart__count">0 Items</p>
-              </div>
-              <div class="cart__content">
-                <!-- Cart items will be populated dynamically -->
-              </div>
-            </div>
-            <div class="bill__details">
-              <p>Bill details</p>
-              <div class="flex justify-between align-center">
-                <p>Item Total</p>
-                <p class="item-total">£0.00</p>
-              </div>
-              <div class="flex justify-between align-center">
-                <p>Delivery Fee | 12.9 kms Custom Delivery time</p>
-                <p class="delivery-fee">£131.00</p>
-              </div>
-              <div class="flex justify-between align-center">
-                <p>Taxes and Charges</p>
-                <p class="taxes">£2.00</p>
-              </div>
-            </div>
-            <p class="deets">
-              Monthly + 3 Days/Week plan + 16:30 Delivery time
-            </p>
-            <div class="cart__subtotal">
-              <div class="flex justify-between align-center">
-                <p>Total</p>
-                <p class="subtotal">£0.00</p>
-              </div>
-              <div class="flex justify-between align-center">
-                <p>Discount</p>
-                <p class="discount">£0.00</p>
-              </div>
-            </div>
-            <div class="cart__total">
-              <div>
-                <p class="cart__total__text">Total:</p>
-              </div>
-              <p class="cart__total__price">£0.00</p>
-            </div>
-            <button class="button--checkout">Proceed To Payment</button>
-          </div>
-        </section>
-      </main>
     </div>
+    <main class="main">
+      <section class="details">
+        <div class="flex align-center justify-center">
+          <div class="details__content flex align-center">
+            <div class="details__image">
+              <img src="../assets/images/cart-img.png" alt="Golden Dish" />
+            </div>
+            <div class="details__info">
+              <h2 class="details__title">LunchBox - Meals and Thalis</h2>
+              <div class="flex info justify-center">
+                <div class="info__details">
+                  <div class="rating flex align-center">
+                    <svg class="icon"><use href="#star"></use></svg>
+                    <span class="rating__text">4.0</span>
+                  </div>
+                  <p class="info__text">100+ ratings</p>
+                </div>
+                <div class="info__details">
+                  <div class="info__text">30 Mins</div>
+                  <div class="info__text">Delivery Time</div>
+                </div>
+                <div class="info__details">
+                  <div class="info__text">£180</div>
+                  <div class="info__text">Cost for two</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="details__offer">
+            <h3>Offers</h3>
+            <ul class="details_list">
+              <li class="list__item">50% off up to £100 | Use code TRYNEW</li>
+              <li class="list__item">20% off | Use code PARTY</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="content">
+        <div class="flex align-center justify-between search-container">
+          <div class="header__search">
+            <input
+              class="search__input"
+              placeholder="Search for dish"
+              aria-label="Search for dish in cart"
+            />
+            <button class="search__button" aria-label="Search cart">
+              <svg class="icon">
+                <use href="#search"></use>
+              </svg>
+            </button>
+          </div>
+          <div class="favourite flex align-center justify-center">
+            <svg class="icon">
+              <use href="#fav"></use>
+            </svg>
+            Favorite
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <div class="dishes">
+            <!-- Dishes will be populated dynamically based on cart items -->
+          </div>
+          <div class="cart">
+            <div class="flex justify-between align-center cart__header">
+              <h3 class="cart__title">Cart</h3>
+              <p class="cart__count">0 Items</p>
+            </div>
+            <div class="cart__content">
+              <!-- Cart items will be populated dynamically -->
+            </div>
+            <div class="cart__subtotal">
+              <div>
+                <p class="cart__subtotal__text">Subtotal:</p>
+                <small class="note">Extra charges may apply</small>
+              </div>
+              <p class="cart__subtotal__price">£0</p>
+            </div>
+            <a href="../checkout/" class="button--checkout">Checkout</a>
+          </div>
+        </div>
+      </section>
+    </main>
     <footer class="footer flex align-center justify-between">
       <div class="footer__content">
         <div class="footer__socials">
@@ -186,25 +173,25 @@
 
       document.addEventListener("DOMContentLoaded", function () {
         const cartContainer = document.querySelector(".cart__content");
+        const dishesContainer = document.querySelector(".dishes");
         const cartCount = document.querySelector(".cart__count");
-        const cartBadge = document.querySelector(".cart-badge");
-        const itemTotal = document.querySelector(".item-total");
-        const deliveryFee = document.querySelector(".delivery-fee");
-        const taxes = document.querySelector(".taxes");
-        const subtotal = document.querySelector(".subtotal");
-        const discount = document.querySelector(".discount");
-        const totalPrice = document.querySelector(".cart__total__price");
+        const cartSubtotal = document.querySelector(".cart__subtotal__price");
+        const cartButton = document.querySelector(".button--cart");
+        const cartBadge = cartButton.querySelector(".cart-badge");
         let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
-        // Function to render cart items
+        // Function to render cart items and dishes
         function renderCartItems() {
           cartContainer.innerHTML = "";
+          dishesContainer.innerHTML = "";
+          
           if (cartItems.length === 0) {
             cartContainer.innerHTML = '<p class="empty-cart-message">Your cart is empty</p>';
+            dishesContainer.innerHTML = '<p class="empty-dishes-message">No items in your cart to display</p>';
             cartCount.textContent = "0 Items";
+            cartSubtotal.textContent = "£0";
             cartBadge.textContent = "0";
             cartBadge.style.display = "none";
-            updateBillDetails(0);
             return;
           }
 
@@ -217,9 +204,11 @@
             return category ? category.name : "Unknown";
           }
 
-          // Render cart items
+          // Render items in cart
           cartItems.forEach((item, index) => {
             const categoryName = getCategoryNameById(item.category);
+
+            // Render in cart
             const cartItem = document.createElement("div");
             cartItem.className = "cart__item";
             cartItem.innerHTML = `
@@ -237,34 +226,36 @@
               </div>
             `;
             cartContainer.appendChild(cartItem);
+
+            // Render in dishes with full description
+            const dishItem = document.createElement("div");
+            dishItem.className = "dish flex align-center justify-between";
+            dishItem.innerHTML = `
+              <div class="dish__details">
+                <h3 class="dish__title">${DOMPurify.sanitize(item.name)}</h3>
+                <span class="dish__price">£${(parseFloat(item.price) || 0).toFixed(2)}</span>
+                <p class="dish__description">${DOMPurify.sanitize(item.description || "No description available")}</p>
+              </div>
+              <button class="button button--add"  style='visibility:hidden'>Add +</button>
+            `;
+            dishesContainer.appendChild(dishItem);
           });
 
           updateCartBadge();
-          updateBillDetails();
+          updateTotalPrice();
           initCartItems();
+          initDishButtons();
         }
 
-        // Function to update bill details
-        function updateBillDetails() {
-          let itemTotalValue = 0;
+        // Function to calculate and update the total price
+        function updateTotalPrice() {
+          let total = 0;
           cartItems.forEach((item) => {
             const price = parseFloat(item.price) || 0;
             const quantity = item.quantity || 1;
-            itemTotalValue += price * quantity;
+            total += price * quantity;
           });
-
-          const deliveryFeeValue = cartItems.length > 0 ? 131.00 : 0;
-          const taxesValue = cartItems.length > 0 ? 2.00 : 0;
-          const discountValue = cartItems.length > 0 ? 4000.00 : 0;
-          const subtotalValue = itemTotalValue + deliveryFeeValue + taxesValue;
-          const totalValue = subtotalValue - discountValue;
-
-          itemTotal.textContent = `£${itemTotalValue.toFixed(2)}`;
-          deliveryFee.textContent = `£${deliveryFeeValue.toFixed(2)}`;
-          taxes.textContent = `£${taxesValue.toFixed(2)}`;
-          subtotal.textContent = `£${subtotalValue.toFixed(2)}`;
-          discount.textContent = `£${discountValue.toFixed(2)}`;
-          totalPrice.textContent = `£${totalValue.toFixed(2)}`;
+          cartSubtotal.textContent = `£${total.toFixed(2)}`;
         }
 
         // Function to update cart badge and count
@@ -300,7 +291,7 @@
                 renderCartItems();
               }
               updateCartBadge();
-              updateBillDetails();
+              updateTotalPrice();
             });
 
             newPlusBtn.addEventListener("click", () => {
@@ -308,7 +299,7 @@
               quantityInput.value = currentValue + 1;
               cartItems[index].quantity = currentValue + 1;
               updateCartBadge();
-              updateBillDetails();
+              updateTotalPrice();
             });
 
             quantityInput.addEventListener("change", () => {
@@ -320,7 +311,25 @@
                 cartItems[index].quantity = value;
               }
               updateCartBadge();
-              updateBillDetails();
+              updateTotalPrice();
+            });
+          });
+        }
+
+        // Initialize add buttons for dishes
+        function initDishButtons() {
+          document.querySelectorAll(".button--add").forEach((button, index) => {
+            // Remove existing listeners to prevent duplicates
+            const newButton = button.cloneNode(true);
+            button.replaceWith(newButton);
+
+            newButton.addEventListener("click", () => {
+              const item = cartItems[index];
+              item.quantity++;
+              updateCartBadge();
+              renderCartItems();
+              cartBadge.classList.add("bump");
+              setTimeout(() => cartBadge.classList.remove("bump"), 300);
             });
           });
         }
@@ -331,7 +340,8 @@
         // Observe cart container for dynamic updates
         const observer = new MutationObserver(() => {
           initCartItems();
-          updateBillDetails();
+          initDishButtons();
+          updateTotalPrice();
         });
 
         if (cartContainer) {
