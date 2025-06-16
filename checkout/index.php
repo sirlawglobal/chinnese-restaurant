@@ -621,7 +621,7 @@ error_log("Checkout - isLoggedIn: " . ($role ? 'true' : 'false') . ", userEmail:
 
     } catch (error) {
         console.error("Error initiating payment:", error);
-        showError("Error initiating payment: " + error.message);
+        showError("Error initiating payment: Server error ");
         resetPaymentButton();
     }
 });
