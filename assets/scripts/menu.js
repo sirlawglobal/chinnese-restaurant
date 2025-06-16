@@ -305,7 +305,7 @@
 
             category.items.forEach((item) => {
 
-              cosn
+              console.log("Processing itemmean:", item);
               const dishCard = document.createElement("article");
               dishCard.className = "dish";
 
@@ -366,46 +366,81 @@
                 ? backendUploadsUrl + item.image_url
                 : "/chinnese-restaurant/avarterdefault.jpg";
 
-             dishCard.innerHTML = `
-  <div class="dish__image">
-    <img src="${imageSrc}" alt="${item.name}" />
-  </div>
+//              dishCard.innerHTML = `
+//   <div class="dish__image">
+//     <img src="${imageSrc}" alt="${item.name}" />
+//   </div>
 
-  <div class="dish__details"  style='border-bottom: 1px solid #ddd;margin-bottom: 9px; padding-bottom: 9px;'>
-    <h3 class="dish__name">${item.name}</h3>
-    ${descriptionHTML}
-  </div>
+//   <div class="dish__details"  style='border-bottom: 1px solid #ddd;margin-bottom: 9px; padding-bottom: 9px;'>
+//     <h3 class="dish__name">${item.name}</h3>
+//     ${descriptionHTML}
+//   </div>
 
-  <div style="display: flex; gap: 0.5rem; align-items: end">
-    <div class="dish__info">
-      ${optionsHTML || `
-        <span class="dish__price">
-          <svg class="icon"><use href="#tag"></use></svg>
-          £${itemPrice.toFixed(2)}
-        </span>
-      `}
-    </div>
+//   <div style="display: flex; gap: 0.5rem; align-items: end">
+//     <div class="dish__info">
+//       ${optionsHTML || `
+//         <span class="dish__price">
+//           <svg class="icon"><use href="#tag"></use></svg>
+//           £${itemPrice.toFixed(2)}
+//         </span>
+//       `}
+//     </div>
 
-    <div class="dish__button">
-      <button 
-        class="dish__add"
-        data-id="${item.id}"
-        data-name="${item.name}"
-        data-price="${itemPrice}"
-        data-portion="${itemPortion}"
-        data-category-id="${item.category_id}"
-      >+</button>
+//     <div class="dish__button">
+//       <button 
+//         class="dish__add"
+//         data-id="${item.id}"
+//         data-name="${item.name}"
+//         data-price="${itemPrice}"
+//         data-portion="${itemPortion}"
+//         data-category-id="${item.category_id}"
+//       >+</button>
 
-      <button 
-        class="dish__review"
-        data-id="${item.id}"
-        data-name="${item.name}"
-        data-category-name="${category.name}"
-      >Add Review</button>
-    </div>
-  </div>
-`;
+//       <button 
+//         class="dish__review"
+//         data-id="${item.id}"
+//         data-name="${item.name}"
+//         data-category-name="${category.name}"
+//       >Add Review</button>
+//     </div>
+//   </div>
+// `;
 
+  dishCard.innerHTML = `
+                <div class="dish__image">
+                  <img src="${imageSrc}" alt="${item.name}" />
+                </div>
+                <div class="dish__details"  style='border-bottom: 1px solid #ddd;margin-bottom: 90px; padding-bottom: 9px;'>
+                  <h3 class="dish__name">${item.name}</h3>
+                  ${descriptionHTML}
+                </div>
+
+                <div  style='display: flex; gap: 0.5rem; align-items: end;bottom: 0;
+    position: absolute;right: 0; justify-content: space-between; width: 100%;'>
+                  <div class="dish__info  <div class="dish__info">
+                    ${optionsHTML || `
+                      <span class="dish__price">
+                        <svg class="icon"><use href="#tag"></use></svg>
+                        £${itemPrice.toFixed(2)}
+                      </span>`}
+                  </div>
+
+                <div class="dish__button">
+                  <button class="dish__add" data-item='${JSON.stringify({
+                    id: item.id,
+                    name: item.name,
+                    price: itemPrice,
+                    portion: itemPortion,
+                    categoryId: item.category_id,
+                  })}'>+</button>
+                  <button class="dish__review" data-item='${JSON.stringify({
+                    id: item.id,
+                    name: item.name,
+                    categoryName: category.name
+                  })}'>Add Review</button>
+                </div>
+                </div>
+              `;
 
               dishesGrid.appendChild(dishCard);
             });
@@ -450,6 +485,7 @@
       document.addEventListener("click", function (e) {
         if (e.target.classList.contains("dish__add")) {
           const itemData = JSON.parse(e.target.getAttribute("data-item"));
+          console.log("Adding item to cart:", itemData);
           const existingItem = cartItems.find(
             (item) =>
               item.id === itemData.id && item.portion === itemData.portion

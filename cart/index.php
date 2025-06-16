@@ -201,11 +201,13 @@
           // Helper function to get category name by id
           function getCategoryNameById(id) {
             const category = categories.find(cat => cat.id === id);
-            return category ? category.name : "Unknown";
+            return category ? category.name : "Set Menu";
+            // return category ? category.name : "Unknown";
           }
 
           // Render items in cart
           cartItems.forEach((item, index) => {
+            console.log("Rendering item111:", item);
             const categoryName = getCategoryNameById(item.category);
 
             // Render in cart
