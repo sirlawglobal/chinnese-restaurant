@@ -825,7 +825,7 @@ fetch('add_order.php', {
         <div class="col-md-2">
           <input type="number" class="form-control total-price" name="items[${itemCount}][total]" step="0.01" readonly >
         </div>
-        <button type="button" class="btn btn-sm btn-danger remove-item-btn" onclick="removeOrderItem(this)">Remove</button>
+         <button type="button" class="btn btn-sm btn-danger remove-item-btn" ><i class="bi bi-trash"></i></button>.
       `;
       orderItemsDiv.appendChild(newItem);
       itemCount++;
