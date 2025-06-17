@@ -32,8 +32,13 @@ $role = true;
           <img src="../assets/images/admin-logo.png" alt="Golden Dish" />
         </div>
         <div class="head">
-          <h3>Sign Up</h3>
+           <?php  if(isset($role) && $role == true): ?> 
+          <h3>Let Add Our Staffs</h3>
+          <p>Add Staff by their rank.</p>
+<?php else: ?>
+    <h3>Sign Up</h3>
           <p>Get started to start feeding like a king.</p>
+          <?php endif;?>
         </div>
      <!-- <form id="registrationForm" method="POST" action="register.php"> -->
      <form id="register-form" method="POST" >

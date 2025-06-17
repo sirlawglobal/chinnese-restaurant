@@ -23,9 +23,9 @@ $password = $data['password'] ?? '';
 $role = trim(filter_var($data['role'] ?? 'user', FILTER_SANITIZE_STRING));
 
 
-$allowedRoles = ['admin', 'staff', 'chef', 'waiter', 'cashier', 'manager', 'dishwasher', 'delivery', 'bartender'];
+$allowedRoles = ['admin', 'staff', 'chef', 'waiter', 'cashier', 'manager', 'dishwasher', 'delivery', 'bartender','user'];
 if (!in_array($role, $allowedRoles)) {
-    $role = 'staff'; // fallback
+    $role = 'user'; // fallback
 }
 
 $response = ['data_type' => 'register', 'success' => false, 'message' => ''];
