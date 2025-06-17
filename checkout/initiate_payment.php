@@ -245,7 +245,7 @@ try {
     foreach ($cart as $item) {
         $item_name = trim(strip_tags($item['name'] ?? '')); 
         $portion = trim(strip_tags($item['portion'] ?? '')); 
-        $category_id = isset($item['category']) ? intval($item['category']) : null;
+        $category_id = isset($item['category']) ? intval($item['category']) : 20;
 
         if (empty($item_name)) {
             throw new Exception("Item name cannot be empty");
