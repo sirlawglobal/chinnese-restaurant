@@ -53,7 +53,9 @@ let months = [
 let events = [];
 
 // Fetch from backend
-fetch('/chinnese-restaurant/admin/calendar/schedules.php')
+const API_URLS = ROOT + 'admin/calendar/schedules.php';
+
+fetch(API_URLS)
   .then(res => res.json())
   .then(data => {
     events = data.map(event => ({
@@ -78,9 +80,10 @@ function updateEventTimes(event) {
 }
 
 
+const API_URL = ROOT + 'admin/calendar/schedules.php';
 
 
-const API_URL = '/chinnese-restaurant/admin/calendar/schedules.php'; // adjust path if needed
+//const API_URL = '../../../admin/calendar/schedules.php'; // adjust path if needed
 
 // Fetch schedules from backend
 

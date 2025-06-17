@@ -178,19 +178,18 @@ $profilePicture = UserSession::getProfilePicture();
               ></textarea>
             </div>
 <button type="button" class="submit-btn" id="createScheduleBtn">Create</button>
-<!-- 
-            <button class="submit-btn" id="createScheduleBtn">Create</button> -->
+<!--  <button class="submit-btn" id="createScheduleBtn">Create</button> -->
           </div>
         </div>
       </div>
     </main>
-
-    <script>
+<script>
        const username = '<?php echo addslashes($first_name); ?>';
       const userRole = '<?php echo addslashes($userRole); ?>';
       const profilePicture = '<?php echo addslashes($profilePicture); ?>';
     </script>
     <script src="../scripts/components.js"></script>
+    <script>const ROOT = "<?= ROOT ?>"; </script>
     <script src="../scripts/calendar.js"></script>
   </body>
 </html>
