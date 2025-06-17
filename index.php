@@ -44,7 +44,7 @@ require_once __DIR__ . '/BackEnd/config/init.php';
           <h1>Your Favorite Chinese Dishes, Just a Tap Away!</h1>
           <p>
             Savor the taste of tradition with fresh, chef-prepared meals at your
-            doorstep. Order now and experience real Chinese cuisine!
+            doorstep. <br> Order now and experience real Chinese cuisine!
           </p>
           <a class="button button-secondary" href="./menu/">Menu</a>
         </div>

@@ -1,7 +1,8 @@
 <?php
 // Database connection configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'dgn_china');
+// define('DB_NAME', 'dgn_china');
+define('DB_NAME', 'chinesse_restaurant');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('ROOT', 'http://localhost/chinnese-restaurant/');

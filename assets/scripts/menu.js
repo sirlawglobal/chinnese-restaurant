@@ -366,81 +366,88 @@
                 ? backendUploadsUrl + item.image_url
                 : "/chinnese-restaurant/avarterdefault.jpg";
 
-//              dishCard.innerHTML = `
+
+dishCard.innerHTML = `
+  <div class="dish__content" style="display: flex; flex-direction: column; height: 100%;">
+    <div class="dish__image">
+      <img src="${imageSrc}" alt="${item.name}" />
+    </div>
+    <div class="dish__details" style="flex: 1; padding-bottom: 9px;">
+      <h3 class="dish__name">${item.name}</h3>
+      ${descriptionHTML}
+    </div>
+
+    <div style="display: flex; gap: 0.5rem; align-items: end; justify-content: space-between; width: 100%; border-top: 1px solid #ddd; padding-top: 8px; margin-top: auto;">
+      <div class="dish__info">
+        ${optionsHTML || `
+          <span class="dish__price">
+            <svg class="icon"><use href="#tag"></use></svg>
+            £${itemPrice.toFixed(2)}
+          </span>`}
+      </div>
+
+      <div class="dish__button" style="display: flex; flex-direction: column; gap: 0.5rem; background:unset; align-items: end;">
+        <button class="dish__add" data-item='${JSON.stringify({
+          id: item.id,
+          name: item.name,
+          price: itemPrice,
+          portion: itemPortion,
+          categoryId: item.category_id,
+        })}'>+</button>
+        <button class="dish__review" data-item='${JSON.stringify({
+          id: item.id,
+          name: item.name,
+          categoryName: category.name
+        })}'>Add Review</button>
+      </div>
+    </div>
+  </div>
+`;
+
+
+
+//   dishCard.innerHTML = `
 //   <div class="dish__image">
 //     <img src="${imageSrc}" alt="${item.name}" />
 //   </div>
 
-//   <div class="dish__details"  style='border-bottom: 1px solid #ddd;margin-bottom: 9px; padding-bottom: 9px;'>
-//     <h3 class="dish__name">${item.name}</h3>
+//   <div class="dish__details" style="margin-bottom: 16px;">
+//     <h3 class="dish__name" style="margin: 0.5rem 0; font-size: 1.2rem; font-weight: bold;">${item.name}</h3>
 //     ${descriptionHTML}
 //   </div>
 
-//   <div style="display: flex; gap: 0.5rem; align-items: end">
-//     <div class="dish__info">
+//   <hr style="border: none; border-top: 1px solid #ddd; margin: 0 0 1rem 0;" />
+
+//   <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+//     <div class="dish__info" style="font-size: 0.95rem; color: #333;">
 //       ${optionsHTML || `
 //         <span class="dish__price">
-//           <svg class="icon"><use href="#tag"></use></svg>
+//           <svg class="icon" style="width: 16px; height: 16px; vertical-align: middle;"><use href="#tag"></use></svg>
 //           £${itemPrice.toFixed(2)}
 //         </span>
 //       `}
 //     </div>
 
-//     <div class="dish__button">
-//       <button 
-//         class="dish__add"
-//         data-id="${item.id}"
-//         data-name="${item.name}"
-//         data-price="${itemPrice}"
-//         data-portion="${itemPortion}"
-//         data-category-id="${item.category_id}"
-//       >+</button>
+//     <div class="dish__button" style="display: flex; flex-direction: column; gap: 0.5rem;">
+//       <button class="dish__add" style="padding: 0.5rem 1rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;"
+//         data-item='${JSON.stringify({
+//           id: item.id,
+//           name: item.name,
+//           price: itemPrice,
+//           portion: itemPortion,
+//           categoryId: item.category_id,
+//         })}'>Add to Cart</button>
 
-//       <button 
-//         class="dish__review"
-//         data-id="${item.id}"
-//         data-name="${item.name}"
-//         data-category-name="${category.name}"
-//       >Add Review</button>
+//       <button class="dish__review" style="padding: 0.5rem 1rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;"
+//         data-item='${JSON.stringify({
+//           id: item.id,
+//           name: item.name,
+//           categoryName: category.name
+//         })}'>Add Review</button>
 //     </div>
 //   </div>
 // `;
 
-  dishCard.innerHTML = `
-                <div class="dish__image">
-                  <img src="${imageSrc}" alt="${item.name}" />
-                </div>
-                <div class="dish__details"  style='border-bottom: 1px solid #ddd;margin-bottom: 90px; padding-bottom: 9px;'>
-                  <h3 class="dish__name">${item.name}</h3>
-                  ${descriptionHTML}
-                </div>
-
-                <div  style='display: flex; gap: 0.5rem; align-items: end;bottom: 0;
-    position: absolute;right: 0; justify-content: space-between; width: 100%;'>
-                  <div class="dish__info  <div class="dish__info">
-                    ${optionsHTML || `
-                      <span class="dish__price">
-                        <svg class="icon"><use href="#tag"></use></svg>
-                        £${itemPrice.toFixed(2)}
-                      </span>`}
-                  </div>
-
-                <div class="dish__button">
-                  <button class="dish__add" data-item='${JSON.stringify({
-                    id: item.id,
-                    name: item.name,
-                    price: itemPrice,
-                    portion: itemPortion,
-                    categoryId: item.category_id,
-                  })}'>+</button>
-                  <button class="dish__review" data-item='${JSON.stringify({
-                    id: item.id,
-                    name: item.name,
-                    categoryName: category.name
-                  })}'>Add Review</button>
-                </div>
-                </div>
-              `;
 
               dishesGrid.appendChild(dishCard);
             });
