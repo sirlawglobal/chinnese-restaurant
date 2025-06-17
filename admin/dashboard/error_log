@@ -1,0 +1,275 @@
+[17-Jun-2025 08:55:24 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:08:40 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:15:39 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:20:20 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:23:19 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:24:49 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:24:53 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:43:06 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:54:03 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:54:18 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 09:54:53 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 11:10:50 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 11:11:04 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 11:23:28 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:04:39 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:12:58 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:14:31 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:15:41 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:35:24 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:39:10 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:39:26 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:39:53 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:40:33 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:40:44 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:42:22 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:42:40 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:43:21 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:52:54 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:53:19 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:56:32 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 12:58:12 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:04:59 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:05:38 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:05:48 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:06:57 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:07:22 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:07:38 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:08:15 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:09:35 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:09:46 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:10:16 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:10:31 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:10:49 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:10:57 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:11:06 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:12:13 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:12:17 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:16:03 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:16:22 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:16:59 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:17:13 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:14
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(14): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 14
+[17-Jun-2025 13:19:42 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:16
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(16): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 16
+[17-Jun-2025 13:20:08 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:16
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(16): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 16
+[17-Jun-2025 13:20:10 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:16
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(16): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 16
+[17-Jun-2025 13:22:56 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_type2' in 'SELECT' in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php:16
+Stack trace:
+#0 /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php(16): PDO->query()
+#1 {main}
+  thrown in /home/soyoruba/public_html/admin/dashboard/fetch_order_types.php on line 16

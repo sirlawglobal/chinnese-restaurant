@@ -61,6 +61,18 @@ main {
   width: 100%;
   font-size: 0.8rem;
 }
+
+.content form fieldset select {
+  background-color: #ffffff;
+  border: 1px solid #b30505;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  font-size: 0.8rem;
+  color: #e70e28; /* optional: match your input text color */
+  appearance: none; /* removes default arrow styling on some browsers */
+}
+
 .content form .remember {
   gap: 6px;
 }

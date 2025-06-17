@@ -1,0 +1,140 @@
+[17-Jun-2025 09:16:25 UTC] Raw input for update: {"order_id":"PO125\nJun 11, 2025","items":[{"item_name":"charlesd","unit_price":34,"vendor":"charles","category":"Food ingredients","quantity":29,"status":"delivered"}]}
+[17-Jun-2025 09:16:25 UTC] Decoded input for update: Array
+(
+    [order_id] => PO125
+Jun 11, 2025
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [item_name] => charlesd
+                    [unit_price] => 34
+                    [vendor] => charles
+                    [category] => Food ingredients
+                    [quantity] => 29
+                    [status] => delivered
+                )
+
+        )
+
+)
+
+[17-Jun-2025 09:16:25 UTC] Received order_id: PO125
+Jun 11, 2025
+[17-Jun-2025 09:16:25 UTC] Parsed order_id: PO125 to database ID 25
+[17-Jun-2025 09:16:25 UTC] Retained existing category_id: 2 for order_id 25
+[17-Jun-2025 09:16:25 UTC] Updated order ID: 25 with status: delivered
+[17-Jun-2025 09:16:25 UTC] Item parameters for order ID 25: Array
+(
+    [:item_name] => charlesd
+    [:category_id] => 2
+    [:price] => 34
+    [:quantity] => 29
+    [:order_id] => 25
+)
+
+[17-Jun-2025 09:16:59 UTC] Raw input for update: {"order_id":"PO125\nJun 11, 2025","items":[{"item_name":"charlesoo","unit_price":100,"vendor":"charles","category":"Food ingredients","quantity":10,"status":"delivered"}]}
+[17-Jun-2025 09:16:59 UTC] Decoded input for update: Array
+(
+    [order_id] => PO125
+Jun 11, 2025
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [item_name] => charlesoo
+                    [unit_price] => 100
+                    [vendor] => charles
+                    [category] => Food ingredients
+                    [quantity] => 10
+                    [status] => delivered
+                )
+
+        )
+
+)
+
+[17-Jun-2025 09:16:59 UTC] Received order_id: PO125
+Jun 11, 2025
+[17-Jun-2025 09:16:59 UTC] Parsed order_id: PO125 to database ID 25
+[17-Jun-2025 09:16:59 UTC] Retained existing category_id: 2 for order_id 25
+[17-Jun-2025 09:16:59 UTC] Updated order ID: 25 with status: delivered
+[17-Jun-2025 09:16:59 UTC] Item parameters for order ID 25: Array
+(
+    [:item_name] => charlesoo
+    [:category_id] => 2
+    [:price] => 100
+    [:quantity] => 10
+    [:order_id] => 25
+)
+
+[17-Jun-2025 09:17:22 UTC] Raw input for update: {"order_id":"PO125\nJun 11, 2025","items":[{"item_name":"charlesoo","unit_price":100,"vendor":"charles","category":"Food ingredients","quantity":10,"status":"pending"}]}
+[17-Jun-2025 09:17:22 UTC] Decoded input for update: Array
+(
+    [order_id] => PO125
+Jun 11, 2025
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [item_name] => charlesoo
+                    [unit_price] => 100
+                    [vendor] => charles
+                    [category] => Food ingredients
+                    [quantity] => 10
+                    [status] => pending
+                )
+
+        )
+
+)
+
+[17-Jun-2025 09:17:22 UTC] Received order_id: PO125
+Jun 11, 2025
+[17-Jun-2025 09:17:22 UTC] Parsed order_id: PO125 to database ID 25
+[17-Jun-2025 09:17:22 UTC] Retained existing category_id: 2 for order_id 25
+[17-Jun-2025 09:17:22 UTC] Updated order ID: 25 with status: pending
+[17-Jun-2025 09:17:22 UTC] Item parameters for order ID 25: Array
+(
+    [:item_name] => charlesoo
+    [:category_id] => 2
+    [:price] => 100
+    [:quantity] => 10
+    [:order_id] => 25
+)
+
+[17-Jun-2025 13:00:18 UTC] Raw input for update: {"order_id":"PO125\nJun 11, 2025","items":[{"item_name":"charlesoo","unit_price":100,"vendor":"charles","category":"Food ingredients","quantity":10,"status":"delivered"}]}
+[17-Jun-2025 13:00:18 UTC] Decoded input for update: Array
+(
+    [order_id] => PO125
+Jun 11, 2025
+    [items] => Array
+        (
+            [0] => Array
+                (
+                    [item_name] => charlesoo
+                    [unit_price] => 100
+                    [vendor] => charles
+                    [category] => Food ingredients
+                    [quantity] => 10
+                    [status] => delivered
+                )
+
+        )
+
+)
+
+[17-Jun-2025 13:00:18 UTC] Received order_id: PO125
+Jun 11, 2025
+[17-Jun-2025 13:00:18 UTC] Parsed order_id: PO125 to database ID 25
+[17-Jun-2025 13:00:18 UTC] Retained existing category_id: 2 for order_id 25
+[17-Jun-2025 13:00:18 UTC] Updated order ID: 25 with status: delivered
+[17-Jun-2025 13:00:18 UTC] Item parameters for order ID 25: Array
+(
+    [:item_name] => charlesoo
+    [:category_id] => 2
+    [:price] => 100
+    [:quantity] => 10
+    [:order_id] => 25
+)
+

@@ -1,0 +1,17 @@
+[13-Jun-2025 16:18:57 UTC] Database error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'user_name' cannot be null
+[13-Jun-2025 16:23:34 UTC] Database error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'user_phone' cannot be null
+[16-Jun-2025 10:40:05 UTC] PHP Warning:  require_once(/home/soyoruba/public_html/admin/orders/../../../BackEnd/config/init.php): Failed to open stream: No such file or directory in /home/soyoruba/public_html/admin/orders/index.php on line 30
+[16-Jun-2025 10:40:05 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/soyoruba/public_html/admin/orders/../../../BackEnd/config/init.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/soyoruba/public_html/admin/orders/index.php:30
+Stack trace:
+#0 {main}
+  thrown in /home/soyoruba/public_html/admin/orders/index.php on line 30
+[16-Jun-2025 10:40:21 UTC] PHP Warning:  require_once(/home/soyoruba/public_html/admin/orders/../../../BackEnd/config/init.php): Failed to open stream: No such file or directory in /home/soyoruba/public_html/admin/orders/index.php on line 3
+[16-Jun-2025 10:40:21 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/soyoruba/public_html/admin/orders/../../../BackEnd/config/init.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/soyoruba/public_html/admin/orders/index.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/soyoruba/public_html/admin/orders/index.php on line 3
+[16-Jun-2025 10:40:27 UTC] PHP Warning:  require_once(/home/soyoruba/public_html/admin/orders/../../../BackEnd/config/init.php): Failed to open stream: No such file or directory in /home/soyoruba/public_html/admin/orders/index.php on line 3
+[16-Jun-2025 10:40:27 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/soyoruba/public_html/admin/orders/../../../BackEnd/config/init.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/soyoruba/public_html/admin/orders/index.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/soyoruba/public_html/admin/orders/index.php on line 3

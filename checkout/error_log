@@ -1,0 +1,573 @@
+[13-Jun-2025 09:48:35 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:48:38 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:48:39 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:48:39 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:48:41 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:49:17 UTC] PHP Warning:  require(/home/dgn128/public_html/chinnese-restaurant/checkout/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 7
+[13-Jun-2025 09:49:17 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/dgn128/public_html/chinnese-restaurant/checkout/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 7
+[13-Jun-2025 09:49:33 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:49:58 UTC] PHP Warning:  require(/home/dgn128/public_html/chinnese-restaurant/checkout/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 7
+[13-Jun-2025 09:49:58 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/dgn128/public_html/chinnese-restaurant/checkout/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 7
+[13-Jun-2025 09:50:04 UTC] PHP Warning:  require(/home/dgn128/public_html/chinnese-restaurant/checkout/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 7
+[13-Jun-2025 09:50:04 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/dgn128/public_html/chinnese-restaurant/checkout/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 7
+[13-Jun-2025 09:50:06 UTC] PHP Warning:  require(/home/dgn128/public_html/chinnese-restaurant/checkout/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 7
+[13-Jun-2025 09:50:06 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/dgn128/public_html/chinnese-restaurant/checkout/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 7
+[13-Jun-2025 09:54:07 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:54:08 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:54:09 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:54:10 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 09:54:31 UTC] Pusher connection successful
+[13-Jun-2025 09:54:31 UTC] Initiate Payment Session Data: Array
+(
+    [user] => Array
+        (
+            [id] => 2
+            [name] => akanji
+            [phone] => 08165999946
+            [email] => akanjilawrence9999@gmail.com
+            [role] => admin
+            [created_at] => 2025-06-06 12:22:26
+        )
+
+)
+
+[13-Jun-2025 09:54:31 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Crispy Shredded Chilli Beef
+                    [price] => 7.5
+                    [quantity] => 1
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+    [order_notes] => Any Note for us?
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 140.5
+    [tx_ref] => GD_668774655_1749808470482
+    [guest_email] => 
+    [guest_name] => 
+    [guest_phone] => 
+    [user_email] => akanjilawrence9999@gmail.com
+    [user_phone] => 08165999946
+    [user_id] => 2
+    [user_name] => akanji
+)
+
+[13-Jun-2025 09:54:31 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_name' in 'INSERT INTO' in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php:228
+Stack trace:
+#0 /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php(228): PDOStatement->execute()
+#1 {main}
+  thrown in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 228
+[13-Jun-2025 09:54:48 UTC] Pusher connection successful
+[13-Jun-2025 09:54:48 UTC] Initiate Payment Session Data: Array
+(
+    [user] => Array
+        (
+            [id] => 2
+            [name] => akanji
+            [phone] => 08165999946
+            [email] => akanjilawrence9999@gmail.com
+            [role] => admin
+            [created_at] => 2025-06-06 12:22:26
+        )
+
+)
+
+[13-Jun-2025 09:54:48 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Crispy Shredded Chilli Beef
+                    [price] => 7.5
+                    [quantity] => 1
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+    [order_notes] => Any Note for us?
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 140.5
+    [tx_ref] => GD_784510129_1749808487259
+    [guest_email] => 
+    [guest_name] => 
+    [guest_phone] => 
+    [user_email] => akanjilawrence9999@gmail.com
+    [user_phone] => 08165999946
+    [user_id] => 2
+    [user_name] => akanji
+)
+
+[13-Jun-2025 09:54:48 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_name' in 'INSERT INTO' in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php:228
+Stack trace:
+#0 /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php(228): PDOStatement->execute()
+#1 {main}
+  thrown in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 228
+[13-Jun-2025 10:01:01 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 10:01:21 UTC] Pusher connection successful
+[13-Jun-2025 10:01:21 UTC] Initiate Payment Session Data: Array
+(
+    [user] => Array
+        (
+            [id] => 2
+            [name] => akanji
+            [phone] => 08165999946
+            [email] => akanjilawrence9999@gmail.com
+            [role] => admin
+            [created_at] => 2025-06-06 12:22:26
+        )
+
+)
+
+[13-Jun-2025 10:01:21 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Crispy Shredded Chilli Beef
+                    [price] => 7.5
+                    [quantity] => 1
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+    [order_notes] => Any Note for us?
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 140.5
+    [tx_ref] => GD_476259008_1749808880224
+    [guest_email] => 
+    [guest_name] => 
+    [guest_phone] => 
+    [user_email] => akanjilawrence9999@gmail.com
+    [user_phone] => 08165999946
+    [user_id] => 2
+    [user_name] => akanji
+)
+
+[13-Jun-2025 10:01:21 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_name' in 'INSERT INTO' in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php:228
+Stack trace:
+#0 /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php(228): PDOStatement->execute()
+#1 {main}
+  thrown in /home/dgn128/public_html/chinnese-restaurant/checkout/initiate_payment.php on line 228
+[13-Jun-2025 10:06:13 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 10:06:22 UTC] Pusher connection successful
+[13-Jun-2025 10:06:22 UTC] Initiate Payment Session Data: Array
+(
+    [user] => Array
+        (
+            [id] => 2
+            [name] => akanji
+            [phone] => 08165999946
+            [email] => akanjilawrence9999@gmail.com
+            [role] => admin
+            [created_at] => 2025-06-06 12:22:26
+        )
+
+)
+
+[13-Jun-2025 10:06:22 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Crispy Shredded Chilli Beef
+                    [price] => 7.5
+                    [quantity] => 1
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+    [order_notes] => Any Note for us?
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 140.5
+    [tx_ref] => GD_495739669_1749809181143
+    [guest_email] => 
+    [guest_name] => 
+    [guest_phone] => 
+    [user_email] => akanjilawrence9999@gmail.com
+    [user_phone] => 08165999946
+    [user_id] => 2
+    [user_name] => akanji
+)
+
+[13-Jun-2025 10:06:22 UTC] Pusher notification sent successfully for order ID: 18, Data: {"type":"new_order","order_id":"18","total_amount":"140.50","order_type":"now","timestamp":"2025-06-13 10:06:22"}
+[13-Jun-2025 10:11:14 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 10:11:33 UTC] Pusher connection successful
+[13-Jun-2025 10:11:33 UTC] Initiate Payment Session Data: Array
+(
+    [user] => Array
+        (
+            [id] => 2
+            [name] => akanji
+            [phone] => 08165999946
+            [email] => akanjilawrence9999@gmail.com
+            [role] => admin
+            [created_at] => 2025-06-06 12:22:26
+        )
+
+)
+
+[13-Jun-2025 10:11:33 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Beef with Cashewnuts
+                    [price] => 7.5
+                    [quantity] => 1
+                    [portion] => standard
+                    [category] => 4
+                )
+
+            [1] => Array
+                (
+                    [name] => Beef with Green Pepper in Black Bean Sauce
+                    [price] => 7.3
+                    [quantity] => 1
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+    [order_notes] => Any Note for us?
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 147.8
+    [tx_ref] => GD_456612826_1749809492136
+    [guest_email] => 
+    [guest_name] => 
+    [guest_phone] => 
+    [user_email] => akanjilawrence9999@gmail.com
+    [user_phone] => 08165999946
+    [user_id] => 2
+    [user_name] => akanji
+)
+
+[13-Jun-2025 10:11:33 UTC] Pusher notification sent successfully for order ID: 19, Data: {"type":"new_order","order_id":"19","total_amount":"147.80","order_type":"now","timestamp":"2025-06-13 10:11:33"}
+[13-Jun-2025 10:14:46 UTC] Checkout - isLoggedIn: true, userEmail: akanjilawrence9999@gmail.com, fullName: akanji
+[13-Jun-2025 10:15:10 UTC] Pusher connection successful
+[13-Jun-2025 10:15:10 UTC] Initiate Payment Session Data: Array
+(
+    [user] => Array
+        (
+            [id] => 2
+            [name] => akanji
+            [phone] => 08165999946
+            [email] => akanjilawrence9999@gmail.com
+            [role] => admin
+            [created_at] => 2025-06-06 12:22:26
+        )
+
+)
+
+[13-Jun-2025 10:15:10 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Crispy Seaweed
+                    [price] => 5.5
+                    [quantity] => 1
+                )
+
+            [1] => Array
+                (
+                    [name] => Sesame Prawns on Toast
+                    [price] => 7
+                    [quantity] => 5
+                )
+
+            [2] => Array
+                (
+                    [name] => Mixed Platter (min for 2)
+                    [price] => 14.8
+                    [quantity] => 1
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+
+    [order_notes] => v
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 188.3
+    [tx_ref] => GD_844581042_1749809685190
+    [guest_email] => 
+    [guest_name] => 
+    [guest_phone] => 
+    [user_email] => akanjilawrence9999@gmail.com
+    [user_phone] => 08165999946
+    [user_id] => 2
+    [user_name] => akanji
+)
+
+[13-Jun-2025 10:15:10 UTC] Order processing error: Invalid or missing category ID for item: Crispy Seaweed
+[13-Jun-2025 10:17:15 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[13-Jun-2025 10:17:46 UTC] Pusher connection successful
+[13-Jun-2025 10:17:46 UTC] Initiate Payment Session Data: Array
+(
+)
+
+[13-Jun-2025 10:17:46 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Crispy Shredded Chilli Beef
+                    [price] => 7.5
+                    [quantity] => 1
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+
+    [order_notes] => 
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 140.5
+    [tx_ref] => GD_768698551_1749809842056
+    [guest_email] => ronnieta@ergfd.jio
+    [guest_name] => Guest
+    [guest_phone] => 89797869
+    [user_email] => 
+    [user_phone] => 
+    [user_id] => 
+    [user_name] => 
+)
+
+[13-Jun-2025 10:17:47 UTC] Pusher notification sent successfully for order ID: 21, Data: {"type":"new_order","order_id":"21","total_amount":"140.50","order_type":"now","timestamp":"2025-06-13 10:17:46"}
+[13-Jun-2025 10:43:14 UTC] Pusher connection successful
+[13-Jun-2025 10:43:14 UTC] Initiate Payment Session Data: Array
+(
+    [user] => Array
+        (
+            [id] => 2
+            [name] => akanji
+            [phone] => 08165999946
+            [email] => akanjilawrence9999@gmail.com
+            [role] => admin
+            [created_at] => 2025-06-06 12:22:26
+        )
+
+)
+
+[13-Jun-2025 10:43:14 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Beef with Cashewnuts
+                    [price] => 7.5
+                    [quantity] => 4
+                    [portion] => standard
+                    [category] => 4
+                )
+
+            [1] => Array
+                (
+                    [name] => Beef with Green Pepper in Black Bean Sauce
+                    [price] => 7.3
+                    [quantity] => 3
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+    [order_notes] => Any Note for us?
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 184.9
+    [tx_ref] => GD_880553453_1749811392179
+    [guest_email] => 
+    [guest_name] => 
+    [guest_phone] => 
+    [user_email] => akanjilawrence9999@gmail.com
+    [user_phone] => 08165999946
+    [user_id] => 2
+    [user_name] => akanji
+)
+
+[13-Jun-2025 10:43:14 UTC] Pusher notification sent successfully for order ID: 22, Data: {"type":"new_order","order_id":"22","total_amount":"184.90","order_type":"now","timestamp":"2025-06-13 10:43:14"}
+[13-Jun-2025 13:28:22 UTC] Checkout - isLoggedIn: true, userEmail: admin@gmail.com, fullName: admin
+[16-Jun-2025 09:14:20 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[16-Jun-2025 09:14:55 UTC] Pusher connection successful
+[16-Jun-2025 09:14:55 UTC] Initiate Payment Session Data: Array
+(
+)
+
+[16-Jun-2025 09:14:55 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Beef with Green Pepper in Black Bean Sauce
+                    [price] => 7.3
+                    [quantity] => 1
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => Delivery Address
+    [order_notes] => Any Note for us?
+    [order_type] => now
+    [schedule_date] => 
+    [schedule_time] => 
+    [total_amount] => 140.3
+    [tx_ref] => GD_958680898_1750065291981
+    [guest_email] => Phone@gmail.com
+    [guest_name] => Guest
+    [guest_phone] => Phone
+    [user_email] => 
+    [user_phone] => 
+    [user_id] => 
+    [user_name] => 
+)
+
+[16-Jun-2025 09:14:55 UTC] Pusher notification sent successfully for order ID: 24, Data: {"type":"new_order","order_id":"24","total_amount":"140.30","order_type":"now","timestamp":"2025-06-16 09:14:55"}
+[16-Jun-2025 09:14:56 UTC] Mailer Error: SMTP Error: Could not authenticate.
+PHPMailer ErrorInfo: SMTP Error: Could not authenticate.
+
+[16-Jun-2025 09:14:56 UTC] Failed to send order email to: Phone@gmail.com - Mailer Error: SMTP Error: Could not authenticate.
+PHPMailer ErrorInfo: SMTP Error: Could not authenticate.
+
+[16-Jun-2025 11:39:02 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[16-Jun-2025 11:49:25 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[16-Jun-2025 11:50:57 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[16-Jun-2025 11:52:07 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[16-Jun-2025 12:33:17 UTC] Checkout - isLoggedIn: true, userEmail: admin@gmail.com, fullName: admin
+[16-Jun-2025 12:37:27 UTC] Pusher connection successful
+[16-Jun-2025 12:37:27 UTC] Initiate Payment Session Data: Array
+(
+    [user] => Array
+        (
+            [id] => 2
+            [name] => admin
+            [phone] => 08165999946
+            [email] => admin@gmail.com
+            [role] => admin
+            [created_at] => 2025-06-06 12:22:26
+        )
+
+)
+
+[16-Jun-2025 12:37:27 UTC] Initiate Payment Input: Array
+(
+    [cart] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Crispy Shredded Chilli Beef
+                    [price] => 7.5
+                    [quantity] => 2
+                    [portion] => standard
+                    [category] => 4
+                )
+
+            [1] => Array
+                (
+                    [name] => Beef with Cashewnuts
+                    [price] => 7.5
+                    [quantity] => 2
+                    [portion] => standard
+                    [category] => 4
+                )
+
+        )
+
+    [delivery_address] => 123 High Road
+    [order_notes] => 
+    [order_type] => schedule
+    [schedule_date] => 2025-06-16
+    [schedule_time] => 15:37
+    [total_amount] => 163
+    [tx_ref] => GD_490291623_1750077444697
+    [guest_email] => 
+    [guest_name] => 
+    [guest_phone] => 
+    [user_email] => admin@gmail.com
+    [user_phone] => 08165999946
+    [user_id] => 2
+    [user_name] => admin
+)
+
+[16-Jun-2025 12:37:27 UTC] Pusher notification sent successfully for order ID: 25, Data: {"type":"new_order","order_id":"25","total_amount":"163.00","order_type":"schedule","timestamp":"2025-06-16 12:37:27"}
+[16-Jun-2025 12:38:45 UTC] Checkout - isLoggedIn: true, userEmail: admin@gmail.com, fullName: admin
+[16-Jun-2025 12:44:19 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[16-Jun-2025 14:12:37 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[16-Jun-2025 16:01:20 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 08:16:18 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 08:16:49 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 08:21:32 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 08:49:45 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 09:57:28 UTC] Checkout - isLoggedIn: true, userEmail: admin@gmail.com, fullName: admin
+[17-Jun-2025 10:48:22 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 10:59:27 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 10:59:50 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:03:13 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:03:34 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:03:38 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:03:51 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:04:36 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:06:34 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:07:23 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:07:51 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 11:09:46 UTC] Checkout - isLoggedIn: false, userEmail: , fullName: 
+[17-Jun-2025 12:23:22 UTC] Checkout - isLoggedIn: true, userEmail: admin@gmail.com, fullName: admin

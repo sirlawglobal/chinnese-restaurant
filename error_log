@@ -1,0 +1,5 @@
+[16-Jun-2025 08:29:26 UTC] PHP Warning:  require_once(/home/soyoruba/public_html/BackEnd/config/init.php): Failed to open stream: No such file or directory in /home/soyoruba/public_html/index.php on line 2
+[16-Jun-2025 08:29:26 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/soyoruba/public_html/BackEnd/config/init.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/soyoruba/public_html/index.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/soyoruba/public_html/index.php on line 2

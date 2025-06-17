@@ -50,64 +50,26 @@ let months = [
 ];
 
 // Calendar events (for demonstration)
-let events = [
-  {
-    id: 1,
-    title: "New Seasonal Dish Tasting",
-    date: "2025-05-03",
-    time: "10:30 AM - 12:30 PM",
-    startTime: "10:30 AM",
-    endTime: "12:30 PM",
-    type: "new-dish",
-    people: ["HC", "SC", "+3"],
-  },
-  {
-    id: 2,
-    title: "Weekly Team Check-in",
-    date: "2025-05-04",
-    time: "11:00 AM - 12:30 PM",
-    startTime: "11:00 AM",
-    endTime: "12:30 PM",
-    type: "team-check",
-  },
-  {
-    id: 3,
-    title: "Inventory Audit",
-    date: "2025-05-04",
-    time: "10:30 AM - 12:30 PM",
-    startTime: "10:30 AM",
-    endTime: "12:30 PM",
-    type: "inventory",
-  },
-  {
-    id: 4,
-    title: "Weekly Team Check-in",
-    date: "2025-05-11",
-    time: "11:30 AM - 12:30 PM",
-    startTime: "11:30 AM",
-    endTime: "12:30 PM",
-    type: "team-check",
-  },
-  {
-    id: 5,
-    title: "Inventory Audit",
-    date: "2025-05-11",
-    time: "11:30 AM - 12:30 PM",
-    startTime: "11:30 AM",
-    endTime: "12:30 PM",
-    type: "inventory",
-  },
-  {
-    id: 6,
-    title: "New Seasonal Dish Tasting",
-    date: "2025-05-13",
-    time: "11:30 AM - 12:30 PM",
-    startTime: "11:30 AM",
-    endTime: "12:30 PM",
-    type: "new-dish",
-    people: ["HC", "SC", "+3"],
-  },
-];
+let events = [];
+
+// Fetch from backend
+const API_URLS = ROOT + 'admin/calendar/schedules.php';
+
+fetch(API_URLS)
+  .then(res => res.json())
+  .then(data => {
+    events = data.map(event => ({
+      ...event,
+      
+   type: getCategoryClass(event.category_slug),
+      time: `${event.start_time} - ${event.end_time}`,
+      startTime: event.start_time,
+      endTime: event.end_time,
+      people: JSON.parse(event.team || "[]")
+    }));
+    updateCalendarView(currentView);
+  });
+
 
 //   Function to parse the time string and update events
 function updateEventTimes(event) {
@@ -116,6 +78,69 @@ function updateEventTimes(event) {
   // event.endTime = parts[1].trim();
   return event;
 }
+
+
+const API_URL = ROOT + 'admin/calendar/schedules.php';
+
+
+//const API_URL = '../../../admin/calendar/schedules.php'; // adjust path if needed
+
+// Fetch schedules from backend
+
+function formatDate(dateStr) {
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  return new Date(dateStr).toLocaleDateString(undefined, options);
+}
+
+
+
+function renderSidebar(events) {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar) {
+    console.warn('Sidebar not found');
+    return;
+  }
+
+  sidebar.innerHTML = '<h2>Schedule Details</h2>';
+
+  if (!events.length) {
+    sidebar.innerHTML += `<div class="empty-state">No schedules found.</div>`;
+    return;
+  }
+
+  events.forEach(event => {
+    const teamList = (event.people || []).map(name => `
+      <div class="team-member">
+        <div class="avatar">${name}</div>
+        ${name}
+      </div>`).join('');
+
+    const scheduleHTML = `
+      <div class="schedule-item">
+        <div class="schedule-title">${event.title}</div>
+       
+        <div class="menu-updates-tag ${event.type}">${event.category}</div>
+        <div class="schedule-details-row">📅 ${formatDate(event.date)}</div>
+        <div class="schedule-details-row">🕒 ${event.startTime} - ${event.endTime}</div>
+        <div class="schedule-details-row">📍 ${event.venue || "No venue"}</div>
+        <div class="team-section">
+          <div class="team-title">Team</div>
+          <div class="team-members">${teamList}</div>
+        </div>
+        <div class="notes-section">
+          <div class="notes-title">Notes</div>
+          <div class="notes-content">${event.notes || "No notes available"}</div>
+        </div>
+      </div>
+    `;
+
+    sidebar.insertAdjacentHTML('beforeend', scheduleHTML);
+  });
+}
+
+
+
+
 
 // Update the initial events array
 events = events.map(updateEventTimes);
@@ -190,20 +215,22 @@ function navigateNext() {
 }
 
 // Function to generate the calendar grid for a given month and year (MODIFIED)
-function generateMonthView(month, year) {
+
+function generateMonthView(month, year, eventsData = events) {
   calendarHeaderTitle.innerHTML = `${months[month]} ${year}`;
   weekHeader.textContent = "";
   calendarGrid.classList.add("month-view");
   calendarGrid.classList.remove("year-view", "week-view", "day-view");
+
   calendarGrid.innerHTML = `
-      <div class="calendar-day-header">Sun</div>
-      <div class="calendar-day-header">Mon</div>
-      <div class="calendar-day-header">Tue</div>
-      <div class="calendar-day-header">Wed</div>
-      <div class="calendar-day-header">Thu</div>
-      <div class="calendar-day-header">Fri</div>
-      <div class="calendar-day-header">Sat</div>
-    `;
+    <div class="calendar-day-header">Sun</div>
+    <div class="calendar-day-header">Mon</div>
+    <div class="calendar-day-header">Tue</div>
+    <div class="calendar-day-header">Wed</div>
+    <div class="calendar-day-header">Thu</div>
+    <div class="calendar-day-header">Fri</div>
+    <div class="calendar-day-header">Sat</div>
+  `;
 
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
@@ -238,7 +265,6 @@ function generateMonthView(month, year) {
     }
 
     dayCell.addEventListener("click", (event) => {
-      // Check if the click target is the day cell itself or the day number
       if (
         event.target === dayCell ||
         event.target.classList.contains("day-number")
@@ -247,19 +273,13 @@ function generateMonthView(month, year) {
         const month = parseInt(dayCell.dataset.month);
         const day = parseInt(dayCell.dataset.day);
         const newSelectedDate = new Date(year, month, day);
-
-        // Format the date for the new schedule form
         const formattedDate = `${newSelectedDate.getFullYear()}-${String(
           newSelectedDate.getMonth() + 1
-        ).padStart(2, "0")}-${String(newSelectedDate.getDate()).padStart(
-          2,
-          "0"
-        )}`;
-        const dateInput = document.getElementById("scheduleDate");
-        dateInput.value = formattedDate;
-        selectedDate = formattedDate;
+        ).padStart(2, "0")}-${String(newSelectedDate.getDate()).padStart(2, "0")}`;
 
-        showNewScheduleForm(); // Open the new schedule form
+        document.getElementById("scheduleDate").value = formattedDate;
+        selectedDate = formattedDate;
+        showNewScheduleForm();
       }
     });
 
@@ -268,31 +288,60 @@ function generateMonthView(month, year) {
     dayNumber.textContent = i;
     dayCell.appendChild(dayNumber);
 
-    const eventsOnThisDay = getEventsForDate(new Date(year, month, i));
+    const eventsOnThisDay = getEventsForDate(new Date(year, month, i), eventsData);
     eventsOnThisDay.forEach((event) => {
+      if (!event || !event.title) return;
+
       const eventDiv = document.createElement("div");
       eventDiv.classList.add("event", event.type);
-      eventDiv.style.cursor = "pointer"; // Indicate event is clickable
+      eventDiv.style.cursor = "pointer";
       eventDiv.dataset.year = year;
       eventDiv.dataset.month = month;
       eventDiv.dataset.day = i;
-      eventDiv.addEventListener("click", showDayViewForEvent); // New event listener
+
       eventDiv.innerHTML = `
-  <div>${event.title}</div>
-  <div class="event-time">${event.time}</div>
-  ${
-    event.people
-      ? `<div class="event-people">${event.people
-          .map((person) => `<div class="avatar">${person}</div>`)
-          .join("")}</div>`
-      : ""
-  }
-`;
+        <div class="event-title">${event.title}</div>
+        <div class="event-time">${event.time}</div>
+        <div class="event-actions">
+          <button class="edit-event" data-id="${event.id}">✏️</button>
+          <button class="delete-event" data-id="${event.id}">🗑️</button>
+        </div>
+        ${
+          event.people
+            ? `<div class="event-people">${event.people
+                .map((person) => `<div class="avatar">${person}</div>`)
+                .join("")}</div>`
+            : ""
+        }
+      `;
+
       dayCell.appendChild(eventDiv);
     });
 
     calendarGrid.appendChild(dayCell);
   }
+
+  // ✅ Activate edit/delete buttons after DOM is updated
+  setTimeout(() => {
+    document.querySelectorAll(".edit-event").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        const event = events.find((ev) => ev.id == id);
+        if (event) openEditForm(event);
+      });
+    });
+
+    document.querySelectorAll(".delete-event").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        if (confirm("Are you sure you want to delete this event?")) {
+          deleteEventById(id);
+        }
+      });
+    });
+  }, 0);
 }
 
 function showDayViewForEvent(event) {
@@ -320,72 +369,44 @@ function showDayViewForEvent(event) {
   }
 }
 
-function generateWeekView(date) {
+function generateWeekView(date, eventsData = events) {
+  calendarHeaderTitle.innerHTML = `Week of ${date.toDateString()}`;
+  weekHeader.textContent = "";
+  calendarGrid.innerHTML = "";
   calendarGrid.classList.add("week-view");
-  calendarGrid.classList.remove("year-view", "day-view", "month-view");
-  calendarGrid.innerHTML = ""; // Clear the previous grid
+  calendarGrid.classList.remove("day-view", "month-view", "year-view");
 
-  const startOfWeek = getStartOfWeek(date);
-  const endOfWeek = new Date(
-    startOfWeek.getFullYear(),
-    startOfWeek.getMonth(),
-    startOfWeek.getDate() + 6
-  );
+  const startOfWeek = new Date(date);
+  startOfWeek.setDate(date.getDate() - date.getDay()); // Sunday
 
-  const monthName = startOfWeek.toLocaleString("en-US", {
-    month: "long",
-  });
-  calendarHeaderTitle.innerHTML = `${monthName}`;
-  const startDateFormatted = `${startOfWeek.toLocaleString("en-US", {
-    weekday: "short",
-  })} ${startOfWeek.getDate()}`;
-  const endDateFormatted = `${endOfWeek.toLocaleString("en-US", {
-    weekday: "short",
-  })} ${endOfWeek.getDate()}`;
+  for (let i = 0; i < 7; i++) {
+    const currentDate = new Date(startOfWeek);
+    currentDate.setDate(startOfWeek.getDate() + i);
 
-  weekHeader.textContent = `${startDateFormatted} - ${endDateFormatted}`;
-  calendarHeader.appendChild(weekHeader);
+    const dayColumn = document.createElement("div");
+    dayColumn.classList.add("week-day-column");
 
-  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const headerRow = document.createElement("div");
-  headerRow.classList.add("calendar-row", "day-headers");
-  const emptyHeader = document.createElement("div"); // For the time column
-  emptyHeader.classList.add("time-header");
-  headerRow.appendChild(emptyHeader);
-  daysOfWeek.forEach((day) => {
-    const dayHeader = document.createElement("div");
-    dayHeader.classList.add("day-header-cell");
-    dayHeader.textContent = day;
-    headerRow.appendChild(dayHeader);
-  });
-  calendarGrid.appendChild(headerRow);
+    const header = document.createElement("div");
+    header.classList.add("week-day-header");
+    header.innerText = currentDate.toDateString();
+    dayColumn.appendChild(header);
 
-  for (let hour = 0; hour < 24; hour++) {
-    const timeRow = document.createElement("div");
-    timeRow.classList.add("calendar-row");
-    const timeCell = document.createElement("div");
-    timeCell.classList.add("time-slot");
-    const formattedHour = String(hour).padStart(2, "0");
-    timeCell.textContent = `${formattedHour}:00`;
-    timeRow.appendChild(timeCell);
+    const eventsForDay = getEventsForDate(currentDate, eventsData);
 
-    for (let i = 0; i < 7; i++) {
-      const currentDateOfWeek = new Date(
-        startOfWeek.getFullYear(),
-        startOfWeek.getMonth(),
-        startOfWeek.getDate() + i
-      );
-      const dayCell = document.createElement("div");
-      dayCell.classList.add("day-cell");
-      const eventsOnThisHour = getEventsForDateTime(currentDateOfWeek, hour);
-      eventsOnThisHour.forEach((event) =>
-        addEventToCellInWeekView(dayCell, event)
-      );
-      timeRow.appendChild(dayCell);
-    }
-    calendarGrid.appendChild(timeRow);
+    eventsForDay.forEach(event => {
+      const eventDiv = document.createElement("div");
+      eventDiv.classList.add("event", event.type);
+      eventDiv.innerHTML = `
+        <div>${event.title}</div>
+        <div class="event-time">${event.time}</div>
+      `;
+      dayColumn.appendChild(eventDiv);
+    });
+
+    calendarGrid.appendChild(dayColumn);
   }
 }
+
 
 function addEventToCellInWeekView(cell, event) {
   const eventDiv = document.createElement("div");
@@ -416,75 +437,53 @@ viewButtons.forEach((button) => {
   });
 });
 
-function generateYearView(year) {
+function generateYearView(year, eventsData = events) {
   calendarHeaderTitle.innerHTML = `${year}`;
   weekHeader.textContent = "";
   calendarGrid.innerHTML = "";
   calendarGrid.classList.add("year-view");
-  calendarGrid.classList.remove("day-view", "week-view", "month-view"); // Add a class for specific styling
+  calendarGrid.classList.remove("day-view", "week-view", "month-view");
 
   for (let month = 0; month < 12; month++) {
     const monthContainer = document.createElement("div");
     monthContainer.classList.add("month-container");
-    generateMiniMonth(month, year, monthContainer);
+    generateMiniMonth(month, year, monthContainer, eventsData); // ✅ pass it here
     calendarGrid.appendChild(monthContainer);
   }
 }
 
-function generateMiniMonth(month, year, container) {
-  container.innerHTML = ""; // Clear previous content
+function generateMiniMonth(month, year, container, eventsData = events) {
+  const monthName = months[month];
+  const title = document.createElement("div");
+  title.classList.add("mini-month-title");
+  title.textContent = monthName;
+  container.appendChild(title);
 
-  const monthName = new Date(year, month, 1).toLocaleString("en-US", {
-    month: "long",
-  });
-  const monthHeader = document.createElement("div");
-  monthHeader.classList.add("mini-month-header");
-  monthHeader.textContent = monthName;
-  monthHeader.dataset.month = month; // Store month for navigation
-  monthHeader.dataset.year = year; // Store year for navigation
-  monthHeader.addEventListener("click", navigateToMonthView);
-  container.appendChild(monthHeader);
+  const daysGrid = document.createElement("div");
+  daysGrid.classList.add("mini-month-grid");
 
-  const miniCalendarGrid = document.createElement("div");
-  miniCalendarGrid.classList.add("mini-calendar-grid");
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const dayHeaders = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  dayHeaders.forEach((header) => {
-    const headerCell = document.createElement("div");
-    headerCell.classList.add("mini-day-header");
-    headerCell.textContent = header;
-    miniCalendarGrid.appendChild(headerCell);
-  });
-
-  const firstDayOfMonth = new Date(year, month, 1);
-  const lastDayOfMonth = new Date(year, month + 1, 0);
-  const daysInMonth = lastDayOfMonth.getDate();
-  const startingDay = firstDayOfMonth.getDay();
-
-  for (let i = 0; i < startingDay; i++) {
-    const emptyCell = document.createElement("div");
-    emptyCell.classList.add("mini-day", "empty");
-    miniCalendarGrid.appendChild(emptyCell);
+  for (let i = 0; i < firstDay; i++) {
+    const empty = document.createElement("div");
+    empty.classList.add("mini-day", "empty");
+    daysGrid.appendChild(empty);
   }
 
-  for (let i = 1; i <= daysInMonth; i++) {
-    const dayCell = document.createElement("div");
-    dayCell.classList.add("mini-day");
-    dayCell.textContent = i;
-    dayCell.dataset.month = month; // Store month for navigation
-    dayCell.dataset.year = year; // Store year for navigation
-    dayCell.dataset.day = i; // Store day for navigation
-    dayCell.addEventListener("click", navigateToMonthView);
-
-    const eventsOnThisDay = getEventsForDate(new Date(year, month, i));
-    if (eventsOnThisDay.length > 0) {
-      dayCell.classList.add("has-event"); // You can enhance this with more visual cues
-    }
-    miniCalendarGrid.appendChild(dayCell);
+  for (let day = 1; day <= daysInMonth; day++) {
+    const cell = document.createElement("div");
+    cell.classList.add("mini-day");
+    const cellDate = new Date(year, month, day);
+    const eventsOnDay = getEventsForDate(cellDate, eventsData);
+    if (eventsOnDay.length) cell.classList.add("has-event");
+    cell.textContent = day;
+    daysGrid.appendChild(cell);
   }
 
-  container.appendChild(miniCalendarGrid);
+  container.appendChild(daysGrid);
 }
+
 
 function navigateToMonthView(event) {
   console.log("====================================");
@@ -505,18 +504,19 @@ function getStartOfWeek(date) {
   return new Date(date.setDate(diff));
 }
 
-function getEventsForDate(date) {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
-  return events.filter((event) => {
+function getEventsForDate(date, data = events) {
+  return data.filter((event) => {
     const eventDate = new Date(event.date);
     return (
-      eventDate.getFullYear() === year &&
-      eventDate.getMonth() === month &&
-      eventDate.getDate() === day
+      eventDate.getFullYear() === date.getFullYear() &&
+      eventDate.getMonth() === date.getMonth() &&
+      eventDate.getDate() === date.getDate()
     );
   });
+}
+
+function getEventsForDateTime(date, data = events) {
+  return getEventsForDate(date, data);
 }
 
 function getEventsForDateTime(date) {
@@ -568,30 +568,31 @@ ${
   });
 }
 
-function updateCalendarView(view) {
+function updateCalendarView(view, data = events) {
   currentView = view;
-  viewButtons.forEach((btn) => btn.classList.remove("active"));
-  document
-    .querySelector(`.view-btn[data-view="${view}"]`)
-    .classList.add("active");
 
+  // Update active button styles
+  viewButtons.forEach((btn) => btn.classList.remove("active"));
+  const activeBtn = document.querySelector(`.view-btn[data-view="${view}"]`);
+  if (activeBtn) activeBtn.classList.add("active");
+
+  // Load the view with filtered data
   if (currentView === "month") {
-    generateMonthView(currentMonth, currentYear);
+    generateMonthView(currentMonth, currentYear, data);  // pass data
     monthSelector.value = currentMonth;
     yearSelector.value = currentYear;
   } else if (currentView === "week") {
-    generateWeekView(currentDate);
-    // You might want to update a header here to show the current week
+    generateWeekView(currentDate, data);
   } else if (currentView === "day") {
-    generateDayView(currentDate);
-    // You might want to update a header here to show the current day
+    generateDayView(currentDate, data);
   } else if (currentView === "year") {
-    generateYearView(currentYear);
+    generateYearView(currentYear, data);
     yearSelector.value = currentYear;
   }
 }
 
-function generateDayView(date) {
+
+function generateDayView(date, eventsData = events) {
   calendarHeaderTitle.innerHTML = `${date.toDateString()}`;
   weekHeader.textContent = "";
   calendarGrid.classList.add("day-view");
@@ -599,36 +600,34 @@ function generateDayView(date) {
   calendarGrid.innerHTML = `<div class="calendar-day-header">Time</div><div class="day-view-column"></div>`;
   const dayViewColumn = calendarGrid.querySelector(".day-view-column");
 
-  const eventsOnThisDay = getEventsForDateTime(date); // Get all events for the day
+  const eventsOnThisDay = getEventsForDateTime(date, eventsData); // ✅ now passes filtered data
 
   for (let hour = 0; hour < 24; hour++) {
-    const timeSlotContainer = document.createElement("div"); // Container for time label and events
+    const timeSlotContainer = document.createElement("div");
     timeSlotContainer.classList.add("time-slot-container");
 
     const timeLabel = document.createElement("div");
     timeLabel.classList.add("time-slot-label");
-    const formattedHour = String(hour).padStart(2, "0");
-    timeLabel.textContent = `${formattedHour}:00`;
+    timeLabel.textContent = `${String(hour).padStart(2, "0")}:00`;
     timeSlotContainer.appendChild(timeLabel);
 
     const eventArea = document.createElement("div");
-    eventArea.classList.add("event-area"); // Area to hold events for this hour
+    eventArea.classList.add("event-area");
     timeSlotContainer.appendChild(eventArea);
 
     const eventsInThisHour = eventsOnThisDay.filter((event) => {
-      const eventStartHour = parseInt(event.time.split(":")[0]);
+      const eventStartHour = parseInt(event.startTime.split(":")[0]);
       const eventEndHour = event.endTime
         ? parseInt(event.endTime.split(":")[0])
-        : eventStartHour + 1; // Assume 1-hour duration if no end time
-      return eventStartHour <= hour && hour < eventEndHour; // Check if the hour falls within the event's duration
+        : eventStartHour + 1;
+      return eventStartHour <= hour && hour < eventEndHour;
     });
 
     if (eventsInThisHour.length > 0) {
-      // Logic to calculate widths and positions of overlapping events
       const overlaps = findOverlappingEvents(eventsInThisHour);
       const positions = calculateEventPositions(eventsInThisHour, overlaps);
 
-      eventsInThisHour.forEach((event, index) => {
+      eventsInThisHour.forEach((event) => {
         const eventDiv = addEventToDayView(event);
         eventDiv.style.width = `${positions[event.id].width}%`;
         eventDiv.style.left = `${positions[event.id].left}%`;
@@ -639,6 +638,7 @@ function generateDayView(date) {
     dayViewColumn.appendChild(timeSlotContainer);
   }
 }
+
 
 function addEventToDayView(event) {
   const eventDiv = document.createElement("div");
@@ -722,75 +722,75 @@ function hideNewScheduleForm() {
   container.classList.remove("slide-left");
 }
 
+// createScheduleBtn.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   try {
+//     const timeParts = timeInput.value.split(" - ");
+//     const startTime = timeParts[0] ? timeParts[0].trim() : timeInput.value.trim();
+//     const endTime = timeParts[1] ? timeParts[1].trim() : endTimeInput.value;
+//     const newEvent = {
+//       title: titleInput.value,
+//       type: categoryInput.value,
+//       date: dateInput.value,
+//       time: timeInput.value,
+//       startTime: startTime,
+//       endTime: endTime,
+//       team: teamInput.value.split(",").map((item) => item.trim()),
+//       venue: venueInput.value,
+//       notes: notesInput.value,
+//       people: teamInput.value.split(",").map((item) => item.trim()),
+//     };
+//     events.push(newEvent);
+//     updateCalendarView(currentView);
+//     hideNewScheduleForm();
+//     resetForm();
+//     alert("New schedule created successfully!");
+//   } catch (error) {
+//     console.error("Error creating schedule:", error);
+//     alert("Error saving schedule. Please try again.");
+//   }
+// });
 createScheduleBtn.addEventListener("click", (e) => {
   e.preventDefault();
-
-  const timeParts = timeInput.value.split(" - "); // Assuming the input is also "startTime - endTime"
-  const startTime = timeParts[0] ? timeParts[0].trim() : timeInput.value.trim();
-  const endTime = timeParts[1] ? timeParts[1].trim() : endTimeInput.value;
-
-  const newEvent = {
-    title: titleInput.value,
-    type: categoryInput.value,
-    date: dateInput.value,
-    time: timeInput.value,
-    startTime: startTime,
-    endTime: endTime,
-    team: teamInput.value.split(",").map((item) => item.trim()),
-    venue: venueInput.value,
-    notes: notesInput.value,
-    people: teamInput.value.split(",").map((item) => item.trim()),
-  };
-
-  events.push(newEvent);
-  updateCalendarView(currentView);
-  hideNewScheduleForm();
-  resetForm();
-  alert("New schedule created successfully!");
+  console.log("Form submitted, processing new event...");
+  try {
+    console.log("Input values:", {
+      title: titleInput.value,
+      date: dateInput.value,
+      time: timeInput.value,
+    });
+    const timeParts = timeInput.value.split(" - ");
+    const startTime = timeParts[0] ? timeParts[0].trim() : timeInput.value.trim();
+    const endTime = timeParts[1] ? timeParts[1].trim() : endTimeInput.value;
+    const newEvent = {
+      title: titleInput.value,
+      type: categoryInput.value,
+      date: dateInput.value,
+      time: timeInput.value,
+      startTime: startTime,
+      endTime: endTime,
+      team: teamInput.value.split(",").map((item) => item.trim()),
+      venue: venueInput.value,
+      notes: notesInput.value,
+      people: teamInput.value.split(",").map((item) => item.trim()),
+    };
+    console.log("New event created:", newEvent);
+    events.push(newEvent);
+    console.log("Events array updated:", events);
+    updateCalendarView(currentView);
+    hideNewScheduleForm();
+    resetForm();
+    alert("New schedule created successfully!");
+  } catch (error) {
+    console.error("Error in createScheduleBtn:", error);
+    alert("Error saving schedule. Please try again.");
+  }
 });
 
-// Local Storage Handling
-if (localStorage.getItem("restaurantSchedule")) {
-  events = JSON.parse(localStorage.getItem("restaurantSchedule"));
-  // Ensure existing stored events have startTime and endTime
-  events = events.map((event) => {
-    if (!event.startTime && event.time) {
-      return updateEventTimes(event);
-    }
-    return event;
-  });
-  updateCalendarView(currentView);
+function getCategoryClass(slug) {
+  return slug || "new-dish"; // fallback to default if missing
 }
 
-function saveScheduleToLocalStorage() {
-  localStorage.setItem("restaurantSchedule", JSON.stringify(events));
-}
-
-const originalPush = Array.prototype.push;
-Array.prototype.push = function (...args) {
-  const result = originalPush.apply(this, args);
-  if (this === events) {
-    // Ensure new events also have startTime and endTime before saving
-    args.forEach((newEvent) => {
-      if (!newEvent.startTime && newEvent.time) {
-        updateEventTimes(newEvent);
-      }
-    });
-    saveScheduleToLocalStorage();
-  }
-  return result;
-};
-
-function getCategoryClass(category) {
-  const categoryLower = category.toLowerCase();
-  if (categoryLower.includes("dish") || categoryLower.includes("tasting"))
-    return "new-dish";
-  if (categoryLower.includes("team") || categoryLower.includes("check"))
-    return "team-check";
-  if (categoryLower.includes("inventory") || categoryLower.includes("audit"))
-    return "inventory";
-  return "new-dish"; // Default
-}
 
 // Add event to calendar UI
 function addEventToCalendar(event) {
@@ -849,3 +849,420 @@ function resetForm() {
 
   selectedDate = defaultDateFormatted;
 }
+
+function fetchSchedulesFromServer() {
+  console.log("Fetching schedules from API...");
+
+  fetch(API_URL)
+    .then(response => response.json())
+    .then(data => {
+      console.log("API data received:", data);
+      events = data.map(event => ({
+        
+  id: event.id, // ✅ Add this
+  ...event,
+  type: getCategoryClass(event.category_slug),
+  category: event.category_name,
+  time: `${event.start_time} - ${event.end_time}`,
+  startTime: event.start_time,
+  endTime: event.end_time,
+  people: JSON.parse(event.team || "[]"),
+  venue: event.venue,
+  notes: event.notes,
+  date: event.date,
+}));
+console.log("Event IDs:", events.map(e => e.id));
+
+      updateCalendarView(currentView);
+      renderSidebar(events);
+
+      updateFilterCounts(events); // ✅ Add this line!
+    })
+    .catch(error => {
+      console.error("Failed to fetch schedules:", error);
+      alert("Failed to load schedules from server.");
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+function renderSidebar(events) {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar) {
+    console.warn('Sidebar element not found.');
+    return;
+  }
+
+  console.log("Rendering events:", events);
+
+  sidebar.innerHTML = '<h2>Schedule Details</h2>';
+
+  if (!events.length) {
+    sidebar.innerHTML += '<div class="empty-state">No schedules found.</div>';
+    return;
+  }
+
+  events.forEach(event => {
+    const teamList = (event.people || []).map(name => `
+      <div class="team-member">
+        <div class="avatar">${name}</div>
+        ${name}
+      </div>`).join('');
+
+    const scheduleHTML = `
+      <div class="schedule-item">
+        <div class="schedule-title">${event.title}</div>
+       <div class="menu-updates-tag ${event.type}">${event.category}</div>
+        <div class="schedule-details-row">📅 ${formatDate(event.date)}</div>
+        <div class="schedule-details-row">🕒 ${event.startTime} - ${event.endTime}</div>
+        <div class="schedule-details-row">📍 ${event.venue || "No venue"}</div>
+        <div class="team-section">
+          <div class="team-title">Team</div>
+          <div class="team-members">${teamList}</div>
+        </div>
+        <div class="notes-section">
+          <div class="notes-title">Notes</div>
+          <div class="notes-content">${event.notes || "No notes available"}</div>
+        </div>
+      </div>
+    `;
+
+    sidebar.insertAdjacentHTML('beforeend', scheduleHTML);
+  });
+}
+
+});
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const filterTags = document.querySelectorAll(".filter-tag");
+
+  filterTags.forEach(tag => {
+    tag.addEventListener("click", () => {
+      const selectedCategory = tag.dataset.category;
+
+      // Highlight selected
+      filterTags.forEach(t => t.classList.remove("active"));
+      tag.classList.add("active");
+
+      // Filter and update
+      const filteredEvents = events.filter(e => getCategoryClass(e.category_slug) === selectedCategory);
+      updateCalendarView(currentView, filteredEvents); // pass filtered
+      renderSidebar(filteredEvents);                   // update sidebar
+    });
+  });
+});
+
+
+
+function updateFilterCounts(eventsData = events) {
+  const countMap = {};
+
+  // Count events by category slug (via getCategoryClass)
+  eventsData.forEach(event => {
+    const categorySlug = getCategoryClass(event.category_slug); // normalize
+    countMap[categorySlug] = (countMap[categorySlug] || 0) + 1;
+  });
+
+  // Update each filter-tag's .filter-count
+  const filterTags = document.querySelectorAll(".filter-tag");
+  filterTags.forEach(tag => {
+    const category = tag.dataset.category;
+    const countSpan = tag.querySelector(".filter-count");
+    const count = countMap[category] || 0;
+    if (countSpan) {
+      countSpan.textContent = count;
+    }
+  });
+}
+
+
+
+
+function deleteEventById(id) {
+  fetch(API_URL, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: `id=${encodeURIComponent(id)}`
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        // ✅ Remove event from array
+        events = events.filter(ev => ev.id != id);
+        // ✅ Update calendar and sidebar
+        // updateCalendarView(currentView);
+        // renderSidebar(events);
+
+        fetchSchedulesFromServer();
+        updateFilterCounts(events);
+        alert("Event deleted successfully.");
+      } else {
+        console.error("Delete failed:", data.message);
+        alert("Failed to delete event.");
+      }
+    })
+    .catch(err => {
+      console.error("Delete error:", err);
+      alert("Something went wrong while deleting the event.");
+    });
+}
+
+// function openEditForm(event) {
+//   showNewScheduleForm(); // show the form
+
+//   document.getElementById("scheduleId").value = event.id || '';
+//   document.getElementById("scheduleTitle").value = event.title || '';
+//   document.getElementById("scheduleDate").value = event.date || '';
+//   document.getElementById("scheduleTime").value = event.startTime || '';
+//   document.getElementById("scheduleEndTime").value = event.endTime || '';
+//   document.getElementById("scheduleVenue").value = event.venue || '';
+//   document.getElementById("scheduleNotes").value = event.notes || '';
+//   document.getElementById("scheduleTeam").value = (event.people || []).join(', ');
+
+//   if (document.getElementById("scheduleCategory")) {
+//     document.getElementById("scheduleCategory").value = event.category_id || '';
+//   }
+
+//   document.getElementById("createScheduleBtn").textContent = "Update";
+// }
+
+
+
+// function saveSchedule() {
+//   const id = document.getElementById("scheduleId").value;
+//   const title = document.getElementById("scheduleTitle").value;
+//   //const category_id = document.getElementById("scheduleCategory").value;
+
+//   const category_id = parseInt(document.getElementById("scheduleCategory").value, 10);
+
+//   const date = document.getElementById("scheduleDate").value;
+//   const startTime = document.getElementById("scheduleTime").value;
+//   const endTime = document.getElementById("scheduleEndTime").value;
+//   const team = document.getElementById("scheduleTeam").value;
+//   const venue = document.getElementById("scheduleVenue").value;
+//   const notes = document.getElementById("scheduleNotes").value;
+
+//   if (!title || !category_id || !date || !startTime || !endTime) {
+//     alert("Please fill in all required fields.");
+//     return;
+//   }
+
+// const payload = {
+//   id: id || 0,
+//   title,
+//   category_id: parseInt(category_id, 10), // ✅ fix here
+//   date,
+//   startTime,
+//   endTime,
+//   venue,
+//   notes,
+//   team: team.split(",").map(t => t.trim())
+// };
+
+
+
+// console.log("Payload being sent:", payload);
+
+//   fetch(API_URL, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(payload)
+//   })
+//     //.then(res => res.json())
+//     .then(async (res) => {
+//   const text = await res.text();
+//   try {
+//     const json = JSON.parse(text);
+//     return json;
+//   } catch (e) {
+//     console.error("❌ Invalid JSON from server:", text);
+//     throw new Error("Invalid response. Fix your PHP output.");
+//   }
+// })
+//     .then(data => {
+//       if (data.status === "success") {
+//         alert(id ? "Schedule updated!" : "Schedule created!");
+//         fetchSchedulesFromServer(); // refresh UI
+//         hideNewScheduleForm();
+//         resetForm();
+//       } else {
+//         alert("Save failed: " + data.message);
+//       }
+//     })
+//     .catch(err => {
+//        console.error("Error saving:", err); 
+   
+//       alert("Something went wrong while saving.");
+//     });
+// }
+
+function openEditForm(event) {
+  showNewScheduleForm();
+  document.getElementById("scheduleId").value = event.id || '';
+  document.getElementById("scheduleTitle").value = event.title || '';
+  document.getElementById("scheduleDate").value = event.date || '';
+  document.getElementById("scheduleTime").value = event.startTime || '';
+  document.getElementById("scheduleEndTime").value = event.endTime || '';
+  document.getElementById("scheduleVenue").value = event.venue || '';
+  document.getElementById("scheduleNotes").value = event.notes || '';
+  document.getElementById("scheduleTeam").value = (event.people || []).join(', ');
+  const categorySelect = document.getElementById("scheduleCategory");
+  if (categorySelect) {
+    categorySelect.value = event.category_id || event.category || ''; // Use category_id from event
+  }
+  document.getElementById("createScheduleBtn").textContent = "Update";
+}
+
+
+
+function saveSchedule() {
+  const id = document.getElementById("scheduleId").value;
+  const title = document.getElementById("scheduleTitle").value;
+  const category_id = parseInt(document.getElementById("scheduleCategory").value, 10);
+  const date = document.getElementById("scheduleDate").value;
+  const startTime = document.getElementById("scheduleTime").value;
+  const endTime = document.getElementById("scheduleEndTime").value;
+  const team = document.getElementById("scheduleTeam").value;
+  const venue = document.getElementById("scheduleVenue").value;
+  const notes = document.getElementById("scheduleNotes").value;
+
+  if (!title || !category_id || !date || !startTime || !endTime) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  const payload = {
+    id: id ? parseInt(id, 10) : 0,
+    title,
+    category_id,
+    date,
+    startTime,
+    endTime,
+    venue,
+    notes,
+    team: team ? team.split(",").map(t => t.trim()) : []
+  };
+
+  console.log("Payload being sent:", payload);
+  console.log("Request URL:", API_URL);
+
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+    .then(res => {
+      console.log("Response received:", {
+        status: res.status,
+        ok: res.ok,
+        url: res.url
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status} ${res.statusText}`);
+      }
+      return res.text();
+    })
+    .then(text => {
+      console.log("Raw response:", text);
+      if (!text) {
+        throw new Error("Empty response from server");
+      }
+      try {
+        const data = JSON.parse(text);
+        console.log("Parsed JSON:", data);
+        return data;
+      } catch (e) {
+        console.error("JSON parse error:", e.message, "Raw response:", text);
+        throw new Error(`Invalid JSON response: ${text}`);
+      }
+    })
+    .then(data => {
+      console.log("Data received:", data);
+      if (typeof data !== "object" || data === null) {
+        throw new Error("Response is not a valid JSON object");
+      }
+      if (data.status === "success") {
+        alert(id ? "Schedule updated successfully!" : "Schedule created successfully!");
+        fetchSchedulesFromServer();
+        hideNewScheduleForm();
+        resetForm();
+      } else {
+        alert("Save failed: " + (data.message || "Unknown error"));
+      }
+    })
+    .catch(err => {
+      console.error("Fetch error:", err);
+      alert("Request failed: " + err.message);
+    });
+}
+// ✅ Reset form function – keep this
+// function resetForm() {
+//   const form = document.getElementById("newSchedule");
+//   if (form) form.reset();
+//   document.getElementById("scheduleId").value = "";
+//   document.getElementById("createScheduleBtn").textContent = "Create";
+// }
+
+
+function resetForm() {
+  document.getElementById("scheduleId").value = "";
+  document.getElementById("scheduleTitle").value = "";
+  document.getElementById("scheduleCategory").value = "";
+  document.getElementById("scheduleDate").value = "";
+  document.getElementById("scheduleTime").value = "12:30";
+  document.getElementById("scheduleEndTime").value = "";
+  document.getElementById("scheduleTeam").value = "";
+  document.getElementById("scheduleVenue").value = "";
+  document.getElementById("scheduleNotes").value = "";
+  document.getElementById("createScheduleBtn").textContent = "Create";
+}
+
+
+
+
+
+
+// ✅ Only ONE DOMContentLoaded block below – delete the others
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("✅ DOM fully loaded 🚀");
+
+  // 🔄 Safely rebind the createSchedule button (prevents duplicate submit)
+  const oldCreateBtn = document.getElementById("createScheduleBtn");
+  if (oldCreateBtn) {
+    const newCreateBtn = oldCreateBtn.cloneNode(true);
+    oldCreateBtn.parentNode.replaceChild(newCreateBtn, oldCreateBtn);
+
+    newCreateBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      saveSchedule();
+    });
+  }
+
+  // 🚀 Load schedules from backend
+  fetchSchedulesFromServer();
+
+  // 🏷️ Setup filter tag click handlers
+  const filterTags = document.querySelectorAll(".filter-tag");
+  filterTags.forEach(tag => {
+    tag.addEventListener("click", () => {
+      const selectedCategory = tag.dataset.category;
+
+      // Toggle active filter styling
+      filterTags.forEach(t => t.classList.remove("active"));
+      tag.classList.add("active");
+
+      // Filter the events
+      const filteredEvents = events.filter(e =>
+        getCategoryClass(e.category_slug) === selectedCategory
+      );
+      updateCalendarView(currentView, filteredEvents);
+      renderSidebar(filteredEvents);
+    });
+  });
+});
+
