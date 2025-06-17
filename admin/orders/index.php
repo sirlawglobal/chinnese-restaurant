@@ -427,6 +427,7 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
     </thead>
     <tbody>
       <?php foreach ($orders as $order): ?>
+        
         <?php
         $orderId = $order['id'];
         $fullName = !empty($order['user_name']) ? $order['user_name'] : $order['guest_name'];
@@ -633,25 +634,27 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
               </div>
               <div class="modal-body">
                 <div class="row">
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label fw-bold">Full Name:</label>
-                    <input type="text" class="form-control" name="full_name" required>
+  <div class="mb-3 col-md-6">
+    <label class="form-label fw-bold">Surname:</label>
+    <input type="text" class="form-control" name="surname" required>
+  </div>
+  <div class="mb-3 col-md-6">
+    <label class="form-label fw-bold">Lastname:</label>
+    <input type="text" class="form-control" name="lastname" required>
+  </div>
+</div>
+
+                <div class="row">
+                   <div class="mb-3 col-md-6">
+                    <label class="form-label fw-bold">Phone:</label>
+                    <input type="text" class="form-control" name="phone">
                   </div>
                   <div class="mb-3 col-md-6">
                     <label class="form-label fw-bold">Email:</label>
                     <input type="email" class="form-control" name="email" required>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label fw-bold">Phone:</label>
-                    <input type="text" class="form-control" name="phone">
-                  </div>
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label fw-bold">Address:</label>
-                    <input type="text" class="form-control" name="address" required>
-                  </div>
-                </div>
+               
                 <div class="row">
                   <div class="mb-3 col-md-6">
                     <label class="form-label fw-bold">Order Type:</label>
@@ -669,6 +672,13 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
                       <option value="completed">Completed</option>
                       <option value="cancelled">Cancelled</option>
                     </select>
+                  </div>
+                </div>
+                 <div class="row">
+                 
+                  <div class="mb-3 col-md-12">
+                    <label class="form-label fw-bold">Address:</label>
+                    <input type="text" class="form-control" name="address" required>
                   </div>
                 </div>
                 <div class="mb-3">
@@ -724,6 +734,16 @@ document.querySelector('#addOrderModal form').addEventListener('submit', functio
   const itemRows = document.querySelectorAll('.order-item-row');
   let hasErrors = false;
 
+  const surname = form.querySelector('[name="surname"]').value.trim();
+const lastname = form.querySelector('[name="lastname"]').value.trim();
+const fullName = `${surname} ${lastname}`.trim();
+formData.append('full_name', fullName);
+
+// Optional: Remove the individual surname/lastname to avoid confusion on backend (optional)
+formData.delete('surname');
+formData.delete('lastname');
+
+
   // Validate item rows
   itemRows.forEach((row, index) => {
     const categorySelect = row.querySelector('.category-select');
@@ -762,6 +782,8 @@ document.querySelector('#addOrderModal form').addEventListener('submit', functio
     }
   }
   console.log(formDataObject);
+
+  return; // Stop here to avoid sending the request
 
 fetch('add_order.php', {
     method: 'POST',
