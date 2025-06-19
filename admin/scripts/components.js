@@ -353,6 +353,10 @@ const pageMap = {
     page: "Reviews",
     icon: "review",
   },
+  "/signup/": {
+    page: "AddUser",
+    icon: "inventory",
+  },
 };
 
 function getCurrentPath() {

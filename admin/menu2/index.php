@@ -123,6 +123,79 @@ form{
   z-index: 1000;
 }
 
+/* Menu Edit Modal Styles */
+.menu-edit-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.menu-edit-modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.menu-edit-close-modal {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.menu-edit-form-group {
+  margin-bottom: 15px;
+}
+
+.menu-edit-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.menu-edit-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.menu-edit-image-preview {
+  max-width: 200px;
+  display: block;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #eee;
+}
+
+.menu-edit-save-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.menu-edit-save-button:hover {
+  background-color: #45a049;
+}
+
     </style>
   </head>
   <body class="flex">
@@ -403,6 +476,34 @@ form{
         </div>
       </div>
     </main>
+
+    <div id="menuEditModal" class="menu-edit-modal">
+  <div class="menu-edit-modal-content cream-card">
+    <span class="menu-edit-close-modal">&times;</span>
+    <h2>Edit Menu Item</h2>
+    <form id="menuEditForm" class="menu-edit-form">
+      <div class="menu-edit-form-group">
+        <label for="menuEditName">Name:</label>
+        <input type="text" id="menuEditName" class="menu-edit-input" required>
+      </div>
+      <div class="menu-edit-form-group">
+        <label for="menuEditPrice">Price:</label>
+        <input type="number" id="menuEditPrice" class="menu-edit-input" step="0.01" required>
+      </div>
+      <div class="menu-edit-form-group">
+        <label for="menuEditImage">Image URL:</label>
+        <input type="text" id="menuEditImage" class="menu-edit-input">
+      </div>
+      <div class="menu-edit-form-group">
+        <label>Current Image:</label>
+        <img id="menuEditImagePreview" class="menu-edit-image-preview" src="" alt="Current Image">
+      </div>
+      <button type="submit" class="menu-edit-save-button">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+
     <script>
       const username = '<?php echo addslashes($first_name); ?>';
 const userRole = '<?php echo addslashes($userRole); ?>';
@@ -413,6 +514,8 @@ const profilePicture = '<?php echo addslashes($profilePicture); ?>';
    
 
     <script>
+
+      
       document.addEventListener('DOMContentLoaded', () => {
   // Cache DOM elements
   const elements = {

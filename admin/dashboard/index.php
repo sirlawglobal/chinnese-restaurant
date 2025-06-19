@@ -633,7 +633,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(data => {
 
-      console.log("Order Types Data:", data); // Debug: Log the fetched data
+      console.log("Order Types Data111111:", data); // Debug: Log the fetched data
       const container = document.getElementById("orderTypesContainer");
 
       data.forEach(item => {

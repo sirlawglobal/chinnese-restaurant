@@ -427,6 +427,7 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
     </thead>
     <tbody>
       <?php foreach ($orders as $order): ?>
+        
         <?php
         $orderId = $order['id'];
         $fullName = !empty($order['user_name']) ? $order['user_name'] : $order['guest_name'];
@@ -439,8 +440,11 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
         $time = date('h:i A', strtotime($order['created_at']));
         ?>
         <tr>
-          <td><?= $date ?><br><small><?= $time ?></small></td>
-          <td>ORD<?= $orderId ?></td>
+          <!-- <td><?= $date ?><br><small><?= $time ?></small></td> -->
+          <td><?= $date ?></td>
+      <td>GD<?= date('Y', strtotime($order['created_at']))  . str_pad($orderId, 4, '0', STR_PAD_LEFT) ?></td>
+
+
           <td><?= explode(' ', $fullName)[1] ?? $fullName?></td>
           <td><?= explode(' ', $fullName)[0] ?? $fullName ?></td>
           <td><?= $phone ?></td>
@@ -470,6 +474,11 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
 <?php foreach ($orders as $order): ?>
   <?php
   $orderId = $order['id'];
+
+  // echo '<pre>';
+  // print_r($order);
+  // echo '</pre>';
+ 
   // $orderItems = db_query("SELECT oi.*, m.name AS item_name 
   //               FROM order_items oi 
   //               JOIN menu_items m ON oi.menu_item_id = m.id 
@@ -478,12 +487,27 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
   $orderItems = db_query("SELECT * FROM order_items WHERE order_id = ?", [$orderId], 'assoc');
 
 
+
+
+$order_time = !empty($order['created_at']) ? $order['created_at'] : null;
+
+$formatted_time = '';
+if ($order_time) {
+    $dt = new DateTime($order_time);
+    $formatted_time = $dt->format('l, jS F Y, h:i A'); // e.g., Monday, 16th June 2025, 12:35 PM
+}
+
   $fullName = !empty($order['user_name']) ? $order['user_name'] : $order['guest_name'];
   $email = !empty($order['user_email']) ? $order['user_email'] : $order['guest_email'];
+  $delivery_address = !empty($order['delivery_address']) ? $order['delivery_address'] : $order['delivery_address'];
   $phone = !empty($order['user_phone']) ? $order['user_phone'] : ($order['guest_phone'] ?? '-');
   $address = htmlspecialchars($order['delivery_address']);
   $status = ucfirst($order['status']);
   $amount = '£' . number_format($order['total_amount'], 2);
+
+   $nameParts = explode(' ', trim($fullName));
+    $firstname = $nameParts[0];
+    $surname = isset($nameParts[1]) ? $nameParts[1] : $nameParts[0];
   ?>
   
   <!-- View Modal -->
@@ -503,36 +527,51 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
 
   <div class="row">
     <div class="mb-3 col-md-4">
-      <label class="form-label fw-bold">Name:</label>
-      <input class="form-control" value="<?= htmlspecialchars($fullName) ?>" readonly>
-    </div>
-    <div class="mb-3 col-md-4">
-      <label class="form-label fw-bold">Email:</label>
-      <input class="form-control" value="<?= htmlspecialchars($email) ?>" readonly>
-    </div>
-    <div class="mb-3 col-md-4">
-      <label class="form-label fw-bold">Phone:</label>
-      <input class="form-control" value="<?= htmlspecialchars($phone) ?>" readonly>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="mb-3 col-md-6">
-      <label class="form-label fw-bold">Address:</label>
-      <input class="form-control" value="<?= htmlspecialchars($address) ?>" readonly>
-    </div>
-
-    <div class="mb-3 col-md-6">
-      <label class="form-label fw-bold">Status:</label>
-      <input class="form-control" value="<?= htmlspecialchars($status) ?>" readonly>
-    </div>
+  <label class="form-label fw-bold">Surname:</label>
+  <input class="form-control" value="<?= htmlspecialchars($surname) ?>" readonly>
+</div>
+<div class="mb-3 col-md-4">
+  <label class="form-label fw-bold">Firstname:</label>
+  <input class="form-control" value="<?= htmlspecialchars($firstname) ?>" readonly>
+</div>
+<div class="mb-3 col-md-4">
+  <label class="form-label fw-bold">Phone:</label>
+  <input class="form-control" value="<?= htmlspecialchars($phone) ?>" readonly>
+</div>
     
   </div>
 
   <div class="row">
-    <div class="mb-3 col-md-12">
+
+  <div class="mb-3 col-md-4">
+      <label class="form-label fw-bold">Email:</label>
+      <input class="form-control" value="<?= htmlspecialchars($email) ?>" readonly>
+    </div>
+    
+
+    <div class="mb-3 col-md-4">
+      <label class="form-label fw-bold">Status:</label>
+      <input class="form-control" value="<?= htmlspecialchars($status) ?>" readonly>
+    </div>
+
+     <div class="mb-3 col-md-4">
       <label class="form-label fw-bold">Grand Total (with delivery):</label>
       <input class="form-control" value="<?= htmlspecialchars($amount) ?>" readonly>
+    </div>
+
+    
+  </div>
+
+  <div class="row">
+   
+
+    <div class="mb-3 col-md-6">
+      <label class="form-label fw-bold">Address:</label>
+      <input class="form-control" value="<?= htmlspecialchars($delivery_address) ?>" readonly>
+    </div>
+    <div class="mb-3 col-md-6">
+      <label class="form-label fw-bold">Order Time:</label>
+      <input class="form-control" value="<?= htmlspecialchars($formatted_time) ?>" readonly>
     </div>
   </div>
 
@@ -632,43 +671,52 @@ $categories = db_query("SELECT id, name FROM categories ORDER BY name", [], 'ass
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <div class="row">
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label fw-bold">Full Name:</label>
-                    <input type="text" class="form-control" name="full_name" required>
-                  </div>
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label fw-bold">Email:</label>
-                    <input type="email" class="form-control" name="email" required>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label fw-bold">Phone:</label>
-                    <input type="text" class="form-control" name="phone">
-                  </div>
-                  <div class="mb-3 col-md-6">
+              <div class="row">
+      <div class="mb-3 col-md-4">
+        <label class="form-label fw-bold">Surname:</label>
+        <input type="text" class="form-control" name="surname" required>
+      </div>
+      <div class="mb-3 col-md-4">
+        <label class="form-label fw-bold">Firstname:</label>
+        <input type="text" class="form-control" name="lastname" required>
+      </div>
+      <div class="mb-3 col-md-4">
+        <label class="form-label fw-bold">Phone:</label>
+        <input type="text" class="form-control" name="phone">
+      </div>
+    </div>
+
+
+                 <div class="row">
+      <div class="mb-3 col-md-4">
+        <label class="form-label fw-bold">Email:</label>
+        <input type="email" class="form-control" name="email" required>
+      </div>
+      <div class="mb-3 col-md-4">
+        <label class="form-label fw-bold">Order Type:</label>
+        <select name="order_type" class="form-control" required>
+          <option value="Online">Online</option>
+          <option value="Telephone">Telephone</option>
+          <option value="Walk-in">Walk-in</option>
+        </select>
+      </div>
+      <div class="mb-3 col-md-4">
+        <label class="form-label fw-bold">Status:</label>
+        <select name="status" class="form-control" required>
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+               
+              
+                 <div class="row">
+                 
+                  <div class="mb-3 col-md-12">
                     <label class="form-label fw-bold">Address:</label>
                     <input type="text" class="form-control" name="address" required>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label fw-bold">Order Type:</label>
-                    <select name="order_type" class="form-control" required>
-                      <option value="Online">Online</option>
-                      <option value="Telephone">Telephone </option>
-                      <option value="Walk-in">Walk-in</option>
-                    </select>
-                  </div>
-                  <div class="mb-3 col-md-6">
-                    <label class="form-label fw-bold">Status:</label>
-                    <select name="status" class="form-control" required>
-                      <option value="pending">Pending</option>
-                      <option value="processing">Processing</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
                   </div>
                 </div>
                 <div class="mb-3">
@@ -724,6 +772,16 @@ document.querySelector('#addOrderModal form').addEventListener('submit', functio
   const itemRows = document.querySelectorAll('.order-item-row');
   let hasErrors = false;
 
+  const surname = form.querySelector('[name="surname"]').value.trim();
+const lastname = form.querySelector('[name="lastname"]').value.trim();
+const fullName = `${surname} ${lastname}`.trim();
+formData.append('full_name', fullName);
+
+// Optional: Remove the individual surname/lastname to avoid confusion on backend (optional)
+formData.delete('surname');
+formData.delete('lastname');
+
+
   // Validate item rows
   itemRows.forEach((row, index) => {
     const categorySelect = row.querySelector('.category-select');
@@ -762,6 +820,8 @@ document.querySelector('#addOrderModal form').addEventListener('submit', functio
     }
   }
   console.log(formDataObject);
+
+  // return; // Stop here to avoid sending the request
 
 fetch('add_order.php', {
     method: 'POST',
@@ -899,6 +959,33 @@ fetch('add_order.php', {
       const total = (quantity * unitPrice).toFixed(2);
       totalPriceInput.value = total;
     }
+
+
+    document.addEventListener('click', function (e) {
+  if (e.target.closest('.remove-item-btn')) {
+    const button = e.target.closest('.remove-item-btn');
+    const itemRow = button.closest('.order-item-row');
+    if (itemRow) {
+      itemRow.remove();
+      renumberItems(); // Optional: reindex item names after removal
+    }
+  }
+});
+
+// Optional: Re-index the name attributes to keep them sequential after a row is removed
+function renumberItems() {
+  const itemRows = document.querySelectorAll('.order-item-row');
+  itemRows.forEach((row, index) => {
+    row.setAttribute('data-item-index', index);
+    row.querySelector('.category-select').setAttribute('name', `items[${index}][category_id]`);
+    row.querySelector('.item-select').setAttribute('name', `items[${index}][item_id]`);
+    row.querySelector('.unit-price').setAttribute('name', `items[${index}][price]`);
+    row.querySelector('.quantity').setAttribute('name', `items[${index}][quantity]`);
+    row.querySelector('.quantity').setAttribute('oninput', `calculateTotal(this, ${index})`);
+    row.querySelector('.total-price').setAttribute('name', `items[${index}][total]`);
+  });
+}
+
   </script>
 </script>
       
